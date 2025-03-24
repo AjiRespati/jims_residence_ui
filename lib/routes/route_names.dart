@@ -1,0 +1,11 @@
+const String signInRoute = "/SignIn";
+const String signUpRoute = "/SignUp";
+const String signOutRoute = "/SignOut";
+const String homeRoute = "/Home";
+const String dashboardRoute = "/Dashboard";
+const String productsRoute = "/Products";
+const String productDetailRoute = "/Products/Detail";
+const String addProductsRoute = "/AddProducts";
+const String stockRoute = "/Stock";
+const String clientsRoute = "/Clients";
+const String settingsRoute = "/Settings";
