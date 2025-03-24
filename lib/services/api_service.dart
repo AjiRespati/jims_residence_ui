@@ -175,7 +175,7 @@ class ApiService {
     }
 
     var response = await request.send();
-    return response.statusCode == 201;
+    return response.statusCode == 200;
   }
 
   // ✅ Pick Image for Mobile (Gallery & Camera)
@@ -238,7 +238,7 @@ class ApiService {
       }),
     );
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       fetchProduct(productId);
       Navigator.pop(context);
       return true;
@@ -304,7 +304,7 @@ class ApiService {
       }),
     );
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       Navigator.pop(context);
       return true;
     } else {
@@ -385,7 +385,7 @@ class ApiService {
       }),
     );
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       return true;
     } else {
       return false;
@@ -432,7 +432,7 @@ class ApiService {
       }),
     );
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       return true;
     } else {
       return false;
@@ -479,7 +479,7 @@ class ApiService {
       }),
     );
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       return true;
     } else {
       return false;

@@ -8,8 +8,8 @@ class ApplicationInfo {
   static const appName = "Ice Stock 1.0";
 
   static const baseUrlDev =
-      kIsWeb ? 'http://localhost:3000/api' : "http://10.0.2.2:3000/api";
-  static const baseUrlProd = "http://10.0.2.2:3000/api";
+      kIsWeb ? 'http://localhost:3300/api' : "http://10.0.2.2:3300/api";
+  static const baseUrlProd = "http://10.0.2.2:3300/api";
 
   static const baseUrl = baseUrlDev;
   // static const baseUrl = baseUrlProd;
