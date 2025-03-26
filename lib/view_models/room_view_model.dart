@@ -101,6 +101,63 @@ class RoomViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  String _tenantName = "";
+  String _tenantPhone = "";
+  String _tenantIdNumber = "";
+  String? _idImagePath;
+  bool _isIdCopied = false;
+  String? _isIdCopiedText;
+  String _tenantStatus = "";
+  List<dynamic> _tenants = [];
+
+  String get tenantName => _tenantName;
+  set tenantName(String val) {
+    _tenantName = val;
+    notifyListeners();
+  }
+
+  String get tenantPhone => _tenantPhone;
+  set tenantPhone(String val) {
+    _tenantPhone = val;
+    notifyListeners();
+  }
+
+  String get tenantIdNumber => _tenantIdNumber;
+  set tenantIdNumber(String val) {
+    _tenantIdNumber = val;
+    notifyListeners();
+  }
+
+  String? get idImagePath => _idImagePath;
+  set idImagePath(String? val) {
+    _idImagePath = val;
+    notifyListeners();
+  }
+
+  bool get isIdCopied => _isIdCopied;
+  set isIdCopied(bool val) {
+    _isIdCopied = val;
+    notifyListeners();
+  }
+
+  String get tenantStatus => _tenantStatus;
+  set tenantStatus(String val) {
+    _tenantStatus = val;
+    notifyListeners();
+  }
+
+  String? get isIdCopiedText => _isIdCopiedText;
+  set isIdCopiedText(String? val) {
+    _isIdCopiedText = val;
+    notifyListeners();
+  }
+
+  List<dynamic> get tenants => _tenants;
+  set tenants(List<dynamic> val) {
+    _tenants = val;
+    notifyListeners();
+  }
+
   /// ################## ///
   ///       METHOD       ///
   /// ################## ///
@@ -136,5 +193,41 @@ class RoomViewModel extends ChangeNotifier {
     rooms = await apiService.fetchRooms();
     isBusy = false;
     return rooms.isNotEmpty;
+  }
+
+  Future<bool> addTenant({required BuildContext context}) async {
+    isBusy = true;
+
+    final resp = await apiService.createTenant(
+      roomId: roomId,
+      name: tenantName,
+      phone: tenantPhone,
+      idNumber: tenantIdNumber,
+      idImagePath: idImagePath,
+      isIdCopyDone: isIdCopied,
+      tenancyStatus: "Active",
+    );
+
+    if (resp) {
+      await fetchTenants();
+      isBusy = false;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Tenant Berhasil ditambahkan')));
+      return true;
+    } else {
+      isBusy = false;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Tenant gagal ditambahkan')));
+      return false;
+    }
+  }
+
+  Future<bool> fetchTenants() async {
+    isBusy = true;
+    tenants = await apiService.fetchTenants();
+    isBusy = false;
+    return tenants.isNotEmpty;
   }
 }

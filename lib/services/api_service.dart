@@ -112,7 +112,16 @@ class ApiService {
       }),
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) return false;
+      return createRoom(
+        roomNumber: roomNumber,
+        roomSize: roomSize,
+        roomStatus: roomStatus,
+        basicPrice: basicPrice,
+      );
+    } else if (response.statusCode == 200) {
       return true;
     } else {
       return false;
@@ -124,6 +133,73 @@ class ApiService {
 
     final response = await http.get(
       Uri.parse('$baseUrl/room'),
+      headers: {"Authorization": "Bearer $token"},
+    );
+
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) return [];
+      return fetchRooms();
+    } else if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      return [];
+    }
+  }
+
+  // TODO: TENANT ROUTES
+
+  Future<bool> createTenant({
+    required String roomId,
+    required String name,
+    required String phone,
+    required String idNumber,
+    required String? idImagePath,
+    required bool isIdCopyDone,
+    required String tenancyStatus,
+  }) async {
+    String? token = await _getToken();
+    final response = await http.post(
+      Uri.parse('$baseUrl/tenant'),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
+      body: jsonEncode({
+        'roomId': roomId,
+        'name': name,
+        'phone': phone,
+        'idNumber': idNumber,
+        'idImagePath': idImagePath,
+        'isIdCopyDone': isIdCopyDone,
+        'tenancyStatus': tenancyStatus,
+      }),
+    );
+
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) return false;
+      return createTenant(
+        roomId: roomId,
+        name: name,
+        phone: phone,
+        idNumber: idNumber,
+        idImagePath: idImagePath,
+        isIdCopyDone: isIdCopyDone,
+        tenancyStatus: tenancyStatus,
+      );
+    } else if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<List<dynamic>> fetchTenants() async {
+    String? token = await _getToken();
+
+    final response = await http.get(
+      Uri.parse('$baseUrl/tenant'),
       headers: {"Authorization": "Bearer $token"},
     );
 

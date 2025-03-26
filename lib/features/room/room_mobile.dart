@@ -44,7 +44,6 @@ class RoomMobile extends StatelessWidget with GetItMixin {
                 itemCount: get<RoomViewModel>().rooms.length,
                 itemBuilder: (context, idx) {
                   var item = get<RoomViewModel>().rooms[idx];
-                  print(item);
                   return Card(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
