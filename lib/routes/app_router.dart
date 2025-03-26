@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/features/auth/login_screen.dart';
+import 'package:frontend/features/home/home.dart';
 import '../widgets/not_found_page.dart';
 
 import 'animate_route_transitions.dart';
@@ -8,7 +9,7 @@ import 'route_names.dart';
 class AppRouter {
   static RouteFactory routes() {
     return ((settings) {
-      dynamic arguments = settings.arguments;
+      // dynamic arguments = settings.arguments;
       Widget screen;
 
       switch (settings.name) {
@@ -17,6 +18,9 @@ class AppRouter {
           break;
         case signInRoute:
           screen = LoginScreen();
+          break;
+        case homeRoute:
+          screen = Home();
           break;
         default:
           screen = const NotFoundPage();

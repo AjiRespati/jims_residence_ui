@@ -32,10 +32,10 @@ class _PageContainerState extends State<PageContainer> {
 
     switch (menuTitle) {
       case "Dashboard":
-        Navigator.pushNamed(context, dashboardRoute);
+        Navigator.pushNamed(context, homeRoute);
         break;
       case "Products":
-        Navigator.pushNamed(context, productsRoute);
+        Navigator.pushNamed(context, homeRoute);
         break;
       default:
     }

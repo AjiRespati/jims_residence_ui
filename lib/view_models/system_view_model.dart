@@ -50,7 +50,7 @@ class SystemViewModel extends ChangeNotifier {
     String? token = prefs.getString('accessToken');
 
     if (!isTokenExpired(token)) {
-      Navigator.pushNamed(context, dashboardRoute);
+      Navigator.pushNamed(context, homeRoute);
       isBusy = false;
     } else {
       isBusy = false;
@@ -77,7 +77,7 @@ class SystemViewModel extends ChangeNotifier {
     if (isLogin) {
       usernameController.text = "";
       passwordController.text = "";
-      Navigator.pushReplacementNamed(context, dashboardRoute);
+      Navigator.pushReplacementNamed(context, homeRoute);
     } else {
       ScaffoldMessenger.of(
         context,
