@@ -89,6 +89,55 @@ class ApiService {
     }
   }
 
+  // TODO: ROOMS ROUTES
+
+  Future<bool> createRoom({
+    required String roomNumber,
+    required String roomSize,
+    required String roomStatus,
+    required double basicPrice,
+  }) async {
+    String? token = await _getToken();
+    final response = await http.post(
+      Uri.parse('$baseUrl/room'),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
+      body: jsonEncode({
+        'roomNumber': roomNumber,
+        'roomSize': roomSize,
+        'roomStatus': roomStatus,
+        'basicPrice': basicPrice,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<List<dynamic>> fetchRooms() async {
+    String? token = await _getToken();
+
+    final response = await http.get(
+      Uri.parse('$baseUrl/room'),
+      headers: {"Authorization": "Bearer $token"},
+    );
+
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) return [];
+      return fetchRooms();
+    } else if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      return [];
+    }
+  }
+
   // TODO: PRODUCTS ROUTES
   /// GET /
   /// POST /

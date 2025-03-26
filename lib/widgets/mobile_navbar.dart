@@ -16,7 +16,7 @@ class MobileNavbar extends StatelessWidget with GetItMixin {
             Navigator.pushNamed(context, homeRoute);
             break;
           case 1:
-            Navigator.pushNamed(context, homeRoute);
+            Navigator.pushNamed(context, roomRoute);
             break;
           case 2:
             Navigator.pushNamed(context, homeRoute);
@@ -35,15 +35,15 @@ class MobileNavbar extends StatelessWidget with GetItMixin {
       destinations: [
         NavigationDestination(icon: Icon(Icons.home), label: "Home"),
         NavigationDestination(
-          icon: Icon(Icons.factory_rounded),
+          icon: Icon(Icons.meeting_room_rounded),
           label: "Rooms",
         ),
         NavigationDestination(
-          icon: Icon(Icons.shopping_cart_checkout_rounded),
+          icon: Icon(Icons.people_alt_rounded),
           label: "Tenants",
         ),
         NavigationDestination(
-          icon: Icon(Icons.store_rounded),
+          icon: Icon(Icons.payments_rounded),
           label: "Transaction",
         ),
         NavigationDestination(icon: Icon(Icons.settings), label: "Setting"),

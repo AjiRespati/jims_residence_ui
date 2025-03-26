@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/features/auth/login_screen.dart';
 import 'package:frontend/features/home/home.dart';
+import 'package:frontend/features/room/room.dart';
 import '../widgets/not_found_page.dart';
 
 import 'animate_route_transitions.dart';
@@ -21,6 +22,9 @@ class AppRouter {
           break;
         case homeRoute:
           screen = Home();
+          break;
+        case roomRoute:
+          screen = Room();
           break;
         default:
           screen = const NotFoundPage();
