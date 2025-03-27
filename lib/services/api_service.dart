@@ -133,7 +133,10 @@ class ApiService {
 
     final response = await http.get(
       Uri.parse('$baseUrl/room'),
-      headers: {"Authorization": "Bearer $token"},
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
     );
 
     if (response.statusCode == 401) {
@@ -144,6 +147,53 @@ class ApiService {
       return jsonDecode(response.body);
     } else {
       return [];
+    }
+  }
+
+  Future<dynamic> fetchRoom({required String roomId}) async {
+    String? token = await _getToken();
+
+    final response = await http.get(
+      Uri.parse('$baseUrl/room/$roomId'),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
+    );
+
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) return null;
+      return fetchRoom(roomId: roomId);
+    } else if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      return null;
+    }
+  }
+
+  Future<dynamic> updateRoomStatus({
+    required String roomId,
+    required String roomStatus,
+  }) async {
+    String? token = await _getToken();
+    final response = await http.put(
+      Uri.parse('$baseUrl/room/$roomId'),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
+      body: jsonEncode({'roomStatus': roomStatus}),
+    );
+
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) return null;
+      return fetchRoom(roomId: roomId);
+    } else if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      return null;
     }
   }
 
@@ -200,7 +250,10 @@ class ApiService {
 
     final response = await http.get(
       Uri.parse('$baseUrl/tenant'),
-      headers: {"Authorization": "Bearer $token"},
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
     );
 
     if (response.statusCode == 401) {
@@ -261,7 +314,10 @@ class ApiService {
 
     final response = await http.get(
       Uri.parse('$baseUrl/products/$productId'),
-      headers: {"Authorization": "Bearer $token"},
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
     );
 
     if (response.statusCode == 401) {
@@ -280,7 +336,10 @@ class ApiService {
 
     final response = await http.get(
       Uri.parse('$baseUrl/products'),
-      headers: {"Authorization": "Bearer $token"},
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
     );
 
     if (response.statusCode == 401) {
@@ -365,7 +424,10 @@ class ApiService {
     String? token = await _getToken();
     final response = await http.get(
       Uri.parse('$baseUrl/dashboard/commissionSummary'),
-      headers: {"Authorization": "Bearer $token"},
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
     );
     if (response.statusCode == 200) {
       return json.decode(response.body);
@@ -420,7 +482,10 @@ class ApiService {
 
     final response = await http.get(
       Uri.parse('$baseUrl/stocks/product/$productId'),
-      headers: {"Authorization": "Bearer $token"},
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
     );
 
     if (response.statusCode == 401) {

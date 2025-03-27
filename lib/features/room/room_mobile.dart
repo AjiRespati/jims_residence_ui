@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:frontend/features/room/components/add_room.dart';
 import 'package:frontend/routes/route_names.dart';
@@ -40,7 +42,7 @@ class RoomMobile extends StatelessWidget with GetItMixin {
         ],
       ),
       body:
-          watchOnly((RoomViewModel x) => x.isBusy)
+          watchOnly((RoomViewModel x) => x.rooms).isEmpty
               ? const Center(child: CircularProgressIndicator())
               : ListView.builder(
                 itemCount: get<RoomViewModel>().rooms.length,
@@ -126,12 +128,18 @@ class RoomMobile extends StatelessWidget with GetItMixin {
                               Column(
                                 children: [
                                   IconButton(
-                                    onPressed: () {
-                                      Navigator.pushNamed(
-                                        context,
-                                        roomSettingsRoute,
-                                        arguments: item,
-                                      );
+                                    onPressed: () async {
+                                      get<RoomViewModel>().roomId = item['id'];
+                                      final go =
+                                          await get<RoomViewModel>()
+                                              .fetchRoom();
+                                      if (go) {
+                                        Navigator.pushNamed(
+                                          context,
+                                          roomSettingsRoute,
+                                          arguments: item,
+                                        );
+                                      }
                                     },
                                     icon: Icon(Icons.settings),
                                   ),

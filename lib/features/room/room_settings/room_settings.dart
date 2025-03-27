@@ -18,14 +18,14 @@ class _RoomSettingsState extends State<RoomSettings> with GetItStateMixin {
   void initState() {
     super.initState();
     print(widget.datas);
-    get<RoomViewModel>().roomId = widget.datas['id'] ?? "";
+    // get<RoomViewModel>().roomId = widget.datas['id'] ?? "";
   }
 
   @override
   Widget build(BuildContext context) {
     return ResponsiveLayout(
       desktopLayout: RoomSettingsDesktop(),
-      mobileLayout: RoomSettingsMobile(datas: widget.datas),
+      mobileLayout: RoomSettingsMobile(),
     );
   }
 }

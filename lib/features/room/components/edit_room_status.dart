@@ -19,30 +19,6 @@ class EditRoomStatus extends StatelessWidget with GetItMixin {
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
           SizedBox(height: 6),
-          // TextFormField(
-          //   decoration: InputDecoration(
-          //     isDense: true,
-          //     label: Text("Nomor Kamar"),
-          //   ),
-          //   keyboardType: TextInputType.number,
-          //   onChanged: (value) => get<RoomViewModel>().roomNumber = value,
-          // ),
-          // SizedBox(height: 6),
-          // DropdownButtonFormField<String>(
-          //   decoration: InputDecoration(labelText: "Ukuran Kamar"),
-          //   value: get<RoomViewModel>().roomSize,
-          //   items:
-          //       ["Kecil", "Standard", "Besar"].map((item) {
-          //         return DropdownMenuItem<String>(
-          //           value: item,
-          //           child: Text(item),
-          //         );
-          //       }).toList(),
-          //   onChanged: (value) {
-          //     get<RoomViewModel>().roomSize = value ?? "Standard";
-          //   },
-          // ),
-          // SizedBox(height: 6),
           DropdownButtonFormField<String>(
             decoration: InputDecoration(labelText: "Status Kamar"),
             value: get<RoomViewModel>().roomStatus,
@@ -75,11 +51,11 @@ class EditRoomStatus extends StatelessWidget with GetItMixin {
               GradientElevatedButton(
                 onPressed: () async {
                   get<RoomViewModel>().isBusy = true;
-                  await get<RoomViewModel>().addRoom(context: context);
+                  await get<RoomViewModel>().updateRoomStatus();
                   Navigator.pop(context);
                 },
                 child: Text(
-                  "Tambah Kamar",
+                  "Ubah Status",
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,

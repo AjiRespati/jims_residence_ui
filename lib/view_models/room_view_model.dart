@@ -28,6 +28,7 @@ class RoomViewModel extends ChangeNotifier {
   DateTime? _paymentDate;
   String _paymentStatus = "";
   List<dynamic> _rooms = [];
+  dynamic _room;
 
   String get roomId => _roomId;
   set roomId(String val) {
@@ -98,6 +99,12 @@ class RoomViewModel extends ChangeNotifier {
   List<dynamic> get rooms => _rooms;
   set rooms(List<dynamic> val) {
     _rooms = val;
+    notifyListeners();
+  }
+
+  dynamic get room => _room;
+  set room(dynamic val) {
+    _room = val;
     notifyListeners();
   }
 
@@ -213,6 +220,23 @@ class RoomViewModel extends ChangeNotifier {
     rooms = await apiService.fetchRooms();
     isBusy = false;
     return rooms.isNotEmpty;
+  }
+
+  Future<bool> fetchRoom() async {
+    room = await apiService.fetchRoom(roomId: roomId);
+    roomStatus = room['roomStatus'];
+    isBusy = false;
+    return room != null;
+  }
+
+  Future<bool> updateRoomStatus() async {
+    room = await apiService.updateRoomStatus(
+      roomId: roomId,
+      roomStatus: roomStatus,
+    );
+    roomStatus = room['roomStatus'];
+    isBusy = false;
+    return room != null;
   }
 
   Future<bool> addTenant({required BuildContext context}) async {
