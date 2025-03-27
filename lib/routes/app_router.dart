@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/features/auth/login_screen.dart';
 import 'package:frontend/features/home/home.dart';
 import 'package:frontend/features/room/room.dart';
+import 'package:frontend/features/room/room_detail/room_detail.dart';
 import 'package:frontend/features/tenant/tenant.dart';
 import '../widgets/not_found_page.dart';
 
@@ -11,7 +12,7 @@ import 'route_names.dart';
 class AppRouter {
   static RouteFactory routes() {
     return ((settings) {
-      // dynamic arguments = settings.arguments;
+      dynamic arguments = settings.arguments;
       Widget screen;
 
       switch (settings.name) {
@@ -26,6 +27,9 @@ class AppRouter {
           break;
         case roomRoute:
           screen = Room();
+          break;
+        case roomDetailRoute:
+          screen = RoomDetail(datas: arguments);
           break;
         case tenantRoute:
           screen = Tenant();

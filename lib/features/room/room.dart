@@ -17,7 +17,7 @@ class _RoomState extends State<Room> with GetItStateMixin {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      get<RoomViewModel>().fetchRooms();
+      get<RoomViewModel>().fetchRooms(isAfterEvent: false);
     });
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/features/room/components/add_room.dart';
+import 'package:frontend/routes/route_names.dart';
 import 'package:frontend/view_models/room_view_model.dart';
 import 'package:frontend/widgets/buttons/add_button.dart';
 
@@ -11,6 +12,7 @@ class RoomMobile extends StatelessWidget with GetItMixin {
 
   @override
   Widget build(BuildContext context) {
+    watchOnly((RoomViewModel x) => x.rooms);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -50,7 +52,13 @@ class RoomMobile extends StatelessWidget with GetItMixin {
                     ),
                     elevation: 2,
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          roomDetailRoute,
+                          arguments: item,
+                        );
+                      },
                       child: SizedBox(
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),

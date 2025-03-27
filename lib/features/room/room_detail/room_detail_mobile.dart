@@ -1,0 +1,95 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:flutter/material.dart';
+import 'package:frontend/features/tenant/components/add_tenant.dart';
+import 'package:frontend/view_models/room_view_model.dart';
+import 'package:frontend/widgets/buttons/gradient_elevated_button.dart';
+import 'package:frontend/widgets/mobile_navbar.dart';
+import 'package:get_it_mixin/get_it_mixin.dart';
+
+class RoomDetailMobile extends StatelessWidget with GetItMixin {
+  RoomDetailMobile({required this.datas, super.key});
+
+  final dynamic datas;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: true, // Add this line
+      appBar: AppBar(
+        title: Text(
+          "Detail Kamar",
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+        ),
+      ),
+      body: SingleChildScrollView(
+        // Wrap the body with SingleChildScrollView
+        child: Column(
+          children: [
+            SizedBox(
+              width: 50,
+              child: Text(
+                datas['roomNumber'],
+                style: TextStyle(fontSize: 35, fontWeight: FontWeight.w500),
+              ),
+            ),
+            Stack(
+              alignment: AlignmentDirectional.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: GradientElevatedButton(
+                    inactiveDelay: Duration.zero,
+                    onPressed: () async {
+                      showModalBottomSheet(
+                        isScrollControlled: true,
+                        constraints: BoxConstraints(
+                          minHeight: 440,
+                          maxHeight: 450,
+                        ),
+                        context: context,
+                        builder: (context) {
+                          return Padding(
+                            padding: EdgeInsets.only(
+                              bottom: MediaQuery.of(context).viewInsets.bottom,
+                            ),
+                            child: SingleChildScrollView(
+                              child: SizedBox(width: 600, child: AddTenant()),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    child: Text(
+                      "Daftarkan Penghuni Kamar",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+                if (watchOnly((RoomViewModel x) => x.isBusy))
+                  Row(
+                    children: [
+                      SizedBox(width: 20),
+                      SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.grey[300],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: MobileNavbar(),
+    );
+  }
+}

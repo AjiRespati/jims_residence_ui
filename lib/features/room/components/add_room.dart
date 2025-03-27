@@ -69,18 +69,39 @@ class AddRoom extends StatelessWidget with GetItMixin {
                     get<RoomViewModel>().basicPrice = double.parse(value),
           ),
           SizedBox(height: 30),
-          GradientElevatedButton(
-            onPressed: () async {
-              await get<RoomViewModel>().addRoom(context: context);
-              Navigator.pop(context);
-            },
-            child: Text(
-              "Tambah Kamar",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
+          Stack(
+            alignment: AlignmentDirectional.center,
+            children: [
+              GradientElevatedButton(
+                onPressed: () async {
+                  get<RoomViewModel>().isBusy = true;
+                  await get<RoomViewModel>().addRoom(context: context);
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  "Tambah Kamar",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
-            ),
+              if (watchOnly((RoomViewModel x) => x.isBusy))
+                Row(
+                  children: [
+                    SizedBox(width: 20),
+                    SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.grey[300],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+            ],
           ),
         ],
       ),

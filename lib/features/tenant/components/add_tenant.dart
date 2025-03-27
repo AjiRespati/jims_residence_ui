@@ -16,7 +16,7 @@ class AddTenant extends StatelessWidget with GetItMixin {
         children: [
           SizedBox(height: 6),
           Text(
-            "Tambah Tenant",
+            "Daftarkan Penghuni Kamar",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
           SizedBox(height: 6),
@@ -61,7 +61,7 @@ class AddTenant extends StatelessWidget with GetItMixin {
               Navigator.pop(context);
             },
             child: Text(
-              "Tambah Kamar",
+              "Daftarkan",
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w600,

@@ -163,8 +163,6 @@ class RoomViewModel extends ChangeNotifier {
   /// ################## ///
 
   Future<bool> addRoom({required BuildContext context}) async {
-    isBusy = true;
-
     final resp = await apiService.createRoom(
       roomNumber: roomNumber,
       roomSize: roomSize,
@@ -173,23 +171,23 @@ class RoomViewModel extends ChangeNotifier {
     );
 
     if (resp) {
-      await fetchRooms();
-      isBusy = false;
+      await fetchRooms(isAfterEvent: true);
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('Kamar Berhasil ditambahkan')));
+      isBusy = false;
       return true;
     } else {
-      isBusy = false;
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('Kamar gagal ditambahkan')));
+      isBusy = false;
       return false;
     }
   }
 
-  Future<bool> fetchRooms() async {
-    isBusy = true;
+  Future<bool> fetchRooms({required bool isAfterEvent}) async {
+    isBusy = !isAfterEvent;
     rooms = await apiService.fetchRooms();
     isBusy = false;
     return rooms.isNotEmpty;
