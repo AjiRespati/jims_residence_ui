@@ -31,3 +31,18 @@ String formatDateString(String dateTimeString) {
   final formatter = DateFormat('yyyy-MM-dd');
   return formatter.format(dateTime);
 }
+
+String formatCurrency(num number) {
+  // Floor rounding the number
+  int roundedNumber = number.floor();
+
+  // Create a NumberFormat for Indonesian Rupiah
+  final currencyFormatter = NumberFormat.currency(
+    locale: 'id_ID',
+    symbol: 'Rp',
+    decimalDigits: 0, // No decimal digits
+  );
+
+  // Format the rounded number
+  return currencyFormatter.format(roundedNumber);
+}

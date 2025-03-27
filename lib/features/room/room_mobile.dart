@@ -122,6 +122,21 @@ class RoomMobile extends StatelessWidget with GetItMixin {
                                   ),
                                 ],
                               ),
+                              Expanded(child: SizedBox()),
+                              Column(
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        roomSettingsRoute,
+                                        arguments: item,
+                                      );
+                                    },
+                                    icon: Icon(Icons.settings),
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
                         ),

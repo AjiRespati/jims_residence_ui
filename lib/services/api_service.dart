@@ -214,6 +214,45 @@ class ApiService {
     }
   }
 
+  // TODO: ADDITIONAL PRICES ROUTES
+
+  Future<bool> createAdditionalPrice({
+    required String roomId,
+    required String name,
+    required double amount,
+    required String? description,
+  }) async {
+    String? token = await _getToken();
+    final response = await http.post(
+      Uri.parse('$baseUrl/additionalPrice'),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
+      body: jsonEncode({
+        'roomId': roomId,
+        'name': name,
+        'amount': amount,
+        'description': description,
+      }),
+    );
+
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) return false;
+      return createAdditionalPrice(
+        roomId: roomId,
+        name: name,
+        amount: amount,
+        description: description,
+      );
+    } else if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   // TODO: PRODUCTS ROUTES
   /// GET /
   /// POST /

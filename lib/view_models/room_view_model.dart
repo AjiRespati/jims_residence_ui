@@ -158,6 +158,28 @@ class RoomViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  String _addPriceName = "";
+  double _addPriceAmount = 0.0;
+  String? _addPriceDesc = "";
+
+  String get addPriceName => _addPriceName;
+  set addPriceName(String val) {
+    _addPriceName = val;
+    notifyListeners();
+  }
+
+  double get addPriceAmount => _addPriceAmount;
+  set addPriceAmount(double val) {
+    _addPriceAmount = val;
+    notifyListeners();
+  }
+
+  String? get addPriceDesc => _addPriceDesc;
+  set addPriceDesc(String? val) {
+    _addPriceDesc = val;
+    notifyListeners();
+  }
+
   /// ################## ///
   ///       METHOD       ///
   /// ################## ///
@@ -227,5 +249,29 @@ class RoomViewModel extends ChangeNotifier {
     tenants = await apiService.fetchTenants();
     isBusy = false;
     return tenants.isNotEmpty;
+  }
+
+  Future<bool> createAdditionalPrice({required BuildContext context}) async {
+    final resp = await apiService.createAdditionalPrice(
+      roomId: roomId,
+      name: addPriceName,
+      amount: addPriceAmount,
+      description: addPriceDesc,
+    );
+
+    if (resp) {
+      await fetchRooms(isAfterEvent: true);
+      isBusy = false;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Biaya Berhasil ditambahkan')));
+      return true;
+    } else {
+      isBusy = false;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Biaya gagal ditambahkan')));
+      return false;
+    }
   }
 }

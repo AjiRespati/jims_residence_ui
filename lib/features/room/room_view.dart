@@ -5,14 +5,14 @@ import 'package:frontend/utils/responsive_layout.dart';
 import 'package:frontend/view_models/room_view_model.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
-class Room extends StatefulWidget with GetItStatefulWidgetMixin {
-  Room({super.key});
+class RoomView extends StatefulWidget with GetItStatefulWidgetMixin {
+  RoomView({super.key});
 
   @override
-  State<Room> createState() => _RoomState();
+  State<RoomView> createState() => _RoomViewState();
 }
 
-class _RoomState extends State<Room> with GetItStateMixin {
+class _RoomViewState extends State<RoomView> with GetItStateMixin {
   @override
   void initState() {
     super.initState();

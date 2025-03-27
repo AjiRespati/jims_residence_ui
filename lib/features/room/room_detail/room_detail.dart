@@ -7,8 +7,8 @@ import 'package:get_it_mixin/get_it_mixin.dart';
 
 class RoomDetail extends StatefulWidget with GetItStatefulWidgetMixin {
   RoomDetail({required this.datas, super.key});
-
   final dynamic datas;
+
   @override
   State<RoomDetail> createState() => _RoomDetailState();
 }

@@ -4,4 +4,5 @@ const String signOutRoute = "/SignOut";
 const String homeRoute = "/Home";
 const String roomRoute = "/Room";
 const String roomDetailRoute = "/Room/Detail";
+const String roomSettingsRoute = "/Room/Settings";
 const String tenantRoute = "/Tenant";

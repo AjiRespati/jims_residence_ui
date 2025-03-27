@@ -1,0 +1,46 @@
+{
+    "id": "fdb2253b-22f6-46aa-970e-e0164af4a643",
+    "roomNumber": "01",
+    "roomSize": "Standard",
+    "roomStatus": "Tersedia",
+    "basicPrice": 1200000,
+    "totalPrice": 1200000,
+    "description": null,
+    "startDate": null,
+    "dueDate": null,
+    "paymentDate": null,
+    "paymentStatus": null,
+    "updateBy": null,
+    "createdAt": "2025-03-27T01:02:04.479Z",
+    "updatedAt": "2025-03-27T01:02:04.479Z",
+    "AdditionalPrices": [],
+    "OtherCosts": [],
+    "Tenants": [
+        {
+            "id": "a1fde830-ca48-4fcc-935d-e1110154a89e",
+            "roomId": "fdb2253b-22f6-46aa-970e-e0164af4a643",
+            "name": "Gugun Gundul",
+            "phone": "087744445555",
+            "idNumber": "6482022405740002",
+            "idImagePath": null,
+            "isIdCopyDone": false,
+            "tenancyStatus": "Active",
+            "updateBy": null,
+            "createdAt": "2025-03-27T02:15:16.619Z",
+            "updatedAt": "2025-03-27T02:15:16.619Z"
+        }
+    ],
+    "latestTenant": {
+        "id": "a1fde830-ca48-4fcc-935d-e1110154a89e",
+        "roomId": "fdb2253b-22f6-46aa-970e-e0164af4a643",
+        "name": "Gugun Gundul",
+        "phone": "087744445555",
+        "idNumber": "6482022405740002",
+        "idImagePath": null,
+        "isIdCopyDone": false,
+        "tenancyStatus": "Active",
+        "updateBy": null,
+        "createdAt": "2025-03-27T02:15:16.619Z",
+        "updatedAt": "2025-03-27T02:15:16.619Z"
+    }
+}

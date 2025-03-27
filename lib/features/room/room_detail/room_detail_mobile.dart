@@ -33,6 +33,74 @@ class RoomDetailMobile extends StatelessWidget with GetItMixin {
                 style: TextStyle(fontSize: 35, fontWeight: FontWeight.w500),
               ),
             ),
+            Row(
+              children: [
+                SizedBox(width: 20),
+                Text("Ukuran: "),
+                Text(datas['roomSize'] ?? " -"),
+              ],
+            ),
+            Row(
+              children: [
+                SizedBox(width: 20),
+                Text("Status: "),
+                Text(datas['roomStatus'] ?? " -"),
+              ],
+            ),
+            Row(
+              children: [
+                SizedBox(width: 20),
+                Text("Harga: "),
+                Text((datas['basicPrice'] ?? " -").toString()),
+              ],
+            ),
+            if ((datas['AdditionalPrices'] ?? []).length != 0)
+              Row(children: [SizedBox(width: 20), Text("Tambahan harga: ")]),
+            if ((datas['AdditionalPrices'] ?? []).length != 0)
+              SizedBox(
+                height: 300,
+                child: ListView.builder(
+                  itemCount: (datas['AdditionalPrices'] ?? []).length,
+                  itemBuilder: (context, index) {
+                    dynamic item = datas['AdditionalPrices'][index];
+                    return Text("data");
+                  },
+                ),
+              ),
+            Row(children: [SizedBox(width: 20), Text("Penghuni: ")]),
+            Row(
+              children: [
+                SizedBox(width: 60),
+                Text("Nama: "),
+                Text((datas['latestTenant']?['name'] ?? " -")),
+              ],
+            ),
+            Row(
+              children: [
+                SizedBox(width: 60),
+                Text("Telepon: "),
+                Text((datas['latestTenant']?['phone'] ?? " -")),
+              ],
+            ),
+            Row(
+              children: [
+                SizedBox(width: 60),
+                Text("NIK: "),
+                Text((datas['latestTenant']?['idNumber'] ?? " -")),
+              ],
+            ),
+            Row(
+              children: [
+                SizedBox(width: 60),
+                Text("Fotocopy KTP: "),
+                Text(
+                  (datas['latestTenant']?['isIdCopyDone'] ?? false)
+                      ? "Sudah"
+                      : "Belum",
+                ),
+              ],
+            ),
+            SizedBox(height: 100),
             Stack(
               alignment: AlignmentDirectional.center,
               children: [
