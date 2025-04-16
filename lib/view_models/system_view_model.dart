@@ -10,8 +10,13 @@ class SystemViewModel extends ChangeNotifier {
   final ApiService apiService = ApiService();
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   bool _isBusy = false;
+  bool _isLoginView = true;
+
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController confirmpasswordController =
+      TextEditingController();
   bool _showPassword = false;
   int _currentPageIndex = 0;
   List<String> pageLabels = ["Home", "Products", "Stock", "Sales"];
@@ -24,6 +29,12 @@ class SystemViewModel extends ChangeNotifier {
   bool get isBusy => _isBusy;
   set isBusy(bool val) {
     _isBusy = val;
+    notifyListeners();
+  }
+
+  bool get isLoginView => _isLoginView;
+  set isLoginView(bool val) {
+    _isLoginView = val;
     notifyListeners();
   }
 
@@ -83,5 +94,12 @@ class SystemViewModel extends ChangeNotifier {
         context,
       ).showSnackBar(const SnackBar(content: Text("Invalid credentials")));
     }
+  }
+
+  Future<bool> register() async {
+    return await apiService.register(
+      emailController.text,
+      passwordController.text,
+    );
   }
 }
