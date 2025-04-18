@@ -5,11 +5,13 @@ class EditButton extends StatelessWidget {
     this.size,
     required this.message,
     required this.onPressed,
+    this.altIcon,
     super.key,
   });
 
   final double? size;
   final String? message;
+  final IconData? altIcon;
   final Function() onPressed;
 
   @override
@@ -28,7 +30,7 @@ class EditButton extends StatelessWidget {
           ),
           onPressed: onPressed,
           child: Icon(
-            Icons.edit,
+            altIcon ?? Icons.edit,
             // color: Colors.white,
             size: size == null ? 20 : size! * 0.8,
           ),

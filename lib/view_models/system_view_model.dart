@@ -102,4 +102,9 @@ class SystemViewModel extends ChangeNotifier {
       passwordController.text,
     );
   }
+
+  Future<bool> logout() async {
+    isBusy = true;
+    return await apiService.logout();
+  }
 }

@@ -8,13 +8,13 @@
       "name": "frontend",
       "request": "launch",
       "type": "dart",
-      // "args": ["-d", "chrome", "--web-port", "3330", "--wasm"]
+      // "args": ["-d", "chrome", "--web-port", "2222", "--wasm"]
       "args": [
         "-d",
         "chrome",
         "--web-port",
         "2222",
-        "canvaskit"
+        // "canvaskit"
       ]
       // "args": [
       //     "-d",  

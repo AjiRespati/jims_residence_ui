@@ -7,12 +7,41 @@ class RoomViewModel extends ChangeNotifier {
   final ApiService apiService = ApiService();
   // final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
+  bool _isUpdating = false;
   bool _isBusy = false;
+  bool _isNoSession = false;
+  bool _isError = false;
+  String? _errorMessage;
+
   final formKey = GlobalKey<FormState>();
+
+  bool get isUpdating => _isUpdating;
+  set isUpdating(bool val) {
+    _isUpdating = val;
+    notifyListeners();
+  }
 
   bool get isBusy => _isBusy;
   set isBusy(bool val) {
     _isBusy = val;
+    notifyListeners();
+  }
+
+  bool get isNoSession => _isNoSession;
+  set isNoSession(bool val) {
+    _isNoSession = val;
+    notifyListeners();
+  }
+
+  bool get isError => _isError;
+  set isError(bool val) {
+    _isError = val;
+    notifyListeners();
+  }
+
+  String? get errorMessage => _errorMessage;
+  set errorMessage(String? val) {
+    _errorMessage = val;
     notifyListeners();
   }
 
@@ -187,6 +216,35 @@ class RoomViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  List<dynamic> _kosts = [];
+  String _kostName = "";
+  String _kostAddress = "";
+  String _kostDescription = "";
+
+  List<dynamic> get kosts => _kosts;
+  set kosts(List<dynamic> val) {
+    _kosts = val;
+    notifyListeners();
+  }
+
+  String get kostName => _kostName;
+  set kostName(String val) {
+    _kostName = val;
+    notifyListeners();
+  }
+
+  String get kostAddress => _kostAddress;
+  set kostAddress(String val) {
+    _kostAddress = val;
+    notifyListeners();
+  }
+
+  String get kostDescription => _kostDescription;
+  set kostDescription(String val) {
+    _kostDescription = val;
+    notifyListeners();
+  }
+
   /// ################## ///
   ///       METHOD       ///
   /// ################## ///
@@ -296,6 +354,35 @@ class RoomViewModel extends ChangeNotifier {
         context,
       ).showSnackBar(SnackBar(content: Text('Biaya gagal ditambahkan')));
       return false;
+    }
+  }
+
+  Future<bool> fetchKosts() async {
+    isBusy = true;
+    kosts = await apiService.fetchKosts();
+    isBusy = false;
+    return kosts.isNotEmpty;
+  }
+
+  Future<bool> createKost() async {
+    isBusy = true;
+    String response = await apiService.createKost(
+      name: kostName,
+      address: kostAddress,
+      description: kostDescription,
+    );
+
+    switch (response) {
+      case 'relogin':
+        isNoSession = true;
+        return false;
+      case 'success':
+        kosts = await apiService.fetchKosts();
+        return true;
+
+      default:
+        errorMessage = response;
+        return false;
     }
   }
 }

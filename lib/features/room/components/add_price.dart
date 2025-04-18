@@ -42,7 +42,6 @@ class AddPrice extends StatelessWidget with GetItMixin {
               isDense: true,
               label: Text("Keterangan"),
             ),
-            keyboardType: TextInputType.number,
             onChanged: (value) => get<RoomViewModel>().addPriceDesc = value,
           ),
           SizedBox(height: 6),

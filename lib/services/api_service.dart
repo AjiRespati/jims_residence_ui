@@ -42,7 +42,7 @@ class ApiService {
     return false;
   }
 
-  Future<bool> logout(String refreshToken) async {
+  Future<bool> logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('accessToken');
     String? refreshToken = prefs.getString('refreshToken');
@@ -307,36 +307,45 @@ class ApiService {
     }
   }
 
-  // TODO: PRODUCTS ROUTES
+  // TODO: BOARDING HOUSE ROUTES
   /// GET /
   /// POST /
-  Future<dynamic> fetchProduct(String productId) async {
-    String? token = await _getToken();
 
-    final response = await http.get(
-      Uri.parse('$baseUrl/products/$productId'),
+  Future<String> createKost({
+    required String name,
+    required String address,
+    required String description,
+  }) async {
+    String? token = await _getToken();
+    final response = await http.post(
+      Uri.parse('$baseUrl/boardingHouse'),
       headers: {
         'Content-Type': 'application/json',
         "Authorization": "Bearer $token",
       },
+      body: jsonEncode({
+        'name': name,
+        'address': address,
+        'description': description,
+      }),
     );
 
     if (response.statusCode == 401) {
       token = await refreshAccessToken();
-      if (token == null) return null;
-      return fetchProduct(productId);
+      if (token == null) return "relogin";
+      return createKost(name: name, address: address, description: description);
     } else if (response.statusCode == 200) {
-      return jsonDecode(response.body);
+      return "success";
     } else {
-      return null;
+      return response.body;
     }
   }
 
-  Future<List<dynamic>> fetchProducts() async {
+  Future<List<dynamic>> fetchKosts() async {
     String? token = await _getToken();
 
     final response = await http.get(
-      Uri.parse('$baseUrl/products'),
+      Uri.parse('$baseUrl/boardingHouse'),
       headers: {
         'Content-Type': 'application/json',
         "Authorization": "Bearer $token",
@@ -346,388 +355,8 @@ class ApiService {
     if (response.statusCode == 401) {
       token = await refreshAccessToken();
       if (token == null) return [];
-      return fetchProducts();
+      return fetchRooms();
     } else if (response.statusCode == 200) {
-      return jsonDecode(response.body);
-    } else {
-      return [];
-    }
-  }
-
-  // ✅ Create Product API with Image Upload
-  Future<bool> createProduct(
-    String name,
-    String description,
-    String metric,
-    double price,
-    Uint8List? imageWeb,
-    XFile? imageDevice,
-  ) async {
-    String? token = await _getToken();
-    var request = http.MultipartRequest("POST", Uri.parse('$baseUrl/products'));
-    request.headers['Authorization'] = "Bearer $token";
-    request.fields["name"] = name;
-    request.fields["description"] = description;
-
-    //TODO: ambil dari user JWT
-    request.fields["updateBy"] = "ambil dari user";
-    request.fields["price"] = price.toString();
-    request.fields["metricType"] = metric; // ✅ Add metric field
-
-    // ✅ Handle Web (File Picker)
-    if (kIsWeb && imageWeb != null) {
-      Uint8List imageBytes = imageWeb;
-      request.files.add(
-        http.MultipartFile.fromBytes(
-          'image',
-          imageBytes,
-          filename: "product_image.png",
-          contentType: MediaType('image', 'png'),
-        ),
-      );
-    }
-    // ✅ Handle Mobile (Gallery & Camera)
-    else if (!kIsWeb && imageDevice != null) {
-      XFile imageFile = XFile(imageDevice.path);
-      request.files.add(
-        await http.MultipartFile.fromPath(
-          'image',
-          imageFile.path,
-          contentType: MediaType('image', 'png'),
-        ),
-      );
-    }
-
-    var response = await request.send();
-    return response.statusCode == 200;
-  }
-
-  // ✅ Pick Image for Mobile (Gallery & Camera)
-  Future<XFile?> pickImageMobile(ImageSource source) async {
-    final ImagePicker picker = ImagePicker();
-    return await picker.pickImage(source: source);
-  }
-
-  // ✅ Pick Image for Web
-  Future<Uint8List?> pickImageWeb() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.image,
-    );
-    if (result != null) {
-      return result.files.first.bytes;
-    }
-    return null;
-  }
-
-  Future<Map<String, dynamic>> fetchCommissionSummary({
-    required BuildContext context,
-  }) async {
-    String? token = await _getToken();
-    final response = await http.get(
-      Uri.parse('$baseUrl/dashboard/commissionSummary'),
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": "Bearer $token",
-      },
-    );
-    if (response.statusCode == 200) {
-      return json.decode(response.body);
-    } else {
-      if (response.body.contains("Invalid token")) {
-        return json.decode(response.body);
-      } else {
-        throw Exception('Failed to fetch commission data');
-      }
-    }
-  }
-
-  // TODO: METRIC ROUTES
-  /// GET /
-  /// POST /
-  ///
-  Future<bool> createMetric(
-    BuildContext context,
-    String productId,
-    String metricType,
-    double price,
-  ) async {
-    String? token = await _getToken();
-    final response = await http.post(
-      Uri.parse('$baseUrl/metrics'),
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": "Bearer $token",
-      },
-      body: jsonEncode({
-        'productId': productId,
-        'metricType': metricType,
-        'price': price,
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      fetchProduct(productId);
-      Navigator.pop(context);
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  // TODO: STOCKS ROUTES
-  /// GET /
-  /// POST /
-
-  Future<dynamic> fetchStockByProduct(String productId) async {
-    String? token = await _getToken();
-
-    final response = await http.get(
-      Uri.parse('$baseUrl/stocks/product/$productId'),
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": "Bearer $token",
-      },
-    );
-
-    if (response.statusCode == 401) {
-      token = await refreshAccessToken();
-      if (token == null) return null;
-      return fetchStockByProduct(productId);
-    } else if (response.statusCode == 200) {
-      return jsonDecode(response.body);
-    } else {
-      return null;
-    }
-  }
-
-  // controller parameters:
-  // metricId, stockEvent, amount, createdBy,
-  // salesId, subAgentId, agentId, shopId, status, description
-  Future<bool> createStock({
-    required BuildContext context,
-    required String? metricId,
-    required String stockEvent,
-    required int amount,
-    required String? salesId,
-    required String? subAgentId,
-    required String? agentId,
-    required String? shopId,
-    required String status,
-    required String? description,
-  }) async {
-    String? token = await _getToken();
-    final response = await http.post(
-      Uri.parse('$baseUrl/stocks'),
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": "Bearer $token",
-      },
-      body: jsonEncode({
-        'metricId': metricId,
-        'stockEvent': stockEvent,
-        'amount': amount,
-        'salesId': salesId,
-        'subAgentId': subAgentId,
-        'agentId': agentId,
-        'status': status,
-        'description': description,
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      Navigator.pop(context);
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  /// Date String yyyy-mm-dd, 2025-03-01
-  Future<List<dynamic>> getStockTable({
-    required String fromDate,
-    required String toDate,
-  }) async {
-    String? token = await _getToken();
-
-    final response = await http.get(
-      Uri.parse('$baseUrl/stocks/table?fromDate=$fromDate&toDate=$toDate'),
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": "Bearer $token",
-      },
-    );
-
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body);
-    } else {
-      return [];
-    }
-  }
-
-  /// Date String yyyy-mm-dd, 2025-03-01
-  Future<List<dynamic>> getStockHistoryTable({
-    required String fromDate,
-    required String toDate,
-    required String metricId,
-  }) async {
-    String? token = await _getToken();
-
-    final response = await http.get(
-      Uri.parse(
-        '$baseUrl/stocks/history?metricId=$metricId&fromDate=$fromDate&toDate=$toDate',
-      ),
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": "Bearer $token",
-      },
-    );
-
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body);
-    } else {
-      return [];
-    }
-  }
-
-  // TODO: CLIENTS ROUTES
-  /// GET /
-  /// POST /
-
-  Future<bool> createSalesman({
-    required String name,
-    required String address,
-    required String phone,
-    required String email,
-  }) async {
-    String? token = await _getToken();
-
-    final response = await http.post(
-      Uri.parse('$baseUrl/salesmen'),
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": "Bearer $token",
-      },
-      body: jsonEncode({
-        'name': name,
-        'address': address,
-        'phone': phone,
-        'email': email,
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  Future<List<dynamic>> getSalesmen() async {
-    String? token = await _getToken();
-
-    final response = await http.get(
-      Uri.parse('$baseUrl/salesmen'),
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": "Bearer $token",
-      },
-    );
-
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body);
-    } else {
-      return [];
-    }
-  }
-
-  Future<bool> createSubAgent({
-    required String name,
-    required String address,
-    required String phone,
-    required String email,
-  }) async {
-    String? token = await _getToken();
-
-    final response = await http.post(
-      Uri.parse('$baseUrl/subagents'),
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": "Bearer $token",
-      },
-      body: jsonEncode({
-        'name': name,
-        'address': address,
-        'phone': phone,
-        'email': email,
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  Future<List<dynamic>> getSubAgents() async {
-    String? token = await _getToken();
-
-    final response = await http.get(
-      Uri.parse('$baseUrl/subagents'),
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": "Bearer $token",
-      },
-    );
-
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body);
-    } else {
-      return [];
-    }
-  }
-
-  Future<bool> createAgent({
-    required String name,
-    required String address,
-    required String phone,
-    required String email,
-  }) async {
-    String? token = await _getToken();
-
-    final response = await http.post(
-      Uri.parse('$baseUrl/agents'),
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": "Bearer $token",
-      },
-      body: jsonEncode({
-        'name': name,
-        'address': address,
-        'phone': phone,
-        'email': email,
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  Future<List<dynamic>> getAgents() async {
-    String? token = await _getToken();
-
-    final response = await http.get(
-      Uri.parse('$baseUrl/agents'),
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": "Bearer $token",
-      },
-    );
-
-    if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
       return [];
