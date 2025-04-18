@@ -115,7 +115,7 @@ class ApiService {
 
     if (response.statusCode == 401) {
       token = await refreshAccessToken();
-      if (token == null) return false;
+      if (token == null) throw Exception("please reLogin");
       return createRoom(
         roomNumber: roomNumber,
         roomSize: roomSize,
@@ -142,7 +142,7 @@ class ApiService {
 
     if (response.statusCode == 401) {
       token = await refreshAccessToken();
-      if (token == null) return [];
+      if (token == null) throw Exception("please reLogin");
       return fetchRooms();
     } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -164,7 +164,7 @@ class ApiService {
 
     if (response.statusCode == 401) {
       token = await refreshAccessToken();
-      if (token == null) return null;
+      if (token == null) throw Exception("please reLogin");
       return fetchRoom(roomId: roomId);
     } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -189,7 +189,7 @@ class ApiService {
 
     if (response.statusCode == 401) {
       token = await refreshAccessToken();
-      if (token == null) return null;
+      if (token == null) throw Exception("please reLogin");
       return fetchRoom(roomId: roomId);
     } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -229,7 +229,7 @@ class ApiService {
 
     if (response.statusCode == 401) {
       token = await refreshAccessToken();
-      if (token == null) return false;
+      if (token == null) throw Exception("please reLogin");
       return createTenant(
         roomId: roomId,
         name: name,
@@ -259,12 +259,80 @@ class ApiService {
 
     if (response.statusCode == 401) {
       token = await refreshAccessToken();
-      if (token == null) return [];
+      if (token == null) throw Exception("please reLogin");
       return fetchRooms();
     } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
       return [];
+    }
+  }
+
+  Future<dynamic> fetchTenant({required String id}) async {
+    String? token = await _getToken();
+
+    final response = await http.get(
+      Uri.parse('$baseUrl/tenant/$id'),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
+    );
+
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) throw Exception("please reLogin");
+      return fetchRooms();
+    } else if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      return null;
+    }
+  }
+
+  Future<dynamic> updateTenant({
+    required String id,
+    required dynamic updateItems,
+  }) async {
+    String? token = await _getToken();
+    final response = await http.put(
+      Uri.parse('$baseUrl/tenant/$id'),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
+      body: jsonEncode(updateItems),
+    );
+
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) throw Exception("please reLogin");
+      return updateTenant(id: id, updateItems: updateItems);
+    } else if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      return null;
+    }
+  }
+
+  Future<bool> deleteTenant({required String id}) async {
+    String? token = await _getToken();
+    final response = await http.delete(
+      Uri.parse('$baseUrl/tenant/$id'),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
+    );
+
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) throw Exception("please reLogin");
+      return deleteTenant(id: id);
+    } else if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw Exception("errorMessage");
     }
   }
 
@@ -293,7 +361,7 @@ class ApiService {
 
     if (response.statusCode == 401) {
       token = await refreshAccessToken();
-      if (token == null) return false;
+      if (token == null) throw Exception("please reLogin");
       return createAdditionalPrice(
         roomId: roomId,
         name: name,
@@ -332,7 +400,7 @@ class ApiService {
 
     if (response.statusCode == 401) {
       token = await refreshAccessToken();
-      if (token == null) return "relogin";
+      if (token == null) throw Exception("please reLogin");
       return createKost(name: name, address: address, description: description);
     } else if (response.statusCode == 200) {
       return "success";
@@ -354,7 +422,7 @@ class ApiService {
 
     if (response.statusCode == 401) {
       token = await refreshAccessToken();
-      if (token == null) return [];
+      if (token == null) throw Exception("please reLogin");
       return fetchRooms();
     } else if (response.statusCode == 200) {
       return jsonDecode(response.body);

@@ -97,7 +97,7 @@ class SettingsMobile extends StatelessWidget with GetItMixin {
                               onTap: () {
                                 Navigator.pushNamed(
                                   context,
-                                  homeRoute,
+                                  roomRoute,
                                   arguments: true,
                                 );
                               },
@@ -105,12 +105,12 @@ class SettingsMobile extends StatelessWidget with GetItMixin {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text("Shop Management"),
+                                  Text("Room Management"),
                                   IconButton(
                                     onPressed: () {
                                       Navigator.pushNamed(
                                         context,
-                                        homeRoute,
+                                        roomRoute,
                                         arguments: true,
                                       );
                                     },

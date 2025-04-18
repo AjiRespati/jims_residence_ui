@@ -16,7 +16,7 @@ class _KostState extends State<Kost> with GetItStateMixin {
   @override
   void initState() {
     super.initState();
-    get<RoomViewModel>().fetchKosts();
+    // get<RoomViewModel>().fetchKosts();
   }
 
   @override

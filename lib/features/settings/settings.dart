@@ -24,6 +24,7 @@ class _SettingsState extends State<Settings> with GetItStateMixin {
     //   get<RoomViewModel>().getAllShops(context: context);
     //   get<RoomViewModel>().fetchPercentages();
     // }
+    get<RoomViewModel>().fetchKosts();
 
     get<RoomViewModel>().isBusy = false;
   }
