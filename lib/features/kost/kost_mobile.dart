@@ -102,24 +102,6 @@ class _KostMobileState extends State<KostMobile> with GetItStateMixin {
                             onPressed: () async {
                               await get<RoomViewModel>().createKost();
                               Navigator.pop(context);
-                              // bool result =
-                              //     await get<RoomViewModel>().createKost();
-                              // get<RoomViewModel>().isBusy = false;
-                              // if (result) {
-                              //   Navigator.pop(context, "success");
-                              // } else {
-                              //   if (get<RoomViewModel>().isNoSession) {
-                              //     Navigator.pushNamed(context, signInRoute);
-                              //     get<RoomViewModel>().isNoSession = false;
-                              //   } else {
-                              //     Navigator.pop(
-                              //       context,
-                              //       get<RoomViewModel>().errorMessage ?? "",
-                              //     );
-                              //     get<RoomViewModel>().errorMessage = null;
-                              //     get<RoomViewModel>().isError = false;
-                              //   }
-                              // }
                             },
                             child: Text(
                               "Tambah Kost",
@@ -136,48 +118,6 @@ class _KostMobileState extends State<KostMobile> with GetItStateMixin {
                   );
                 },
               );
-
-              // if (get<RoomViewModel>().isNoSession) {
-              //   Navigator.pushNamed(context, signInRoute);
-              //   get<RoomViewModel>().isNoSession = false;
-              // } else if (get<RoomViewModel>().isError) {
-              //   ScaffoldMessenger.of(context).showSnackBar(
-              //     SnackBar(
-              //       backgroundColor: Colors.red.shade400,
-              //       content: Text(get<RoomViewModel>().errorMessage ?? "Error"),
-              //       duration: Duration(seconds: 2), // Adjust duration as needed
-              //     ),
-              //   );
-              //   get<RoomViewModel>().isError = false;
-              //   get<RoomViewModel>().errorMessage = null;
-              // } else if (get<RoomViewModel>().isSuccess) {
-              //   ScaffoldMessenger.of(context).showSnackBar(
-              //     const SnackBar(
-              //       backgroundColor: Colors.green,
-              //       content: Text("Tambah kost berhasil"),
-              //       duration: Duration(seconds: 2), // Adjust duration as needed
-              //     ),
-              //   );
-              //   get<RoomViewModel>().isSuccess = false;
-              // }
-
-              // if (result == "success") {
-              //   ScaffoldMessenger.of(context).showSnackBar(
-              //     const SnackBar(
-              //       backgroundColor: Colors.green,
-              //       content: Text("tambah kost berhasil"),
-              //       duration: Duration(seconds: 2), // Adjust duration as needed
-              //     ),
-              //   );
-              // } else {
-              //   ScaffoldMessenger.of(context).showSnackBar(
-              //     SnackBar(
-              //       backgroundColor: Colors.green,
-              //       content: Text(result),
-              //       duration: Duration(seconds: 2), // Adjust duration as needed
-              //     ),
-              //   );
-              // }
             },
           ),
           SizedBox(width: 25),

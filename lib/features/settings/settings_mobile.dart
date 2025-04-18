@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:frontend/routes/route_names.dart';
 import 'package:frontend/view_models/system_view_model.dart';
 import 'package:frontend/widgets/buttons/edit_button.dart';
-import 'package:frontend/widgets/buttons/gradient_elevated_button.dart';
 import 'package:frontend/widgets/mobile_navbar.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
@@ -14,7 +13,6 @@ class SettingsMobile extends StatelessWidget with GetItMixin {
   @override
   Widget build(BuildContext context) {
     dynamic user = watchOnly((SystemViewModel x) => x.isBusy);
-    SystemViewModel model = get<SystemViewModel>();
     return Scaffold(
       appBar: AppBar(
         title: Text("Settings"),

@@ -2,8 +2,6 @@
 
 import 'dart:convert';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 
 import '../../application_info.dart';
 import 'package:image_picker/image_picker.dart';
@@ -86,13 +84,16 @@ class ApiService {
       await prefs.setString('accessToken', newAccessToken);
       return newAccessToken;
     } else {
-      throw Exception('Internal service error');
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
     }
   }
 
   // TODO: ROOMS ROUTES
 
   Future<bool> createRoom({
+    required String? boardingHouseId,
     required String roomNumber,
     required String roomSize,
     required String roomStatus,
@@ -106,6 +107,7 @@ class ApiService {
         "Authorization": "Bearer $token",
       },
       body: jsonEncode({
+        'boardingHouseId': boardingHouseId,
         'roomNumber': roomNumber,
         'roomSize': roomSize,
         'roomStatus': roomStatus,
@@ -117,6 +119,7 @@ class ApiService {
       token = await refreshAccessToken();
       if (token == null) throw Exception("please reLogin");
       return createRoom(
+        boardingHouseId: boardingHouseId,
         roomNumber: roomNumber,
         roomSize: roomSize,
         roomStatus: roomStatus,
@@ -125,11 +128,13 @@ class ApiService {
     } else if (response.statusCode == 200) {
       return true;
     } else {
-      throw Exception('Internal service error');
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
     }
   }
 
-  Future<List<dynamic>> fetchRooms() async {
+  Future<dynamic> fetchRooms() async {
     String? token = await _getToken();
 
     final response = await http.get(
@@ -147,7 +152,9 @@ class ApiService {
     } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      throw Exception('Internal service error');
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
     }
   }
 
@@ -169,7 +176,9 @@ class ApiService {
     } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      throw Exception('Internal service error');
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
     }
   }
 
@@ -194,7 +203,9 @@ class ApiService {
     } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      throw Exception('Internal service error');
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
     }
   }
 
@@ -242,7 +253,9 @@ class ApiService {
     } else if (response.statusCode == 200) {
       return true;
     } else {
-      throw Exception('Internal service error');
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
     }
   }
 
@@ -260,11 +273,13 @@ class ApiService {
     if (response.statusCode == 401) {
       token = await refreshAccessToken();
       if (token == null) throw Exception("please reLogin");
-      return fetchRooms();
+      return fetchTenants();
     } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      throw Exception('Internal service error');
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
     }
   }
 
@@ -286,7 +301,9 @@ class ApiService {
     } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      throw Exception('Internal service error');
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
     }
   }
 
@@ -311,7 +328,9 @@ class ApiService {
     } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      throw Exception('Internal service error');
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
     }
   }
 
@@ -332,7 +351,9 @@ class ApiService {
     } else if (response.statusCode == 200) {
       return true;
     } else {
-      throw Exception('Internal service error');
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
     }
   }
 
@@ -371,7 +392,9 @@ class ApiService {
     } else if (response.statusCode == 200) {
       return true;
     } else {
-      throw Exception('Internal service error');
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
     }
   }
 
@@ -404,7 +427,9 @@ class ApiService {
     } else if (response.statusCode == 200) {
       return true;
     } else {
-      throw Exception('Internal service error');
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
     }
   }
 
@@ -422,11 +447,13 @@ class ApiService {
     if (response.statusCode == 401) {
       token = await refreshAccessToken();
       if (token == null) throw Exception("please reLogin");
-      return fetchRooms();
+      return fetchKosts();
     } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      throw Exception('Internal service error');
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
     }
   }
 }

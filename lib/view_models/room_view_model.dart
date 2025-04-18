@@ -53,6 +53,8 @@ class RoomViewModel extends ChangeNotifier {
   }
 
   String _roomId = "";
+  String? _roomKostName;
+  String? _roomKostId;
   String _roomNumber = "";
   String _roomSize = "Standard";
   String _roomStatus = "Tersedia";
@@ -69,6 +71,18 @@ class RoomViewModel extends ChangeNotifier {
   String get roomId => _roomId;
   set roomId(String val) {
     _roomId = val;
+    notifyListeners();
+  }
+
+  String? get roomKostName => _roomKostName;
+  set roomKostName(String? val) {
+    _roomKostName = val;
+    notifyListeners();
+  }
+
+  String? get roomKostId => _roomKostId;
+  set roomKostId(String? val) {
+    _roomKostId = val;
     notifyListeners();
   }
 
@@ -256,37 +270,6 @@ class RoomViewModel extends ChangeNotifier {
   ///       METHOD       ///
   /// ################## ///
 
-  Future<bool> addRoom({required BuildContext context}) async {
-    final resp = await apiService.createRoom(
-      roomNumber: roomNumber,
-      roomSize: roomSize,
-      roomStatus: roomStatus,
-      basicPrice: basicPrice,
-    );
-
-    if (resp) {
-      await fetchRooms(isAfterEvent: true);
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Kamar Berhasil ditambahkan')));
-      isBusy = false;
-      return true;
-    } else {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Kamar gagal ditambahkan')));
-      isBusy = false;
-      return false;
-    }
-  }
-
-  Future<bool> fetchRooms({required bool isAfterEvent}) async {
-    isBusy = !isAfterEvent;
-    rooms = await apiService.fetchRooms();
-    isBusy = false;
-    return rooms.isNotEmpty;
-  }
-
   Future<bool> fetchRoom() async {
     room = await apiService.fetchRoom(roomId: roomId);
     roomStatus = room['roomStatus'];
@@ -364,12 +347,8 @@ class RoomViewModel extends ChangeNotifier {
     }
   }
 
-  Future<bool> fetchKosts() async {
-    isBusy = true;
-    kosts = await apiService.fetchKosts();
-    isBusy = false;
-    return kosts.isNotEmpty;
-  }
+  // TODO: KOST (Boarding House) Section
+  // TODO: BOILERPLATE FOR ALL CONTROLLERS
 
   Future<void> createKost() async {
     try {
@@ -381,6 +360,72 @@ class RoomViewModel extends ChangeNotifier {
       );
       await fetchKosts();
       isSuccess = true;
+    } catch (e) {
+      if (e.toString().contains("please reLogin")) {
+        isBusy = false;
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isBusy = false;
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
+  }
+
+  Future<void> fetchKosts() async {
+    try {
+      isBusy = true;
+      kosts = await apiService.fetchKosts();
+    } catch (e) {
+      if (e.toString().contains("please reLogin")) {
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
+  }
+
+  // TODO: ROOM  Section
+  // TODO: Core logic for this app
+
+  Future<void> addRoom() async {
+    try {
+      isBusy = true;
+
+      await apiService.createRoom(
+        boardingHouseId: roomKostId,
+        roomNumber: roomNumber,
+        roomSize: roomSize,
+        roomStatus: roomStatus,
+        basicPrice: basicPrice,
+      );
+
+      await fetchRooms(isAfterEvent: true);
+      isSuccess = true;
+    } catch (e) {
+      if (e.toString().contains("please reLogin")) {
+        isBusy = false;
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isBusy = false;
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
+  }
+
+  Future<void> fetchRooms({required bool isAfterEvent}) async {
+    try {
+      isBusy = !isAfterEvent;
+      var resp = await apiService.fetchRooms();
+      rooms = resp['data'];
     } catch (e) {
       if (e.toString().contains("please reLogin")) {
         isNoSession = true;
