@@ -11,6 +11,7 @@ class RoomViewModel extends ChangeNotifier {
   bool _isBusy = false;
   bool _isNoSession = false;
   bool _isError = false;
+  bool _isSuccess = false;
   String? _errorMessage;
 
   final formKey = GlobalKey<FormState>();
@@ -30,6 +31,12 @@ class RoomViewModel extends ChangeNotifier {
   bool get isNoSession => _isNoSession;
   set isNoSession(bool val) {
     _isNoSession = val;
+    notifyListeners();
+  }
+
+  bool get isSuccess => _isSuccess;
+  set isSuccess(bool val) {
+    _isSuccess = val;
     notifyListeners();
   }
 
@@ -364,25 +371,25 @@ class RoomViewModel extends ChangeNotifier {
     return kosts.isNotEmpty;
   }
 
-  Future<bool> createKost() async {
-    isBusy = true;
-    String response = await apiService.createKost(
-      name: kostName,
-      address: kostAddress,
-      description: kostDescription,
-    );
-
-    switch (response) {
-      case 'relogin':
+  Future<void> createKost() async {
+    try {
+      isBusy = true;
+      await apiService.createKost(
+        name: kostName,
+        address: kostAddress,
+        description: kostDescription,
+      );
+      await fetchKosts();
+      isSuccess = true;
+    } catch (e) {
+      if (e.toString().contains("please reLogin")) {
         isNoSession = true;
-        return false;
-      case 'success':
-        kosts = await apiService.fetchKosts();
-        return true;
-
-      default:
-        errorMessage = response;
-        return false;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
     }
   }
 }

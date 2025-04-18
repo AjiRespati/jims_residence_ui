@@ -86,7 +86,7 @@ class ApiService {
       await prefs.setString('accessToken', newAccessToken);
       return newAccessToken;
     } else {
-      return null;
+      throw Exception('Internal service error');
     }
   }
 
@@ -125,7 +125,7 @@ class ApiService {
     } else if (response.statusCode == 200) {
       return true;
     } else {
-      return false;
+      throw Exception('Internal service error');
     }
   }
 
@@ -147,7 +147,7 @@ class ApiService {
     } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      return [];
+      throw Exception('Internal service error');
     }
   }
 
@@ -169,7 +169,7 @@ class ApiService {
     } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      return null;
+      throw Exception('Internal service error');
     }
   }
 
@@ -194,7 +194,7 @@ class ApiService {
     } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      return null;
+      throw Exception('Internal service error');
     }
   }
 
@@ -242,7 +242,7 @@ class ApiService {
     } else if (response.statusCode == 200) {
       return true;
     } else {
-      return false;
+      throw Exception('Internal service error');
     }
   }
 
@@ -264,7 +264,7 @@ class ApiService {
     } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      return [];
+      throw Exception('Internal service error');
     }
   }
 
@@ -286,7 +286,7 @@ class ApiService {
     } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      return null;
+      throw Exception('Internal service error');
     }
   }
 
@@ -311,7 +311,7 @@ class ApiService {
     } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      return null;
+      throw Exception('Internal service error');
     }
   }
 
@@ -332,7 +332,7 @@ class ApiService {
     } else if (response.statusCode == 200) {
       return true;
     } else {
-      throw Exception("errorMessage");
+      throw Exception('Internal service error');
     }
   }
 
@@ -371,7 +371,7 @@ class ApiService {
     } else if (response.statusCode == 200) {
       return true;
     } else {
-      return false;
+      throw Exception('Internal service error');
     }
   }
 
@@ -379,7 +379,7 @@ class ApiService {
   /// GET /
   /// POST /
 
-  Future<String> createKost({
+  Future<bool> createKost({
     required String name,
     required String address,
     required String description,
@@ -397,15 +397,14 @@ class ApiService {
         'description': description,
       }),
     );
-
     if (response.statusCode == 401) {
       token = await refreshAccessToken();
       if (token == null) throw Exception("please reLogin");
       return createKost(name: name, address: address, description: description);
     } else if (response.statusCode == 200) {
-      return "success";
+      return true;
     } else {
-      return response.body;
+      throw Exception('Internal service error');
     }
   }
 
@@ -427,7 +426,7 @@ class ApiService {
     } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      return [];
+      throw Exception('Internal service error');
     }
   }
 }

@@ -8,12 +8,18 @@ import 'package:frontend/widgets/buttons/gradient_elevated_button.dart';
 import 'package:frontend/widgets/mobile_navbar.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
-class KostMobile extends StatelessWidget with GetItMixin {
+class KostMobile extends StatefulWidget with GetItStatefulWidgetMixin {
   KostMobile({super.key});
 
   @override
+  State<KostMobile> createState() => _KostMobileState();
+}
+
+class _KostMobileState extends State<KostMobile> with GetItStateMixin {
+  @override
   Widget build(BuildContext context) {
-    watchOnly((RoomViewModel x) => x.kosts);
+    _snackbarGenerator(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Kost"),
@@ -33,7 +39,7 @@ class KostMobile extends StatelessWidget with GetItMixin {
           AddButton(
             message: "",
             onPressed: () async {
-              String result = await showModalBottomSheet(
+              await showModalBottomSheet(
                 isScrollControlled: true,
                 context: context,
                 builder: (context) {
@@ -94,24 +100,26 @@ class KostMobile extends StatelessWidget with GetItMixin {
                           SizedBox(height: 30),
                           GradientElevatedButton(
                             onPressed: () async {
-                              bool result =
-                                  await get<RoomViewModel>().createKost();
-                              get<RoomViewModel>().isBusy = false;
-                              if (result) {
-                                Navigator.pop(context, "success");
-                              } else {
-                                if (get<RoomViewModel>().isNoSession) {
-                                  Navigator.pushNamed(context, signInRoute);
-                                  get<RoomViewModel>().isNoSession = false;
-                                } else {
-                                  Navigator.pop(
-                                    context,
-                                    get<RoomViewModel>().errorMessage ?? "",
-                                  );
-                                  get<RoomViewModel>().errorMessage = null;
-                                  get<RoomViewModel>().isError = false;
-                                }
-                              }
+                              await get<RoomViewModel>().createKost();
+                              Navigator.pop(context);
+                              // bool result =
+                              //     await get<RoomViewModel>().createKost();
+                              // get<RoomViewModel>().isBusy = false;
+                              // if (result) {
+                              //   Navigator.pop(context, "success");
+                              // } else {
+                              //   if (get<RoomViewModel>().isNoSession) {
+                              //     Navigator.pushNamed(context, signInRoute);
+                              //     get<RoomViewModel>().isNoSession = false;
+                              //   } else {
+                              //     Navigator.pop(
+                              //       context,
+                              //       get<RoomViewModel>().errorMessage ?? "",
+                              //     );
+                              //     get<RoomViewModel>().errorMessage = null;
+                              //     get<RoomViewModel>().isError = false;
+                              //   }
+                              // }
                             },
                             child: Text(
                               "Tambah Kost",
@@ -129,23 +137,47 @@ class KostMobile extends StatelessWidget with GetItMixin {
                 },
               );
 
-              if (result == "success") {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    backgroundColor: Colors.green,
-                    content: Text("tambah kost berhasil"),
-                    duration: Duration(seconds: 2), // Adjust duration as needed
-                  ),
-                );
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    backgroundColor: Colors.green,
-                    content: Text(result),
-                    duration: Duration(seconds: 2), // Adjust duration as needed
-                  ),
-                );
-              }
+              // if (get<RoomViewModel>().isNoSession) {
+              //   Navigator.pushNamed(context, signInRoute);
+              //   get<RoomViewModel>().isNoSession = false;
+              // } else if (get<RoomViewModel>().isError) {
+              //   ScaffoldMessenger.of(context).showSnackBar(
+              //     SnackBar(
+              //       backgroundColor: Colors.red.shade400,
+              //       content: Text(get<RoomViewModel>().errorMessage ?? "Error"),
+              //       duration: Duration(seconds: 2), // Adjust duration as needed
+              //     ),
+              //   );
+              //   get<RoomViewModel>().isError = false;
+              //   get<RoomViewModel>().errorMessage = null;
+              // } else if (get<RoomViewModel>().isSuccess) {
+              //   ScaffoldMessenger.of(context).showSnackBar(
+              //     const SnackBar(
+              //       backgroundColor: Colors.green,
+              //       content: Text("Tambah kost berhasil"),
+              //       duration: Duration(seconds: 2), // Adjust duration as needed
+              //     ),
+              //   );
+              //   get<RoomViewModel>().isSuccess = false;
+              // }
+
+              // if (result == "success") {
+              //   ScaffoldMessenger.of(context).showSnackBar(
+              //     const SnackBar(
+              //       backgroundColor: Colors.green,
+              //       content: Text("tambah kost berhasil"),
+              //       duration: Duration(seconds: 2), // Adjust duration as needed
+              //     ),
+              //   );
+              // } else {
+              //   ScaffoldMessenger.of(context).showSnackBar(
+              //     SnackBar(
+              //       backgroundColor: Colors.green,
+              //       content: Text(result),
+              //       duration: Duration(seconds: 2), // Adjust duration as needed
+              //     ),
+              //   );
+              // }
             },
           ),
           SizedBox(width: 25),
@@ -223,5 +255,47 @@ class KostMobile extends StatelessWidget with GetItMixin {
       ),
       bottomNavigationBar: MobileNavbar(),
     );
+  }
+
+  void _snackbarGenerator(BuildContext context) {
+    return WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (get<RoomViewModel>().isNoSession) {
+        Navigator.pushNamed(context, signInRoute);
+        get<RoomViewModel>().isNoSession = false;
+      } else if (get<RoomViewModel>().isError) {
+        _showSnackBar(
+          get<RoomViewModel>().errorMessage ?? "Error",
+          color: Colors.red.shade400,
+          duration: Duration(seconds: 2),
+        );
+        get<RoomViewModel>().isError = false;
+        get<RoomViewModel>().errorMessage = null;
+      } else if (get<RoomViewModel>().isSuccess) {
+        _showSnackBar(
+          "Tambah kost berhasil",
+          color: Colors.green.shade400,
+          duration: Duration(seconds: 2),
+        );
+        get<RoomViewModel>().isSuccess = false;
+      }
+    });
+  }
+
+  // Helper function to show SnackBars
+  void _showSnackBar(
+    String message, {
+    Color color = Colors.blue,
+    Duration duration = const Duration(seconds: 4),
+  }) {
+    // Ensure context is still valid before showing SnackBar
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          backgroundColor: color,
+          duration: duration,
+        ),
+      );
+    }
   }
 }
