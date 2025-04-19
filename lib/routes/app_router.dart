@@ -33,7 +33,7 @@ class AppRouter {
           screen = RoomView();
           break;
         case roomDetailRoute:
-          screen = RoomDetail(datas: arguments);
+          screen = RoomDetail();
           break;
         case roomSettingsRoute:
           screen = RoomSettings(datas: arguments);

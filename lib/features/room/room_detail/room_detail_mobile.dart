@@ -10,9 +10,7 @@ import 'package:frontend/widgets/mobile_navbar.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
 class RoomDetailMobile extends StatefulWidget with GetItStatefulWidgetMixin {
-  RoomDetailMobile({required this.datas, super.key});
-
-  final dynamic datas;
+  RoomDetailMobile({super.key});
 
   @override
   State<RoomDetailMobile> createState() => _RoomDetailMobileState();
@@ -20,15 +18,16 @@ class RoomDetailMobile extends StatefulWidget with GetItStatefulWidgetMixin {
 
 class _RoomDetailMobileState extends State<RoomDetailMobile>
     with GetItStateMixin {
-  dynamic data;
+  dynamic _room;
   dynamic tenant;
   dynamic payment;
 
   _setup() async {
-    data = widget.datas;
-    tenant = data['latestTenant'];
+    await get<RoomViewModel>().fetchRoom();
+    _room = get<RoomViewModel>().room;
+    tenant = _room['latestTenant'];
     payment = tenant?['Payments'][0];
-    print(data);
+    print(_room);
     print(tenant);
     print(payment);
     setState(() {});
@@ -59,14 +58,14 @@ class _RoomDetailMobileState extends State<RoomDetailMobile>
         child: Padding(
           padding: const EdgeInsets.all(20),
           child:
-              data == null
+              _room == null
                   ? SizedBox()
                   : Column(
                     children: [
                       Row(
                         children: [
                           Text(
-                            data['BoardingHouse']['name'],
+                            _room['BoardingHouse']['name'],
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
@@ -77,7 +76,7 @@ class _RoomDetailMobileState extends State<RoomDetailMobile>
                       SizedBox(
                         width: 50,
                         child: Text(
-                          data['roomNumber'],
+                          _room['roomNumber'],
                           style: TextStyle(
                             fontSize: 35,
                             fontWeight: FontWeight.w500,
@@ -89,37 +88,37 @@ class _RoomDetailMobileState extends State<RoomDetailMobile>
                         children: [
                           SizedBox(width: 20),
                           Text("Ukuran: "),
-                          Text(data['Price']['roomSize'] ?? " -"),
+                          Text(_room['Price']['roomSize'] ?? " -"),
                         ],
                       ),
                       Row(
                         children: [
                           SizedBox(width: 20),
                           Text("Status: "),
-                          Text(data['roomStatus'] ?? " -"),
+                          Text(_room['roomStatus'] ?? " -"),
                         ],
                       ),
                       Row(
                         children: [
                           SizedBox(width: 20),
                           Text("Harga: "),
-                          Text(formatCurrency(data['Price']['amount'])),
+                          Text(formatCurrency(_room['Price']['amount'])),
                         ],
                       ),
-                      if ((data['AdditionalPrices'] ?? []).length != 0)
+                      if ((_room['AdditionalPrices'] ?? []).length != 0)
                         Row(
                           children: [
                             SizedBox(width: 20),
                             Text("Tambahan harga: "),
                           ],
                         ),
-                      if ((data['AdditionalPrices'] ?? []).length != 0)
+                      if ((_room['AdditionalPrices'] ?? []).length != 0)
                         SizedBox(
                           height: 300,
                           child: ListView.builder(
-                            itemCount: (data['AdditionalPrices'] ?? []).length,
+                            itemCount: (_room['AdditionalPrices'] ?? []).length,
                             itemBuilder: (context, index) {
-                              dynamic item = data['AdditionalPrices'][index];
+                              dynamic item = _room['AdditionalPrices'][index];
                               return Text("data");
                             },
                           ),
@@ -201,7 +200,10 @@ class _RoomDetailMobileState extends State<RoomDetailMobile>
                                   end: Alignment.bottomRight,
                                 ),
                                 onPressed: () async {
-                                  showModalBottomSheet(
+                                  get<RoomViewModel>().roomId =
+                                      _room?['id'] ?? "";
+
+                                  await showModalBottomSheet(
                                     isScrollControlled: true,
                                     constraints: BoxConstraints(
                                       minHeight: 490,
@@ -225,6 +227,7 @@ class _RoomDetailMobileState extends State<RoomDetailMobile>
                                       );
                                     },
                                   );
+                                  _setup();
                                 },
                                 child: Text(
                                   "Daftarkan Penghuni Baru",
@@ -264,7 +267,7 @@ class _RoomDetailMobileState extends State<RoomDetailMobile>
                               child: GradientElevatedButton(
                                 inactiveDelay: Duration.zero,
                                 onPressed: () async {
-                                  showModalBottomSheet(
+                                  await showModalBottomSheet(
                                     isScrollControlled: true,
                                     constraints: BoxConstraints(
                                       minHeight: 490,
@@ -288,6 +291,7 @@ class _RoomDetailMobileState extends State<RoomDetailMobile>
                                       );
                                     },
                                   );
+                                  _setup();
                                 },
                                 child: Text(
                                   "Update Penghuni",

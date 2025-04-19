@@ -352,13 +352,6 @@ class RoomViewModel extends ChangeNotifier {
   ///       METHOD       ///
   /// ################## ///
 
-  Future<bool> fetchRoom() async {
-    room = await apiService.fetchRoom(roomId: roomId);
-    roomStatus = room['roomStatus'];
-    isBusy = false;
-    return room != null;
-  }
-
   Future<bool> updateRoomStatus() async {
     room = await apiService.updateRoomStatus(
       roomId: roomId,
@@ -388,7 +381,7 @@ class RoomViewModel extends ChangeNotifier {
         tenancyStatus: tenantStatus,
       );
 
-      await fetchRooms();
+      await fetchRoom();
 
       roomId = "";
       tenantName = "";
@@ -536,6 +529,25 @@ class RoomViewModel extends ChangeNotifier {
       isBusy = true;
       var resp = await apiService.fetchRooms();
       rooms = resp['data'];
+    } catch (e) {
+      if (e.toString().contains("please reLogin")) {
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
+  }
+
+  Future<void> fetchRoom() async {
+    try {
+      if (roomId.isNotEmpty) {
+        isBusy = true;
+        var resp = await apiService.fetchRoom(roomId: roomId);
+        room = resp['data'];
+      }
     } catch (e) {
       if (e.toString().contains("please reLogin")) {
         isNoSession = true;

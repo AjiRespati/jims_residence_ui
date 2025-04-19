@@ -62,11 +62,8 @@ class _RoomMobileState extends State<RoomMobile> with GetItStateMixin {
               elevation: 2,
               child: InkWell(
                 onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    roomDetailRoute,
-                    arguments: item,
-                  );
+                  get<RoomViewModel>().roomId = item?['id'] ?? "";
+                  Navigator.pushNamed(context, roomDetailRoute);
                 },
                 child: SizedBox(
                   child: Padding(
@@ -149,15 +146,15 @@ class _RoomMobileState extends State<RoomMobile> with GetItStateMixin {
                             IconButton(
                               onPressed: () async {
                                 get<RoomViewModel>().roomId = item['id'];
-                                final go =
-                                    await get<RoomViewModel>().fetchRoom();
-                                if (go) {
-                                  Navigator.pushNamed(
-                                    context,
-                                    roomSettingsRoute,
-                                    arguments: item,
-                                  );
-                                }
+                                // final go =
+                                await get<RoomViewModel>().fetchRoom();
+                                // if (go) {
+                                Navigator.pushNamed(
+                                  context,
+                                  roomSettingsRoute,
+                                  arguments: item,
+                                );
+                                // }
                               },
                               icon: Icon(Icons.settings),
                             ),
