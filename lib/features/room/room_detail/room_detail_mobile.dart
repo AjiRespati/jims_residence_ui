@@ -50,7 +50,7 @@ class RoomDetailMobile extends StatelessWidget with GetItMixin {
                 children: [
                   SizedBox(width: 20),
                   Text("Ukuran: "),
-                  Text(datas['roomSize'] ?? " -"),
+                  Text(datas['Price']['roomSize'] ?? " -"),
                 ],
               ),
               Row(
