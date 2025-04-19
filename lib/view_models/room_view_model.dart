@@ -10,9 +10,10 @@ class RoomViewModel extends ChangeNotifier {
   bool _isUpdating = false;
   bool _isBusy = false;
   bool _isNoSession = false;
-  bool _isError = false;
+  bool? _isError;
   bool _isSuccess = false;
   String? _errorMessage;
+  String? _successMessage;
 
   final formKey = GlobalKey<FormState>();
 
@@ -40,8 +41,8 @@ class RoomViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool get isError => _isError;
-  set isError(bool val) {
+  bool? get isError => _isError;
+  set isError(bool? val) {
     _isError = val;
     notifyListeners();
   }
@@ -49,6 +50,12 @@ class RoomViewModel extends ChangeNotifier {
   String? get errorMessage => _errorMessage;
   set errorMessage(String? val) {
     _errorMessage = val;
+    notifyListeners();
+  }
+
+  String? get successMessage => _successMessage;
+  set successMessage(String? val) {
+    _successMessage = val;
     notifyListeners();
   }
 
@@ -266,6 +273,44 @@ class RoomViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  //TODO PRICE STATE
+
+  List<dynamic> _prices = [];
+  String _priceName = "";
+  double _priceAmount = 0;
+  String? _priceRoomSize;
+  String? _priceDescription;
+
+  List<dynamic> get prices => _prices;
+  set prices(List<dynamic> val) {
+    _prices = val;
+    notifyListeners();
+  }
+
+  String get priceName => _priceName;
+  set priceName(String val) {
+    _priceName = val;
+    notifyListeners();
+  }
+
+  double get priceAmount => _priceAmount;
+  set priceAmount(double val) {
+    _priceAmount = val;
+    notifyListeners();
+  }
+
+  String? get priceRoomSize => _priceRoomSize;
+  set priceRoomSize(String? val) {
+    _priceRoomSize = val;
+    notifyListeners();
+  }
+
+  String? get priceDescription => _priceDescription;
+  set priceDescription(String? val) {
+    _priceDescription = val;
+    notifyListeners();
+  }
+
   /// ################## ///
   ///       METHOD       ///
   /// ################## ///
@@ -406,6 +451,11 @@ class RoomViewModel extends ChangeNotifier {
       );
 
       await fetchRooms(isAfterEvent: true);
+      roomKostId = null;
+      roomNumber = "";
+      roomSize = "";
+      roomStatus = "";
+      basicPrice = 0;
       isSuccess = true;
     } catch (e) {
       if (e.toString().contains("please reLogin")) {
@@ -426,6 +476,57 @@ class RoomViewModel extends ChangeNotifier {
       isBusy = !isAfterEvent;
       var resp = await apiService.fetchRooms();
       rooms = resp['data'];
+    } catch (e) {
+      if (e.toString().contains("please reLogin")) {
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
+  }
+
+  // TODO: PRICE  Section
+  // TODO: Core logic for this app
+
+  Future<void> createPrice() async {
+    try {
+      isBusy = true;
+      await apiService.createPrice(
+        name: "Harga Kamar $priceRoomSize",
+        amount: priceAmount,
+        roomSize: priceRoomSize,
+        description: priceDescription,
+      );
+      await fetchPrices();
+
+      priceName = "";
+      priceAmount = 0;
+      priceRoomSize = "Standard";
+      priceDescription = null;
+      isSuccess = true;
+      successMessage = "Berhasil menambah harga";
+    } catch (e) {
+      if (e.toString().contains("please reLogin")) {
+        isBusy = false;
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isBusy = false;
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
+  }
+
+  Future<void> fetchPrices() async {
+    isBusy = true;
+    try {
+      var resp = await apiService.fetchPrices();
+      prices = resp['data'];
     } catch (e) {
       if (e.toString().contains("please reLogin")) {
         isNoSession = true;

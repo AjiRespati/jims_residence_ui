@@ -1,46 +1,42 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:frontend/features/room/components/add_room.dart';
+import 'package:frontend/features/price/components/add_price.dart';
 import 'package:frontend/routes/route_names.dart';
 import 'package:frontend/view_models/room_view_model.dart';
 import 'package:frontend/widgets/buttons/add_button.dart';
-
 import 'package:frontend/widgets/mobile_navbar.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
-class RoomMobile extends StatefulWidget with GetItStatefulWidgetMixin {
-  RoomMobile({super.key});
+class PriceMobile extends StatefulWidget with GetItStatefulWidgetMixin {
+  PriceMobile({super.key});
 
   @override
-  State<RoomMobile> createState() => _RoomMobileState();
+  State<PriceMobile> createState() => _PriceMobileState();
 }
 
-class _RoomMobileState extends State<RoomMobile> with GetItStateMixin {
+class _PriceMobileState extends State<PriceMobile> with GetItStateMixin {
   @override
   Widget build(BuildContext context) {
-    watchOnly((RoomViewModel x) => x.rooms);
+    watchOnly((RoomViewModel x) => x.prices);
     watchOnly((RoomViewModel x) => x.isError);
     _snackbarGenerator(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "Kamar",
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
-        ),
+        title: Text("Price"),
         actions: [
-          Text("Tambah Kamar"),
+          Text("Tambah Harga"),
           SizedBox(width: 8),
           AddButton(
             size: 30,
-            message: "Tambah Kamar",
+            message: "Tambah Harga",
             onPressed: () {
               showModalBottomSheet(
                 isScrollControlled: true,
                 constraints: BoxConstraints(minHeight: 600, maxHeight: 620),
                 context: context,
                 builder: (context) {
-                  return SizedBox(width: 600, child: AddRoom());
+                  return SizedBox(width: 600, child: AddPrice());
                 },
               );
             },
@@ -49,9 +45,9 @@ class _RoomMobileState extends State<RoomMobile> with GetItStateMixin {
         ],
       ),
       body: ListView.builder(
-        itemCount: get<RoomViewModel>().rooms.length,
+        itemCount: get<RoomViewModel>().prices.length,
         itemBuilder: (context, idx) {
-          var item = get<RoomViewModel>().rooms[idx];
+          var item = get<RoomViewModel>().prices[idx];
           print(item);
           return Padding(
             padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
@@ -74,28 +70,24 @@ class _RoomMobileState extends State<RoomMobile> with GetItStateMixin {
                     child: Row(
                       children: [
                         SizedBox(width: 5),
-                        SizedBox(
-                          width: 50,
-                          child: Text(
-                            item['roomNumber'],
-                            style: TextStyle(
-                              fontSize: 35,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
                               children: [
                                 Text(
-                                  item['boardingHouseName'],
+                                  item['name'],
                                   style: TextStyle(
                                     fontWeight: FontWeight.w700,
                                     fontSize: 20,
                                   ),
                                 ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text("Harga: "),
+                                Text("${item['amount']}"),
                               ],
                             ),
                             Row(
@@ -106,14 +98,8 @@ class _RoomMobileState extends State<RoomMobile> with GetItStateMixin {
                             ),
                             Row(
                               children: [
-                                Text("Status: "),
-                                Text(item['roomStatus']),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text("Harga: "),
-                                Text("${item['basicPrice']}"),
+                                Text("Keterangan: "),
+                                Text(item['description']),
                               ],
                             ),
                           ],
@@ -190,11 +176,12 @@ class _RoomMobileState extends State<RoomMobile> with GetItStateMixin {
         get<RoomViewModel>().errorMessage = null;
       } else if (get<RoomViewModel>().isSuccess) {
         _showSnackBar(
-          "Tambah room berhasil",
+          get<RoomViewModel>().successMessage ?? "Berhasil",
           color: Colors.green.shade400,
           duration: Duration(seconds: 2),
         );
         get<RoomViewModel>().isSuccess = false;
+        get<RoomViewModel>().successMessage = null;
       }
     });
   }

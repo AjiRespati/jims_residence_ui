@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/features/auth/login_screen.dart';
 import 'package:frontend/features/home/home.dart';
 import 'package:frontend/features/kost/kost.dart';
+import 'package:frontend/features/price/price.dart';
 import 'package:frontend/features/room/room_settings/room_settings.dart';
 import 'package:frontend/features/room/room_view.dart';
 import 'package:frontend/features/room/room_detail/room_detail.dart';
@@ -44,6 +45,9 @@ class AppRouter {
           screen = Settings();
         case kostRoute:
           screen = Kost();
+          break;
+        case priceRoute:
+          screen = Price();
           break;
         default:
           screen = const NotFoundPage();

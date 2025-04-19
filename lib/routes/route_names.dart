@@ -8,3 +8,4 @@ const String roomSettingsRoute = "/Room/Settings";
 const String tenantRoute = "/Tenant";
 const String settingRoute = "/Setting";
 const String kostRoute = "/Kost";
+const String priceRoute = "/Price";

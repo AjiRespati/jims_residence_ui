@@ -18,6 +18,7 @@ class KostMobile extends StatefulWidget with GetItStatefulWidgetMixin {
 class _KostMobileState extends State<KostMobile> with GetItStateMixin {
   @override
   Widget build(BuildContext context) {
+    watchOnly((RoomViewModel x) => x.isError);
     _snackbarGenerator(context);
 
     return Scaffold(
@@ -202,13 +203,13 @@ class _KostMobileState extends State<KostMobile> with GetItStateMixin {
       if (get<RoomViewModel>().isNoSession) {
         Navigator.pushNamed(context, signInRoute);
         get<RoomViewModel>().isNoSession = false;
-      } else if (get<RoomViewModel>().isError) {
+      } else if (get<RoomViewModel>().isError == true) {
         _showSnackBar(
           get<RoomViewModel>().errorMessage ?? "Error",
           color: Colors.red.shade400,
           duration: Duration(seconds: 2),
         );
-        get<RoomViewModel>().isError = false;
+        get<RoomViewModel>().isError = null;
         get<RoomViewModel>().errorMessage = null;
       } else if (get<RoomViewModel>().isSuccess) {
         _showSnackBar(

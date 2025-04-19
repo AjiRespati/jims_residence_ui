@@ -297,7 +297,7 @@ class ApiService {
     if (response.statusCode == 401) {
       token = await refreshAccessToken();
       if (token == null) throw Exception("please reLogin");
-      return fetchRooms();
+      return fetchTenant(id: id);
     } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
@@ -450,6 +450,145 @@ class ApiService {
       return fetchKosts();
     } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
+    } else {
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
+    }
+  }
+
+  // TODO: PRICE ROUTES
+
+  Future<bool> createPrice({
+    required String? roomSize,
+    required String name,
+    required double amount,
+    required String? description,
+  }) async {
+    String? token = await _getToken();
+    final response = await http.post(
+      Uri.parse('$baseUrl/price'),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
+      body: jsonEncode({
+        'roomSize': roomSize,
+        'name': name,
+        'amount': amount,
+        'description': description,
+      }),
+    );
+
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) throw Exception("please reLogin");
+      return createPrice(
+        name: name,
+        amount: amount,
+        roomSize: roomSize,
+        description: description,
+      );
+    } else if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
+    }
+  }
+
+  Future<dynamic> fetchPrices() async {
+    String? token = await _getToken();
+
+    final response = await http.get(
+      Uri.parse('$baseUrl/price'),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
+    );
+
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) throw Exception("please reLogin");
+      return fetchPrices();
+    } else if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
+    }
+  }
+
+  Future<dynamic> fetchPrice({required String id}) async {
+    String? token = await _getToken();
+
+    final response = await http.get(
+      Uri.parse('$baseUrl/price/$id'),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
+    );
+
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) throw Exception("please reLogin");
+      return fetchPrice(id: id);
+    } else if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
+    }
+  }
+
+  Future<dynamic> updatePrice({
+    required String id,
+    required dynamic updateItems,
+  }) async {
+    String? token = await _getToken();
+    final response = await http.put(
+      Uri.parse('$baseUrl/price/$id'),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
+      body: jsonEncode(updateItems),
+    );
+
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) throw Exception("please reLogin");
+      return updatePrice(id: id, updateItems: updateItems);
+    } else if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
+    }
+  }
+
+  Future<bool> deletePrice({required String id}) async {
+    String? token = await _getToken();
+    final response = await http.delete(
+      Uri.parse('$baseUrl/price/$id'),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
+    );
+
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) throw Exception("please reLogin");
+      return deletePrice(id: id);
+    } else if (response.statusCode == 200) {
+      return true;
     } else {
       throw Exception(
         jsonDecode(response.body)['message'] ?? 'Internal service error',

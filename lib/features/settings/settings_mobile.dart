@@ -124,16 +124,16 @@ class SettingsMobile extends StatelessWidget with GetItMixin {
 
                             InkWell(
                               onTap: () {
-                                Navigator.pushNamed(context, homeRoute);
+                                Navigator.pushNamed(context, priceRoute);
                               },
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text("Freezer Management"),
+                                  Text("Price Management"),
                                   IconButton(
                                     onPressed: () {
-                                      Navigator.pushNamed(context, homeRoute);
+                                      Navigator.pushNamed(context, priceRoute);
                                     },
                                     icon: Icon(
                                       Icons.chevron_right_rounded,
