@@ -17,7 +17,6 @@ class _RoomDetailState extends State<RoomDetail> with GetItStateMixin {
   @override
   void initState() {
     super.initState();
-    // print(widget.datas);
     get<RoomViewModel>().roomId = widget.datas['id'] ?? "";
   }
 

@@ -46,3 +46,8 @@ String formatCurrency(num number) {
   // Format the rounded number
   return currencyFormatter.format(roundedNumber);
 }
+
+String generateDateString(DateTime time) {
+  final formatter = DateFormat('yyyy-MM-dd');
+  return formatter.format(time);
+}

@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'package:file_picker/file_picker.dart';
+import 'package:frontend/utils/helpers.dart';
 
 import '../../application_info.dart';
 import 'package:image_picker/image_picker.dart';
@@ -220,8 +221,12 @@ class ApiService {
     required String phone,
     required String idNumber,
     required String? idImagePath,
-    required bool isIdCopyDone,
+    required bool isNIKCopyDone,
     required String tenancyStatus,
+    required DateTime startDate,
+    required DateTime dueDate,
+    required DateTime? paymentDate,
+    required String paymentStatus,
   }) async {
     String? token = await _getToken();
     final response = await http.post(
@@ -234,10 +239,15 @@ class ApiService {
         'roomId': roomId,
         'name': name,
         'phone': phone,
-        'idNumber': idNumber,
-        'idImagePath': idImagePath,
-        'isIdCopyDone': isIdCopyDone,
+        'NIKNumber': idNumber,
+        'startDate': generateDateString(startDate),
+        'dueDate': generateDateString(dueDate),
+        'NIKImagePath': idImagePath,
+        'isNIKCopyDone': isNIKCopyDone,
         'tenancyStatus': tenancyStatus,
+        'paymentDate':
+            paymentDate == null ? null : generateDateString(paymentDate),
+        'paymentStatus': paymentStatus,
       }),
     );
 
@@ -250,8 +260,12 @@ class ApiService {
         phone: phone,
         idNumber: idNumber,
         idImagePath: idImagePath,
-        isIdCopyDone: isIdCopyDone,
         tenancyStatus: tenancyStatus,
+        dueDate: dueDate,
+        paymentDate: paymentDate,
+        startDate: startDate,
+        isNIKCopyDone: isNIKCopyDone,
+        paymentStatus: paymentStatus,
       );
     } else if (response.statusCode == 200) {
       return true;

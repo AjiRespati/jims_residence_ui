@@ -182,6 +182,9 @@ class RoomViewModel extends ChangeNotifier {
   String? _isIdCopiedText;
   String _tenantStatus = "";
   List<dynamic> _tenants = [];
+  DateTime? _tenantStartDate;
+  DateTime? _tenantPaymentDate;
+  DateTime? _tenantDueDate;
 
   String get tenantName => _tenantName;
   set tenantName(String val) {
@@ -228,6 +231,24 @@ class RoomViewModel extends ChangeNotifier {
   List<dynamic> get tenants => _tenants;
   set tenants(List<dynamic> val) {
     _tenants = val;
+    notifyListeners();
+  }
+
+  DateTime? get tenantStartDate => _tenantStartDate;
+  set tenantStartDate(DateTime? val) {
+    _tenantStartDate = val;
+    notifyListeners();
+  }
+
+  DateTime? get tenantPaymentDate => _tenantPaymentDate;
+  set tenantPaymentDate(DateTime? val) {
+    _tenantPaymentDate = val;
+    notifyListeners();
+  }
+
+  DateTime? get tenantDueDate => _tenantDueDate;
+  set tenantDueDate(DateTime? val) {
+    _tenantDueDate = val;
     notifyListeners();
   }
 
@@ -348,32 +369,53 @@ class RoomViewModel extends ChangeNotifier {
     return room != null;
   }
 
-  Future<bool> addTenant({required BuildContext context}) async {
-    isBusy = true;
+  Future<void> addTenant({required BuildContext context}) async {
+    try {
+      isBusy = true;
 
-    final resp = await apiService.createTenant(
-      roomId: roomId,
-      name: tenantName,
-      phone: tenantPhone,
-      idNumber: tenantIdNumber,
-      idImagePath: idImagePath,
-      isIdCopyDone: isIdCopied,
-      tenancyStatus: "Active",
-    );
+      await apiService.createTenant(
+        roomId: roomId,
+        name: tenantName,
+        phone: tenantPhone,
+        idNumber: tenantIdNumber,
+        idImagePath: idImagePath,
+        isNIKCopyDone: isIdCopied,
+        startDate: tenantStartDate ?? DateTime.now(),
+        paymentDate:
+            tenantPaymentDate ?? DateTime.now().add(Duration(days: 30)),
+        dueDate: tenantDueDate ?? DateTime.now().add(Duration(days: 15)),
+        paymentStatus: "unpaid",
+        tenancyStatus: tenantStatus,
+      );
 
-    if (resp) {
-      await fetchTenants();
+      await fetchRooms();
+
+      roomId = "";
+      tenantName = "";
+      tenantPhone = "";
+      tenantIdNumber = "";
+      idImagePath = null;
+      isIdCopied = false;
+      tenantStartDate = null;
+      tenantPaymentDate = null;
+      tenantDueDate = null;
+      tenantStatus = "";
+
       isBusy = false;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Tenant Berhasil ditambahkan')));
-      return true;
-    } else {
+      isSuccess = true;
+      successMessage = "Berhasil menambah harga";
+    } catch (e) {
+      print(e.toString());
+      if (e.toString().contains("please reLogin")) {
+        isBusy = false;
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isBusy = false;
+        isError = true;
+      }
+    } finally {
       isBusy = false;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Tenant gagal ditambahkan')));
-      return false;
     }
   }
 
@@ -393,7 +435,7 @@ class RoomViewModel extends ChangeNotifier {
     );
 
     if (resp) {
-      await fetchRooms(isAfterEvent: true);
+      await fetchRooms();
       isBusy = false;
       ScaffoldMessenger.of(
         context,
@@ -467,7 +509,7 @@ class RoomViewModel extends ChangeNotifier {
         priceId: selectedRoomSize['id'],
       );
 
-      await fetchRooms(isAfterEvent: true);
+      await fetchRooms();
 
       roomKostId = null;
       roomNumber = "";
@@ -489,9 +531,9 @@ class RoomViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchRooms({required bool isAfterEvent}) async {
+  Future<void> fetchRooms() async {
     try {
-      isBusy = !isAfterEvent;
+      isBusy = true;
       var resp = await apiService.fetchRooms();
       rooms = resp['data'];
     } catch (e) {

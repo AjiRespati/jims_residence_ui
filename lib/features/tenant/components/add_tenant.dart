@@ -57,6 +57,7 @@ class AddTenant extends StatelessWidget with GetItMixin {
           SizedBox(height: 30),
           GradientElevatedButton(
             onPressed: () async {
+              get<RoomViewModel>().tenantStatus = "Active";
               await get<RoomViewModel>().addTenant(context: context);
               Navigator.pop(context);
             },
