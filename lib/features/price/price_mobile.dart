@@ -49,7 +49,6 @@ class _PriceMobileState extends State<PriceMobile> with GetItStateMixin {
         itemCount: get<RoomViewModel>().prices.length,
         itemBuilder: (context, idx) {
           var item = get<RoomViewModel>().prices[idx];
-          print(item);
           return Padding(
             padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
             child: Card(

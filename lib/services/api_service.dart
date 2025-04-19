@@ -97,7 +97,8 @@ class ApiService {
     required String roomNumber,
     required String roomSize,
     required String roomStatus,
-    required double basicPrice,
+    required String priceId,
+    required String description,
   }) async {
     String? token = await _getToken();
     final response = await http.post(
@@ -111,7 +112,8 @@ class ApiService {
         'roomNumber': roomNumber,
         'roomSize': roomSize,
         'roomStatus': roomStatus,
-        'basicPrice': basicPrice,
+        'description': description,
+        'priceId': priceId,
       }),
     );
 
@@ -123,7 +125,8 @@ class ApiService {
         roomNumber: roomNumber,
         roomSize: roomSize,
         roomStatus: roomStatus,
-        basicPrice: basicPrice,
+        description: description,
+        priceId: priceId,
       );
     } else if (response.statusCode == 200) {
       return true;

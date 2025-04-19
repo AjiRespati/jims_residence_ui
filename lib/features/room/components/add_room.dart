@@ -10,7 +10,6 @@ class AddRoom extends StatelessWidget with GetItMixin {
 
   @override
   Widget build(BuildContext context) {
-    print(get<RoomViewModel>().prices);
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -38,6 +37,12 @@ class AddRoom extends StatelessWidget with GetItMixin {
                       .toList()
                       .first;
               get<RoomViewModel>().roomKostId = item['id'];
+              var pricesByKost =
+                  get<RoomViewModel>().prices
+                      .where((el) => el['boardingHouseId'] == item['id'])
+                      .toList();
+              get<RoomViewModel>().pricesByKost = pricesByKost;
+              get<RoomViewModel>().selectedRoomSize = pricesByKost.first;
             },
           ),
           SizedBox(height: 6),
@@ -50,18 +55,18 @@ class AddRoom extends StatelessWidget with GetItMixin {
             onChanged: (value) => get<RoomViewModel>().roomNumber = value,
           ),
           SizedBox(height: 6),
-          DropdownButtonFormField<String>(
+          DropdownButtonFormField<dynamic>(
             decoration: InputDecoration(labelText: "Ukuran Kamar"),
-            value: get<RoomViewModel>().roomSize,
+            value: get<RoomViewModel>().selectedRoomSize,
             items:
-                ['Small', 'Standard', 'Big'].map((item) {
-                  return DropdownMenuItem<String>(
+                watchOnly((RoomViewModel x) => x.pricesByKost).map((item) {
+                  return DropdownMenuItem<dynamic>(
                     value: item,
-                    child: Text(item),
+                    child: Text(item['roomSize']),
                   );
                 }).toList(),
             onChanged: (value) {
-              get<RoomViewModel>().roomSize = value ?? "Standard";
+              get<RoomViewModel>().selectedRoomSize = value;
             },
           ),
           SizedBox(height: 6),
@@ -80,30 +85,17 @@ class AddRoom extends StatelessWidget with GetItMixin {
             },
           ),
           SizedBox(height: 6),
-          // TextFormField(
-          //   decoration: InputDecoration(
-          //     isDense: true,
-          //     label: Text("Harga Kamar"),
-          //   ),
-          //   keyboardType: TextInputType.number,
-          //   onChanged:
-          //       (value) =>
-          //           get<RoomViewModel>().basicPrice = double.parse(value),
-          // ),
-          DropdownButtonFormField<dynamic>(
-            decoration: InputDecoration(labelText: "Harga Kamar"),
-            value: get<RoomViewModel>().selectedRoomPrice,
-            items:
-                get<RoomViewModel>().prices.map((item) {
-                  return DropdownMenuItem<dynamic>(
-                    value: item,
-                    child: Text(item['name']),
-                  );
-                }).toList(),
-            onChanged: (value) {
-              get<RoomViewModel>().selectedRoomPrice = value;
-            },
+          TextFormField(
+            maxLines: 2,
+            minLines: 1,
+            decoration: InputDecoration(
+              isDense: true,
+              label: Text("Keterangan"),
+            ),
+            keyboardType: TextInputType.text,
+            onChanged: (value) => get<RoomViewModel>().description = value,
           ),
+          SizedBox(height: 6),
           SizedBox(height: 30),
           Stack(
             alignment: AlignmentDirectional.center,

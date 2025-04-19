@@ -63,7 +63,8 @@ class RoomViewModel extends ChangeNotifier {
   String? _roomKostName;
   String? _roomKostId;
   String _roomNumber = "";
-  String _roomSize = "Standard";
+  String _roomSize = "";
+  dynamic _selectedRoomSize;
   String _roomStatus = "Tersedia";
   double _basicPrice = 0.0;
   double _totalPrice = 0.0;
@@ -74,7 +75,7 @@ class RoomViewModel extends ChangeNotifier {
   String _paymentStatus = "";
   List<dynamic> _rooms = [];
   dynamic _room;
-  dynamic _selectedRoomPrice;
+  // dynamic _selectedRoomPrice;
 
   String get roomId => _roomId;
   set roomId(String val) {
@@ -166,9 +167,9 @@ class RoomViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  dynamic get selectedRoomPrice => _selectedRoomPrice;
-  set selectedRoomPrice(dynamic val) {
-    _selectedRoomPrice = val;
+  dynamic get selectedRoomSize => _selectedRoomSize;
+  set selectedRoomSize(dynamic val) {
+    _selectedRoomSize = val;
     notifyListeners();
   }
 
@@ -284,6 +285,7 @@ class RoomViewModel extends ChangeNotifier {
   //TODO PRICE STATE
 
   List<dynamic> _prices = [];
+  List<dynamic> _pricesByKost = [];
   String _priceName = "";
   double _priceAmount = 0;
   String? _priceRoomSize;
@@ -292,6 +294,12 @@ class RoomViewModel extends ChangeNotifier {
   List<dynamic> get prices => _prices;
   set prices(List<dynamic> val) {
     _prices = val;
+    notifyListeners();
+  }
+
+  List<dynamic> get pricesByKost => _pricesByKost;
+  set pricesByKost(List<dynamic> val) {
+    _pricesByKost = val;
     notifyListeners();
   }
 
@@ -453,12 +461,14 @@ class RoomViewModel extends ChangeNotifier {
       await apiService.createRoom(
         boardingHouseId: roomKostId,
         roomNumber: roomNumber,
-        roomSize: roomSize,
+        roomSize: selectedRoomSize['roomSize'],
         roomStatus: roomStatus,
-        basicPrice: basicPrice,
+        description: description,
+        priceId: selectedRoomSize['id'],
       );
 
       await fetchRooms(isAfterEvent: true);
+
       roomKostId = null;
       roomNumber = "";
       roomSize = "";

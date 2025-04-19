@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/features/room/components/add_room.dart';
 import 'package:frontend/routes/route_names.dart';
+import 'package:frontend/utils/helpers.dart';
 import 'package:frontend/view_models/room_view_model.dart';
 import 'package:frontend/widgets/buttons/add_button.dart';
 
@@ -52,6 +53,7 @@ class _RoomMobileState extends State<RoomMobile> with GetItStateMixin {
         itemCount: get<RoomViewModel>().rooms.length,
         itemBuilder: (context, idx) {
           var item = get<RoomViewModel>().rooms[idx];
+          print(item);
           return Padding(
             padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
             child: Card(
@@ -83,13 +85,14 @@ class _RoomMobileState extends State<RoomMobile> with GetItStateMixin {
                             ),
                           ),
                         ),
+                        SizedBox(width: 5),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
                               children: [
                                 Text(
-                                  item['boardingHouseName'],
+                                  item['BoardingHouse']['name'],
                                   style: TextStyle(
                                     fontWeight: FontWeight.w700,
                                     fontSize: 20,
@@ -112,7 +115,7 @@ class _RoomMobileState extends State<RoomMobile> with GetItStateMixin {
                             Row(
                               children: [
                                 Text("Harga: "),
-                                Text("${item['basicPrice']}"),
+                                Text(formatCurrency(item['Price']['amount'])),
                               ],
                             ),
                           ],

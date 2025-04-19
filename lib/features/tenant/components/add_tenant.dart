@@ -16,7 +16,7 @@ class AddTenant extends StatelessWidget with GetItMixin {
         children: [
           SizedBox(height: 6),
           Text(
-            "Daftarkan Penghuni Kamar",
+            "Daftarkan Penghuni Baru",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
           SizedBox(height: 6),
