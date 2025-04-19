@@ -19,6 +19,26 @@ class AddPrice extends StatelessWidget with GetItMixin {
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
           SizedBox(height: 15),
+          DropdownButtonFormField<String>(
+            decoration: InputDecoration(labelText: "Pilih Kost"),
+            value: get<RoomViewModel>().roomKostName,
+            items:
+                get<RoomViewModel>().kosts.map((item) {
+                  return DropdownMenuItem<String>(
+                    value: item['name'],
+                    child: Text(item['name']),
+                  );
+                }).toList(),
+            onChanged: (value) {
+              get<RoomViewModel>().roomKostName = value;
+              var item =
+                  get<RoomViewModel>().kosts
+                      .where((el) => el['name'] == value)
+                      .toList()
+                      .first;
+              get<RoomViewModel>().roomKostId = item['id'];
+            },
+          ),
           SizedBox(height: 6),
           TextFormField(
             decoration: InputDecoration(

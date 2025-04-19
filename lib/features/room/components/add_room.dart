@@ -10,6 +10,7 @@ class AddRoom extends StatelessWidget with GetItMixin {
 
   @override
   Widget build(BuildContext context) {
+    print(get<RoomViewModel>().prices);
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -53,7 +54,7 @@ class AddRoom extends StatelessWidget with GetItMixin {
             decoration: InputDecoration(labelText: "Ukuran Kamar"),
             value: get<RoomViewModel>().roomSize,
             items:
-                ["Kecil", "Standard", "Besar"].map((item) {
+                ['Small', 'Standard', 'Big'].map((item) {
                   return DropdownMenuItem<String>(
                     value: item,
                     child: Text(item),
@@ -79,15 +80,29 @@ class AddRoom extends StatelessWidget with GetItMixin {
             },
           ),
           SizedBox(height: 6),
-          TextFormField(
-            decoration: InputDecoration(
-              isDense: true,
-              label: Text("Harga Kamar"),
-            ),
-            keyboardType: TextInputType.number,
-            onChanged:
-                (value) =>
-                    get<RoomViewModel>().basicPrice = double.parse(value),
+          // TextFormField(
+          //   decoration: InputDecoration(
+          //     isDense: true,
+          //     label: Text("Harga Kamar"),
+          //   ),
+          //   keyboardType: TextInputType.number,
+          //   onChanged:
+          //       (value) =>
+          //           get<RoomViewModel>().basicPrice = double.parse(value),
+          // ),
+          DropdownButtonFormField<dynamic>(
+            decoration: InputDecoration(labelText: "Harga Kamar"),
+            value: get<RoomViewModel>().selectedRoomPrice,
+            items:
+                get<RoomViewModel>().prices.map((item) {
+                  return DropdownMenuItem<dynamic>(
+                    value: item,
+                    child: Text(item['name']),
+                  );
+                }).toList(),
+            onChanged: (value) {
+              get<RoomViewModel>().selectedRoomPrice = value;
+            },
           ),
           SizedBox(height: 30),
           Stack(

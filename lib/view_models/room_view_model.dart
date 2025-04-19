@@ -74,6 +74,7 @@ class RoomViewModel extends ChangeNotifier {
   String _paymentStatus = "";
   List<dynamic> _rooms = [];
   dynamic _room;
+  dynamic _selectedRoomPrice;
 
   String get roomId => _roomId;
   set roomId(String val) {
@@ -165,6 +166,13 @@ class RoomViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  dynamic get selectedRoomPrice => _selectedRoomPrice;
+  set selectedRoomPrice(dynamic val) {
+    _selectedRoomPrice = val;
+    notifyListeners();
+  }
+
+  // TODO: TENANT STATE
   String _tenantName = "";
   String _tenantPhone = "";
   String _tenantIdNumber = "";
@@ -495,6 +503,7 @@ class RoomViewModel extends ChangeNotifier {
     try {
       isBusy = true;
       await apiService.createPrice(
+        boardingHouseId: roomKostId,
         name: "Harga Kamar $priceRoomSize",
         amount: priceAmount,
         roomSize: priceRoomSize,
@@ -506,6 +515,7 @@ class RoomViewModel extends ChangeNotifier {
       priceAmount = 0;
       priceRoomSize = "Standard";
       priceDescription = null;
+      roomKostName = null;
       isSuccess = true;
       successMessage = "Berhasil menambah harga";
     } catch (e) {

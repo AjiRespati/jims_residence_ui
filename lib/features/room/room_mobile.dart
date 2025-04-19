@@ -52,7 +52,6 @@ class _RoomMobileState extends State<RoomMobile> with GetItStateMixin {
         itemCount: get<RoomViewModel>().rooms.length,
         itemBuilder: (context, idx) {
           var item = get<RoomViewModel>().rooms[idx];
-          print(item);
           return Padding(
             padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
             child: Card(

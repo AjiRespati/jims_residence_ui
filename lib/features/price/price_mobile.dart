@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/features/price/components/add_price.dart';
 import 'package:frontend/routes/route_names.dart';
+import 'package:frontend/utils/helpers.dart';
 import 'package:frontend/view_models/room_view_model.dart';
 import 'package:frontend/widgets/buttons/add_button.dart';
 import 'package:frontend/widgets/mobile_navbar.dart';
@@ -76,29 +77,41 @@ class _PriceMobileState extends State<PriceMobile> with GetItStateMixin {
                             Row(
                               children: [
                                 Text(
-                                  item['name'],
+                                  item['boardingHouseName'],
                                   style: TextStyle(
                                     fontWeight: FontWeight.w700,
-                                    fontSize: 20,
+                                    fontSize: 18,
                                   ),
                                 ),
                               ],
                             ),
                             Row(
                               children: [
-                                Text("Harga: "),
-                                Text("${item['amount']}"),
+                                Text(
+                                  item['name'],
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 16,
+                                  ),
+                                ),
                               ],
                             ),
                             Row(
                               children: [
-                                Text("Ukuran: "),
-                                Text(item['roomSize']),
+                                SizedBox(width: 20),
+                                Text(
+                                  formatCurrency(item['amount']),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 16,
+                                    color: Colors.blue.shade700,
+                                  ),
+                                ),
                               ],
                             ),
                             Row(
                               children: [
-                                Text("Keterangan: "),
+                                SizedBox(width: 20),
                                 Text(item['description']),
                               ],
                             ),

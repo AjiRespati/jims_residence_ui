@@ -461,6 +461,7 @@ class ApiService {
 
   Future<bool> createPrice({
     required String? roomSize,
+    required String? boardingHouseId,
     required String name,
     required double amount,
     required String? description,
@@ -473,6 +474,7 @@ class ApiService {
         "Authorization": "Bearer $token",
       },
       body: jsonEncode({
+        'boardingHouseId': boardingHouseId,
         'roomSize': roomSize,
         'name': name,
         'amount': amount,
@@ -484,6 +486,7 @@ class ApiService {
       token = await refreshAccessToken();
       if (token == null) throw Exception("please reLogin");
       return createPrice(
+        boardingHouseId: boardingHouseId,
         name: name,
         amount: amount,
         roomSize: roomSize,
