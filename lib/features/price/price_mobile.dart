@@ -146,9 +146,6 @@ class _PriceMobileState extends State<PriceMobile> with GetItStateMixin {
                             IconButton(
                               onPressed: () async {
                                 get<RoomViewModel>().roomId = item['id'];
-                                // final go =
-                                await get<RoomViewModel>().fetchRoom();
-                                // if (go) {
                                 Navigator.pushNamed(
                                   context,
                                   roomSettingsRoute,

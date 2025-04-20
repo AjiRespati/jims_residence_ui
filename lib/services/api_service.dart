@@ -186,6 +186,45 @@ class ApiService {
     }
   }
 
+  Future<dynamic> updateRoom({
+    required String roomId,
+    required dynamic roomUpdateData,
+    required List<dynamic> additionalPrices,
+    required List<dynamic> otherCost,
+  }) async {
+    String? token = await _getToken();
+
+    final response = await http.put(
+      Uri.parse('$baseUrl/room/$roomId'),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
+      body: jsonEncode({
+        'roomUpdateData': roomUpdateData,
+        'additionalPrices': additionalPrices,
+        'otherCost': otherCost,
+      }),
+    );
+
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) throw Exception("please reLogin");
+      return updateRoom(
+        roomId: roomId,
+        roomUpdateData: roomUpdateData,
+        additionalPrices: additionalPrices,
+        otherCost: otherCost,
+      );
+    } else if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
+    }
+  }
+
   Future<dynamic> updateRoomStatus({
     required String roomId,
     required String roomStatus,
@@ -223,8 +262,8 @@ class ApiService {
     required String? idImagePath,
     required bool isNIKCopyDone,
     required String tenancyStatus,
-    required DateTime startDate,
-    required DateTime dueDate,
+    required DateTime? startDate,
+    required DateTime? dueDate,
     required DateTime? paymentDate,
     required String paymentStatus,
   }) async {
@@ -240,8 +279,8 @@ class ApiService {
         'name': name,
         'phone': phone,
         'NIKNumber': idNumber,
-        'startDate': generateDateString(startDate),
-        'dueDate': generateDateString(dueDate),
+        'startDate': startDate == null ? null : generateDateString(startDate),
+        'dueDate': dueDate == null ? null : generateDateString(dueDate),
         'NIKImagePath': idImagePath,
         'isNIKCopyDone': isNIKCopyDone,
         'tenancyStatus': tenancyStatus,

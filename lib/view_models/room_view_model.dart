@@ -312,6 +312,11 @@ class RoomViewModel extends ChangeNotifier {
   String? _priceRoomSize;
   String? _priceDescription;
 
+  List<dynamic> _additionalPrices = [];
+  List<dynamic> _otherCost = [];
+  List<dynamic> _updatedAdditionalPrices = [];
+  List<dynamic> _updatedOtherCost = [];
+
   List<dynamic> get prices => _prices;
   set prices(List<dynamic> val) {
     _prices = val;
@@ -348,6 +353,30 @@ class RoomViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  List<dynamic> get additionalPrices => _additionalPrices;
+  set additionalPrices(List<dynamic> val) {
+    _additionalPrices = val;
+    notifyListeners();
+  }
+
+  List<dynamic> get otherCost => _otherCost;
+  set otherCost(List<dynamic> val) {
+    _otherCost = val;
+    notifyListeners();
+  }
+
+  List<dynamic> get updatedAdditionalPrices => _updatedAdditionalPrices;
+  set updatedAdditionalPrices(List<dynamic> val) {
+    _updatedAdditionalPrices = val;
+    notifyListeners();
+  }
+
+  List<dynamic> get updatedOtherCost => _updatedOtherCost;
+  set updatedOtherCost(List<dynamic> val) {
+    _updatedOtherCost = val;
+    notifyListeners();
+  }
+
   /// ################## ///
   ///       METHOD       ///
   /// ################## ///
@@ -373,10 +402,9 @@ class RoomViewModel extends ChangeNotifier {
         idNumber: tenantIdNumber,
         idImagePath: idImagePath,
         isNIKCopyDone: isIdCopied,
-        startDate: tenantStartDate ?? DateTime.now(),
-        paymentDate:
-            tenantPaymentDate ?? DateTime.now().add(Duration(days: 30)),
-        dueDate: tenantDueDate ?? DateTime.now().add(Duration(days: 15)),
+        startDate: tenantStartDate,
+        paymentDate: tenantPaymentDate,
+        dueDate: tenantDueDate,
         paymentStatus: "unpaid",
         tenancyStatus: tenantStatus,
       );
@@ -398,7 +426,6 @@ class RoomViewModel extends ChangeNotifier {
       isSuccess = true;
       successMessage = "Berhasil menambah harga";
     } catch (e) {
-      print(e.toString());
       if (e.toString().contains("please reLogin")) {
         isBusy = false;
         isNoSession = true;
@@ -417,30 +444,6 @@ class RoomViewModel extends ChangeNotifier {
     tenants = await apiService.fetchTenants();
     isBusy = false;
     return tenants.isNotEmpty;
-  }
-
-  Future<bool> createAdditionalPrice({required BuildContext context}) async {
-    final resp = await apiService.createAdditionalPrice(
-      roomId: roomId,
-      name: addPriceName,
-      amount: addPriceAmount,
-      description: addPriceDesc,
-    );
-
-    if (resp) {
-      await fetchRooms();
-      isBusy = false;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Biaya Berhasil ditambahkan')));
-      return true;
-    } else {
-      isBusy = false;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Biaya gagal ditambahkan')));
-      return false;
-    }
   }
 
   // TODO: KOST (Boarding House) Section
@@ -546,6 +549,30 @@ class RoomViewModel extends ChangeNotifier {
       if (roomId.isNotEmpty) {
         isBusy = true;
         var resp = await apiService.fetchRoom(roomId: roomId);
+        room = resp['data'];
+      }
+    } catch (e) {
+      if (e.toString().contains("please reLogin")) {
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
+  }
+
+  Future<void> updateRoom() async {
+    try {
+      if (roomId.isNotEmpty) {
+        isBusy = true;
+        var resp = await apiService.updateRoom(
+          roomId: roomId,
+          roomUpdateData: {},
+          additionalPrices: updatedAdditionalPrices,
+          otherCost: updatedOtherCost,
+        );
         room = resp['data'];
       }
     } catch (e) {

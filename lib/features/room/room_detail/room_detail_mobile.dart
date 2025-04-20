@@ -27,8 +27,8 @@ class _RoomDetailMobileState extends State<RoomDetailMobile>
     _room = get<RoomViewModel>().room;
     tenant = _room['latestTenant'];
     payment = tenant?['Payments'][0];
-    print(_room);
-    print(tenant);
+    // print(_room);
+    // print(tenant);
     print(payment);
     setState(() {});
   }
@@ -175,6 +175,19 @@ class _RoomDetailMobileState extends State<RoomDetailMobile>
                               children: [
                                 SizedBox(width: 20),
                                 Text("Pembayaran: "),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                SizedBox(width: 60),
+                                Text(formatCurrency(payment['totalAmount'])),
+                                Text(payment['paymentStatus'].toUpperCase()),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                SizedBox(width: 60),
+                                Text(payment['description']),
                               ],
                             ),
                             Divider(),

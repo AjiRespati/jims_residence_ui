@@ -29,7 +29,7 @@ class LoginPassword extends StatelessWidget with GetItMixin {
         suffixIcon: IconButton(
           splashRadius: 20,
           icon: Icon(
-            get<SystemViewModel>().showPassword
+            watchOnly((SystemViewModel x) => x.showPassword)
                 ? Icons.visibility_off
                 : Icons.visibility,
           ),
