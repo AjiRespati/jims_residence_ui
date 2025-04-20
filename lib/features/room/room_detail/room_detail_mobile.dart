@@ -19,17 +19,23 @@ class RoomDetailMobile extends StatefulWidget with GetItStatefulWidgetMixin {
 class _RoomDetailMobileState extends State<RoomDetailMobile>
     with GetItStateMixin {
   dynamic _room;
-  dynamic tenant;
-  dynamic payment;
+  dynamic _kost;
+  dynamic _tenant;
+  dynamic _payment;
+  // List<dynamic> _additionalPrices = [];
 
   _setup() async {
     await get<RoomViewModel>().fetchRoom();
     _room = get<RoomViewModel>().room;
-    tenant = _room['latestTenant'];
-    payment = tenant?['Payments'][0];
+    _kost = _room['BoardingHouse'];
+    _tenant = _room['latestTenant'];
+    _payment = _tenant?['Payments'][0];
+    // _additionalPrices = _room['AdditionalPrices'];
+
     // print(_room);
-    // print(tenant);
-    print(payment);
+    // print(_tenant);
+    // print(_payment);
+    // print(_additionalPrices);
     setState(() {});
   }
 
@@ -65,7 +71,7 @@ class _RoomDetailMobileState extends State<RoomDetailMobile>
                       Row(
                         children: [
                           Text(
-                            _room['BoardingHouse']['name'],
+                            _kost['name'],
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
@@ -102,29 +108,56 @@ class _RoomDetailMobileState extends State<RoomDetailMobile>
                         children: [
                           SizedBox(width: 20),
                           Text("Harga: "),
-                          Text(formatCurrency(_room['Price']['amount'])),
+                          Text(
+                            formatCurrency(_room['Price']['amount']),
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
                         ],
                       ),
                       if ((_room['AdditionalPrices'] ?? []).length != 0)
                         Row(
                           children: [
                             SizedBox(width: 20),
-                            Text("Tambahan harga: "),
+                            Text("Tambahan biaya: "),
                           ],
                         ),
                       if ((_room['AdditionalPrices'] ?? []).length != 0)
-                        SizedBox(
-                          height: 300,
-                          child: ListView.builder(
-                            itemCount: (_room['AdditionalPrices'] ?? []).length,
-                            itemBuilder: (context, index) {
-                              dynamic item = _room['AdditionalPrices'][index];
-                              return Text("data");
-                            },
-                          ),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: (_room['AdditionalPrices'] ?? []).length,
+                          itemBuilder: (context, index) {
+                            dynamic item = _room['AdditionalPrices'][index];
+                            return Row(
+                              children: [
+                                SizedBox(width: 40),
+                                Text(item['name'] + ": "),
+                                SizedBox(width: 10),
+                                Text(formatCurrency(item['amount'])),
+                              ],
+                            );
+                          },
                         ),
+                      SizedBox(height: 10),
+                      Row(
+                        children: [
+                          SizedBox(width: 20),
+                          Text(
+                            "Total: ",
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
+                          Text(
+                            formatCurrency(_room['totalPrice']),
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              color: Colors.greenAccent.shade700,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
                       Divider(),
-                      if (tenant != null)
+                      if (_tenant != null)
                         Column(
                           children: [
                             Row(
@@ -137,21 +170,21 @@ class _RoomDetailMobileState extends State<RoomDetailMobile>
                               children: [
                                 SizedBox(width: 60),
                                 Text("Nama: "),
-                                Text((tenant?['name'] ?? " -")),
+                                Text((_tenant?['name'] ?? " -")),
                               ],
                             ),
                             Row(
                               children: [
                                 SizedBox(width: 60),
                                 Text("Telepon: "),
-                                Text((tenant?['phone'] ?? " -")),
+                                Text((_tenant?['phone'] ?? " -")),
                               ],
                             ),
                             Row(
                               children: [
                                 SizedBox(width: 60),
                                 Text("NIK: "),
-                                Text((tenant?['NIKNumber'] ?? " -")),
+                                Text((_tenant?['NIKNumber'] ?? " -")),
                               ],
                             ),
                             Row(
@@ -159,7 +192,7 @@ class _RoomDetailMobileState extends State<RoomDetailMobile>
                                 SizedBox(width: 60),
                                 Text("Fotocopy KTP: "),
                                 Text(
-                                  (tenant?['isIdCopyDone'] ?? false)
+                                  (_tenant?['isIdCopyDone'] ?? false)
                                       ? "Sudah"
                                       : "Belum",
                                 ),
@@ -168,7 +201,7 @@ class _RoomDetailMobileState extends State<RoomDetailMobile>
                             Divider(),
                           ],
                         ),
-                      if (payment != null)
+                      if (_payment != null)
                         Column(
                           children: [
                             Row(
@@ -180,14 +213,14 @@ class _RoomDetailMobileState extends State<RoomDetailMobile>
                             Row(
                               children: [
                                 SizedBox(width: 60),
-                                Text(formatCurrency(payment['totalAmount'])),
-                                Text(payment['paymentStatus'].toUpperCase()),
+                                Text(formatCurrency(_payment['totalAmount'])),
+                                Text(_payment['paymentStatus'].toUpperCase()),
                               ],
                             ),
                             Row(
                               children: [
                                 SizedBox(width: 60),
-                                Text(payment['description']),
+                                Text(_payment['description']),
                               ],
                             ),
                             Divider(),
@@ -195,7 +228,7 @@ class _RoomDetailMobileState extends State<RoomDetailMobile>
                         ),
                       SizedBox(height: 100),
 
-                      if (tenant == null)
+                      if (_tenant == null)
                         Stack(
                           alignment: AlignmentDirectional.center,
                           children: [
@@ -220,7 +253,7 @@ class _RoomDetailMobileState extends State<RoomDetailMobile>
                                     isScrollControlled: true,
                                     constraints: BoxConstraints(
                                       minHeight: 490,
-                                      maxHeight: 700,
+                                      maxHeight: 750,
                                     ),
                                     context: context,
                                     builder: (context) {
@@ -269,7 +302,7 @@ class _RoomDetailMobileState extends State<RoomDetailMobile>
                           ],
                         ),
 
-                      if (tenant != null)
+                      if (_tenant != null)
                         Stack(
                           alignment: AlignmentDirectional.center,
                           children: [

@@ -85,9 +85,10 @@ class ApiService {
       await prefs.setString('accessToken', newAccessToken);
       return newAccessToken;
     } else {
-      throw Exception(
-        jsonDecode(response.body)['message'] ?? 'Internal service error',
-      );
+      return null;
+      // throw Exception(
+      //   jsonDecode(response.body)['message'] ?? 'Internal service error',
+      // );
     }
   }
 

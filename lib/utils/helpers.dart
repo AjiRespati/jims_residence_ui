@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 String generateRandomValueKey() {
@@ -50,4 +51,33 @@ String formatCurrency(num number) {
 String generateDateString(DateTime time) {
   final formatter = DateFormat('yyyy-MM-dd');
   return formatter.format(time);
+}
+
+Future<DateTime?> showCustomDatePicker({
+  required BuildContext context,
+  required DateTime initialDate,
+  required DateTime firstDate,
+}) async {
+  DateTime? selectedDate;
+
+  await showDialog<DateTime>(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: Colors.white,
+        child: CalendarDatePicker(
+          initialDate: initialDate, // DateTime.now(),
+          firstDate: firstDate, //DateTime(1900),
+          lastDate: DateTime(3000),
+          onDateChanged: (DateTime date) {
+            selectedDate = date;
+            Navigator.of(context).pop(date); // Close and return date
+          },
+        ),
+      );
+    },
+  );
+
+  return selectedDate;
 }

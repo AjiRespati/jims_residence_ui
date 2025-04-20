@@ -122,52 +122,51 @@ class SettingsMobile extends StatelessWidget with GetItMixin {
                             ),
                             Divider(),
 
-                            InkWell(
-                              onTap: () {
-                                Navigator.pushNamed(context, priceRoute);
-                              },
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text("Price Management"),
-                                  IconButton(
-                                    onPressed: () {
-                                      Navigator.pushNamed(context, priceRoute);
-                                    },
-                                    icon: Icon(
-                                      Icons.chevron_right_rounded,
-                                      size: 30,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Divider(),
+                            // InkWell(
+                            //   onTap: () {
+                            //     Navigator.pushNamed(context, priceRoute);
+                            //   },
+                            //   child: Row(
+                            //     mainAxisAlignment:
+                            //         MainAxisAlignment.spaceBetween,
+                            //     children: [
+                            //       Text("Price Management"),
+                            //       IconButton(
+                            //         onPressed: () {
+                            //           Navigator.pushNamed(context, priceRoute);
+                            //         },
+                            //         icon: Icon(
+                            //           Icons.chevron_right_rounded,
+                            //           size: 30,
+                            //         ),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
+                            // Divider(),
 
-                            InkWell(
-                              onTap: () {
-                                Navigator.pushNamed(context, homeRoute);
-                              },
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text("Product Management"),
-                                  IconButton(
-                                    onPressed: () {
-                                      Navigator.pushNamed(context, homeRoute);
-                                    },
-                                    icon: Icon(
-                                      Icons.chevron_right_rounded,
-                                      size: 30,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Divider(),
-
+                            // InkWell(
+                            //   onTap: () {
+                            //     Navigator.pushNamed(context, homeRoute);
+                            //   },
+                            //   child: Row(
+                            //     mainAxisAlignment:
+                            //         MainAxisAlignment.spaceBetween,
+                            //     children: [
+                            //       Text("Product Management"),
+                            //       IconButton(
+                            //         onPressed: () {
+                            //           Navigator.pushNamed(context, homeRoute);
+                            //         },
+                            //         icon: Icon(
+                            //           Icons.chevron_right_rounded,
+                            //           size: 30,
+                            //         ),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
+                            // Divider(),
                             InkWell(
                               onTap: () {
                                 Navigator.pushNamed(context, homeRoute);

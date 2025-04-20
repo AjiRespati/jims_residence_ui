@@ -9,3 +9,4 @@ const String tenantRoute = "/Tenant";
 const String settingRoute = "/Setting";
 const String kostRoute = "/Kost";
 const String priceRoute = "/Price";
+const String paymentsRoute = "/Payments";

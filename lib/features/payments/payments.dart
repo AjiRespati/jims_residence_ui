@@ -1,0 +1,27 @@
+import 'package:flutter/material.dart';
+import 'package:frontend/features/payments/payments_desktop.dart';
+import 'package:frontend/features/payments/payments_mobile.dart';
+import 'package:frontend/utils/responsive_layout.dart';
+import 'package:get_it_mixin/get_it_mixin.dart';
+
+class Payments extends StatefulWidget with GetItStatefulWidgetMixin {
+  Payments({super.key});
+
+  @override
+  State<Payments> createState() => _PaymentsState();
+}
+
+class _PaymentsState extends State<Payments> with GetItStateMixin {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ResponsiveLayout(
+      mobileLayout: PaymentsMobile(),
+      desktopLayout: PaymentsDesktop(),
+    );
+  }
+}

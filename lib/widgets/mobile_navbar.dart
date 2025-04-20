@@ -22,13 +22,10 @@ class MobileNavbar extends StatelessWidget with GetItMixin {
             Navigator.pushNamed(context, tenantRoute);
             break;
           case 3:
-            Navigator.pushNamed(context, homeRoute);
+            Navigator.pushNamed(context, paymentsRoute);
             break;
           default:
             Navigator.pushNamed(context, settingRoute);
-          //   break;
-          // default:
-          //   Navigator.pushNamed(context, dashboardRoute);
         }
       },
       selectedIndex: get<SystemViewModel>().currentPageIndex,
@@ -44,7 +41,7 @@ class MobileNavbar extends StatelessWidget with GetItMixin {
         ),
         NavigationDestination(
           icon: Icon(Icons.payments_rounded),
-          label: "Transaction",
+          label: "Payments",
         ),
         NavigationDestination(icon: Icon(Icons.settings), label: "Setting"),
       ],

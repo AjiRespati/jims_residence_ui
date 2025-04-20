@@ -99,7 +99,7 @@ class _RoomMobileState extends State<RoomMobile> with GetItStateMixin {
                             Row(
                               children: [
                                 Text("Ukuran: "),
-                                Text(item['Price']['roomSize']),
+                                Text(item['roomSize']),
                               ],
                             ),
                             Row(
@@ -111,35 +111,12 @@ class _RoomMobileState extends State<RoomMobile> with GetItStateMixin {
                             Row(
                               children: [
                                 Text("Harga: "),
-                                Text(formatCurrency(item['Price']['amount'])),
+                                Text(formatCurrency(item['totalPrice'])),
                               ],
                             ),
                           ],
                         ),
                         SizedBox(width: 10),
-                        // Column(
-                        //   crossAxisAlignment: CrossAxisAlignment.start,
-                        //   children: [
-                        //     Row(
-                        //       children: [
-                        //         Text("Ukuran: "),
-                        //         Text(item['roomSize']),
-                        //       ],
-                        //     ),
-                        //     Row(
-                        //       children: [
-                        //         Text("Status: "),
-                        //         Text(item['roomStatus']),
-                        //       ],
-                        //     ),
-                        //     Row(
-                        //       children: [
-                        //         Text("Harga: "),
-                        //         Text("${item['basicPrice']}"),
-                        //       ],
-                        //     ),
-                        //   ],
-                        // ),
                         Expanded(child: SizedBox()),
                         Column(
                           children: [

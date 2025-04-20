@@ -24,6 +24,7 @@ class _RoomSettingsMobileState extends State<RoomSettingsMobile>
   dynamic _kost;
   dynamic _tenant;
   dynamic _payment;
+  List<dynamic> _additionalPrices = [];
 
   _setup() async {
     await get<RoomViewModel>().fetchRoom();
@@ -31,9 +32,12 @@ class _RoomSettingsMobileState extends State<RoomSettingsMobile>
     _kost = _room['BoardingHouse'];
     _tenant = _room['latestTenant'];
     _payment = _tenant?['Payments'][0];
-    print(_room);
-    print(_tenant);
-    print(_payment);
+    _additionalPrices = _room['AdditionalPrices'];
+    get<RoomViewModel>().updatedAdditionalPrices = _additionalPrices;
+    // print(_room);
+    // print(_tenant);
+    // print(_payment);
+    // print(_additionalPrices);
     setState(() {});
   }
 
