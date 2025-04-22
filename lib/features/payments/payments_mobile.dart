@@ -13,6 +13,7 @@ class _PaymentsMobileState extends State<PaymentsMobile> with GetItStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(title: Text("Payments")),
       bottomNavigationBar: MobileNavbar(),
     );

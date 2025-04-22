@@ -23,6 +23,7 @@ class _PriceMobileState extends State<PriceMobile> with GetItStateMixin {
     watchOnly((RoomViewModel x) => x.isError);
     _snackbarGenerator(context);
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text("Price"),
         actions: [

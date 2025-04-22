@@ -17,9 +17,11 @@ class _HomeMobileState extends State<HomeMobile> with GetItStateMixin {
   Widget build(BuildContext context) {
     watchOnly((RoomViewModel x) => x.isError);
     watchOnly((RoomViewModel x) => x.isNoSession);
+    watchOnly((RoomViewModel x) => x.kosts);
     _snackbarGenerator(context);
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(

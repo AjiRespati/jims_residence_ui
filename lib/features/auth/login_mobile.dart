@@ -10,6 +10,7 @@ class LoginMobile extends StatelessWidget with GetItMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(title: Text("Welcome"), automaticallyImplyLeading: false),
       body: Padding(
         padding: const EdgeInsets.all(20),

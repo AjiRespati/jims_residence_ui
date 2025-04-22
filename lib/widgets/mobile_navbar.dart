@@ -30,20 +30,43 @@ class MobileNavbar extends StatelessWidget with GetItMixin {
       },
       selectedIndex: get<SystemViewModel>().currentPageIndex,
       destinations: [
-        NavigationDestination(icon: Icon(Icons.home), label: "Home"),
         NavigationDestination(
+          selectedIcon: Icon(Icons.home, color: Colors.blue.shade800),
+          icon: Icon(Icons.home),
+          label: "Home",
+        ),
+        NavigationDestination(
+          selectedIcon: Icon(
+            Icons.meeting_room_rounded,
+            color: Colors.blue.shade800,
+          ),
+
           icon: Icon(Icons.meeting_room_rounded),
           label: "Rooms",
         ),
         NavigationDestination(
+          selectedIcon: Icon(
+            Icons.people_alt_rounded,
+            color: Colors.blue.shade800,
+          ),
+
           icon: Icon(Icons.people_alt_rounded),
           label: "Tenants",
         ),
         NavigationDestination(
+          selectedIcon: Icon(
+            Icons.payments_rounded,
+            color: Colors.blue.shade800,
+          ),
+
           icon: Icon(Icons.payments_rounded),
           label: "Payments",
         ),
-        NavigationDestination(icon: Icon(Icons.settings), label: "Setting"),
+        NavigationDestination(
+          selectedIcon: Icon(Icons.settings, color: Colors.blue.shade800),
+          icon: Icon(Icons.settings),
+          label: "Setting",
+        ),
       ],
     );
   }

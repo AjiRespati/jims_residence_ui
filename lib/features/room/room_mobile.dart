@@ -24,6 +24,7 @@ class _RoomMobileState extends State<RoomMobile> with GetItStateMixin {
     watchOnly((RoomViewModel x) => x.isError);
     _snackbarGenerator(context);
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text(
           "Kamar",

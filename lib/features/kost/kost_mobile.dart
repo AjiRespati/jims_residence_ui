@@ -22,6 +22,7 @@ class _KostMobileState extends State<KostMobile> with GetItStateMixin {
     _snackbarGenerator(context);
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text("Kost"),
         actions: [
