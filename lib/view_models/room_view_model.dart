@@ -65,7 +65,7 @@ class RoomViewModel extends ChangeNotifier {
   String _roomNumber = "";
   String _roomSize = "";
   dynamic _selectedRoomSize;
-  String _roomStatus = "Tersedia";
+  String? _roomStatus;
   double _basicPrice = 0.0;
   double _totalPrice = 0.0;
   String _description = "";
@@ -107,8 +107,8 @@ class RoomViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  String get roomStatus => _roomStatus;
-  set roomStatus(String val) {
+  String? get roomStatus => _roomStatus;
+  set roomStatus(String? val) {
     _roomStatus = val;
     notifyListeners();
   }
@@ -181,6 +181,7 @@ class RoomViewModel extends ChangeNotifier {
   bool _isIdCopied = false;
   String? _isIdCopiedText;
   String _tenantStatus = "";
+  String? _tenantRoomStatus = "";
   List<dynamic> _tenants = [];
   DateTime? _tenantStartDate;
   DateTime? _tenantPaymentDate;
@@ -219,6 +220,12 @@ class RoomViewModel extends ChangeNotifier {
   String get tenantStatus => _tenantStatus;
   set tenantStatus(String val) {
     _tenantStatus = val;
+    notifyListeners();
+  }
+
+  String? get tenantRoomStatus => _tenantRoomStatus;
+  set tenantRoomStatus(String? val) {
+    _tenantRoomStatus = val;
     notifyListeners();
   }
 
@@ -381,14 +388,28 @@ class RoomViewModel extends ChangeNotifier {
   ///       METHOD       ///
   /// ################## ///
 
-  Future<bool> updateRoomStatus() async {
-    room = await apiService.updateRoomStatus(
-      roomId: roomId,
-      roomStatus: roomStatus,
-    );
-    roomStatus = room['roomStatus'];
-    isBusy = false;
-    return room != null;
+  Future<void> updateRoomStatus() async {
+    try {
+      dynamic resp = await apiService.updateRoomStatus(
+        roomId: roomId,
+        roomStatus: roomStatus ?? "",
+      );
+
+      roomStatus = resp['data']['roomStatus'];
+      isBusy = false;
+      successMessage = "Berhasil mengubah status";
+      isSuccess = true;
+      notifyListeners();
+    } catch (e) {
+      if (e.toString().contains("please reLogin")) {
+        isBusy = false;
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isBusy = false;
+        isError = true;
+      }
+    }
   }
 
   Future<void> addTenant({required BuildContext context}) async {
@@ -404,9 +425,11 @@ class RoomViewModel extends ChangeNotifier {
         isNIKCopyDone: isIdCopied,
         startDate: tenantStartDate,
         paymentDate: tenantPaymentDate,
-        dueDate: tenantDueDate,
+        dueDate: tenantStartDate?.add(Duration(days: 7)),
+        banishDate: tenantStartDate?.add(Duration(days: 14)),
         paymentStatus: "unpaid",
         tenancyStatus: tenantStatus,
+        roomStatus: tenantRoomStatus,
       );
 
       await fetchRoom();
@@ -421,6 +444,7 @@ class RoomViewModel extends ChangeNotifier {
       tenantPaymentDate = null;
       tenantDueDate = null;
       tenantStatus = "";
+      tenantRoomStatus = "";
 
       isBusy = false;
       isSuccess = true;
@@ -500,7 +524,7 @@ class RoomViewModel extends ChangeNotifier {
         boardingHouseId: roomKostId,
         roomNumber: roomNumber,
         roomSize: selectedRoomSize['roomSize'],
-        roomStatus: roomStatus,
+        roomStatus: roomStatus ?? "",
         description: description,
         priceId: selectedRoomSize['id'],
       );
@@ -574,7 +598,9 @@ class RoomViewModel extends ChangeNotifier {
           otherCost: updatedOtherCost,
         );
         room = resp['data'];
+        isBusy = false;
       }
+      isBusy = false;
     } catch (e) {
       if (e.toString().contains("please reLogin")) {
         isNoSession = true;

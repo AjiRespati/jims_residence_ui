@@ -53,7 +53,7 @@ class _RoomMobileState extends State<RoomMobile> with GetItStateMixin {
       body: ListView.builder(
         itemCount: get<RoomViewModel>().rooms.length,
         itemBuilder: (context, idx) {
-          var item = get<RoomViewModel>().rooms[idx];
+          dynamic item = get<RoomViewModel>().rooms[idx];
           return Padding(
             padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
             child: Card(
@@ -61,80 +61,91 @@ class _RoomMobileState extends State<RoomMobile> with GetItStateMixin {
                 borderRadius: BorderRadius.circular(10),
               ),
               elevation: 2,
-              child: InkWell(
-                onTap: () {
-                  get<RoomViewModel>().roomId = item?['id'] ?? "";
-                  Navigator.pushNamed(context, roomDetailRoute);
-                },
-                child: SizedBox(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        SizedBox(width: 5),
-                        SizedBox(
-                          width: 50,
-                          child: Text(
-                            item['roomNumber'],
-                            style: TextStyle(
-                              fontSize: 35,
-                              fontWeight: FontWeight.w500,
+              child: ClipRRect(
+                child: InkWell(
+                  onTap: () {
+                    get<RoomViewModel>().roomId = item?['id'] ?? "";
+                    Navigator.pushNamed(context, roomDetailRoute);
+                  },
+                  child: Banner(
+                    message: item['roomStatus'],
+                    textStyle: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    location: BannerLocation.topEnd,
+                    color: generateRoomStatusColor(
+                      roomSatus: item['roomStatus'],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          SizedBox(width: 5),
+                          SizedBox(
+                            width: 50,
+                            child: Text(
+                              item['roomNumber'],
+                              style: TextStyle(
+                                fontSize: 35,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(width: 5),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  item['BoardingHouse']['name'],
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 20,
+                          SizedBox(width: 5),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    item['BoardingHouse']['name'],
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 20,
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text("Ukuran: "),
-                                Text(item['roomSize']),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text("Status: "),
-                                Text(item['roomStatus']),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text("Harga: "),
-                                Text(formatCurrency(item['totalPrice'])),
-                              ],
-                            ),
-                          ],
-                        ),
-                        SizedBox(width: 10),
-                        Expanded(child: SizedBox()),
-                        Column(
-                          children: [
-                            IconButton(
-                              onPressed: () async {
-                                get<RoomViewModel>().roomId = item['id'];
-                                Navigator.pushNamed(
-                                  context,
-                                  roomSettingsRoute,
-                                  arguments: item,
-                                );
-                              },
-                              icon: Icon(Icons.settings),
-                            ),
-                          ],
-                        ),
-                      ],
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Text("Ukuran: "),
+                                  Text(item['roomSize']),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Text("Status: "),
+                                  Text(item['roomStatus']),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Text("Harga: "),
+                                  Text(formatCurrency(item['totalPrice'])),
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(width: 10),
+                          Expanded(child: SizedBox()),
+                          Column(
+                            children: [
+                              IconButton(
+                                onPressed: () async {
+                                  get<RoomViewModel>().roomId = item['id'];
+                                  Navigator.pushNamed(
+                                    context,
+                                    roomSettingsRoute,
+                                    arguments: item,
+                                  );
+                                },
+                                icon: Icon(Icons.settings),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

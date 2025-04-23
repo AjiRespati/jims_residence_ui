@@ -15,7 +15,8 @@ class AddTenant extends StatefulWidget with GetItStatefulWidgetMixin {
 
 class _AddTenantState extends State<AddTenant> with GetItStateMixin {
   DateTime? _selectedDate;
-  String _selectedShowDate = 'Nanti';
+  final DateTime _selectedDateNow = DateTime.now();
+  String _selectedShowDate = 'Sekarang';
   final List<String> _pilihDate = ['Sekarang', 'Nanti'];
 
   @override
@@ -66,14 +67,18 @@ class _AddTenantState extends State<AddTenant> with GetItStateMixin {
           Row(children: [Text("Pilih tanggal mulai:")]),
           Row(
             children:
-                _pilihDate.map((language) {
+                _pilihDate.map((when) {
                   return Expanded(
                     child: RadioListTile<String>(
                       dense: true,
-                      title: Text(language),
-                      value: language,
+                      title: Text(when),
+                      value: when,
                       groupValue: _selectedShowDate,
                       onChanged: (String? value) {
+                        get<RoomViewModel>().tenantRoomStatus =
+                            value == 'Nanti' ? "Dipesan" : "Terisi";
+                        get<RoomViewModel>().tenantStartDate =
+                            value == 'Nanti' ? _selectedDate : _selectedDateNow;
                         setState(() {
                           _selectedShowDate = value!;
                           if (value == 'Nanti') {
@@ -86,9 +91,27 @@ class _AddTenantState extends State<AddTenant> with GetItStateMixin {
                   );
                 }).toList(),
           ),
-          if (_selectedShowDate == 'Sekarang')
-            Row(
-              children: [
+          Row(
+            children: [
+              if (_selectedShowDate == 'Sekarang')
+                SizedBox(
+                  height: 34,
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    child: Row(
+                      children: [
+                        Text("Tanggal mulai: "),
+                        Text(
+                          (_selectedDateNow.toLocal()).toString().split(' ')[0],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              // if (_selectedShowDate == 'Sekarang')
+              //   Expanded(child: SizedBox()),
+              if (_selectedShowDate != 'Sekarang') Expanded(child: SizedBox()),
+              if (_selectedShowDate != 'Sekarang')
                 _buildDatePicker(
                   context,
                   "Tanggal mulai: ",
@@ -104,8 +127,8 @@ class _AddTenantState extends State<AddTenant> with GetItStateMixin {
                     fontSize: 14,
                   ),
                 ),
-              ],
-            ),
+            ],
+          ),
 
           SizedBox(height: 30),
           GradientElevatedButton(

@@ -5,8 +5,21 @@ import 'package:frontend/view_models/room_view_model.dart';
 import 'package:frontend/widgets/buttons/gradient_elevated_button.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
-class EditRoomStatus extends StatelessWidget with GetItMixin {
+class EditRoomStatus extends StatefulWidget with GetItStatefulWidgetMixin {
   EditRoomStatus({super.key});
+
+  @override
+  State<EditRoomStatus> createState() => _EditRoomStatusState();
+}
+
+class _EditRoomStatusState extends State<EditRoomStatus> with GetItStateMixin {
+  String? _selectedStatus;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedStatus = get<RoomViewModel>().roomStatus;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,29 +34,22 @@ class EditRoomStatus extends StatelessWidget with GetItMixin {
           SizedBox(height: 6),
           DropdownButtonFormField<String>(
             decoration: InputDecoration(labelText: "Status Kamar"),
-            value: get<RoomViewModel>().roomStatus,
+            value: _selectedStatus,
             items:
-                ["Tersedia", "Terisi", "Pemeliharaan", "Rusak"].map((item) {
+                ['Tersedia', 'Terisi', 'Dipesan', 'Pemeliharaan', 'Rusak'].map((
+                  item,
+                ) {
                   return DropdownMenuItem<String>(
                     value: item,
                     child: Text(item),
                   );
                 }).toList(),
             onChanged: (value) {
-              get<RoomViewModel>().roomStatus = value ?? "Tersedia";
+              _selectedStatus = value;
+              get<RoomViewModel>().roomStatus = value;
+              setState(() {});
             },
           ),
-          // SizedBox(height: 6),
-          // TextFormField(
-          //   decoration: InputDecoration(
-          //     isDense: true,
-          //     label: Text("Harga Kamar"),
-          //   ),
-          //   keyboardType: TextInputType.number,
-          //   onChanged:
-          //       (value) =>
-          //           get<RoomViewModel>().basicPrice = double.parse(value),
-          // ),
           SizedBox(height: 70),
           Stack(
             alignment: AlignmentDirectional.center,
@@ -52,6 +58,7 @@ class EditRoomStatus extends StatelessWidget with GetItMixin {
                 onPressed: () async {
                   get<RoomViewModel>().isBusy = true;
                   await get<RoomViewModel>().updateRoomStatus();
+                  await Future.delayed(Durations.medium4);
                   Navigator.pop(context);
                 },
                 child: Text(

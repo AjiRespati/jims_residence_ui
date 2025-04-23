@@ -7,6 +7,7 @@ import 'package:frontend/view_models/room_view_model.dart';
 import 'package:frontend/widgets/buttons/add_button.dart';
 import 'package:frontend/widgets/buttons/edit_button.dart';
 import 'package:frontend/widgets/buttons/gradient_elevated_button.dart';
+import 'package:frontend/widgets/buttons/remove_button.dart';
 
 import 'package:frontend/widgets/mobile_navbar.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
@@ -24,34 +25,42 @@ class _RoomSettingsMobileState extends State<RoomSettingsMobile>
   dynamic _kost;
   dynamic _tenant;
   dynamic _payment;
-  List<dynamic> _additionalPrices = [];
+  double _totalAdditionalPrice = 0;
 
-  _setup() async {
+  _setup(bool isInit) async {
     await get<RoomViewModel>().fetchRoom();
     _room = get<RoomViewModel>().room;
     _kost = _room['BoardingHouse'];
     _tenant = _room['latestTenant'];
     _payment = _tenant?['Payments'][0];
-    _additionalPrices = _room['AdditionalPrices'];
-    get<RoomViewModel>().updatedAdditionalPrices = _additionalPrices;
-    // print(_room);
+    get<RoomViewModel>().updatedAdditionalPrices = _room['AdditionalPrices'];
+    get<RoomViewModel>().roomStatus = _room['roomStatus'];
+    _totalAdditionalPrice = 0;
+    for (var el in get<RoomViewModel>().updatedAdditionalPrices) {
+      _totalAdditionalPrice = _totalAdditionalPrice + el['amount'].toDouble();
+    }
+
     // print(_tenant);
     // print(_payment);
     // print(_additionalPrices);
-    setState(() {});
+
+    if (isInit) {
+      setState(() {});
+    }
   }
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _setup();
+      _setup(true);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     watchOnly((RoomViewModel x) => x.isError);
+    watchOnly((RoomViewModel x) => x.isSuccess);
     _snackbarGenerator(context);
     return Scaffold(
       resizeToAvoidBottomInset: true, // Add this line
@@ -64,11 +73,17 @@ class _RoomSettingsMobileState extends State<RoomSettingsMobile>
       body:
           (_room == null)
               ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    height: 30,
-                    width: 30,
-                    child: CircularProgressIndicator(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 30,
+                        width: 30,
+                        child: CircularProgressIndicator(),
+                      ),
+                    ],
                   ),
                 ],
               )
@@ -110,10 +125,7 @@ class _RoomSettingsMobileState extends State<RoomSettingsMobile>
                                 ),
                               ),
                               Text(
-                                formatCurrency(
-                                  0,
-                                  // _room['totalPrice'] - _room['basicPrice'],
-                                ),
+                                formatCurrency(_totalAdditionalPrice),
                                 style: TextStyle(
                                   fontSize: 18,
                                   color: Colors.green,
@@ -157,6 +169,15 @@ class _RoomSettingsMobileState extends State<RoomSettingsMobile>
                                       );
                                     },
                                   );
+
+                                  _totalAdditionalPrice = 0;
+                                  for (var el
+                                      in get<RoomViewModel>()
+                                          .updatedAdditionalPrices) {
+                                    _totalAdditionalPrice =
+                                        _totalAdditionalPrice +
+                                        el['amount'].toDouble();
+                                  }
                                   setState(() {});
                                 },
                               ),
@@ -191,6 +212,26 @@ class _RoomSettingsMobileState extends State<RoomSettingsMobile>
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
+                                        SizedBox(width: 20),
+                                        RemoveButton(
+                                          toolTip: "Hapus biaya?",
+                                          size: 18,
+                                          onPressed: () {
+                                            get<RoomViewModel>()
+                                                .updatedAdditionalPrices
+                                                .remove(item);
+
+                                            _totalAdditionalPrice = 0;
+                                            for (var el
+                                                in get<RoomViewModel>()
+                                                    .updatedAdditionalPrices) {
+                                              _totalAdditionalPrice =
+                                                  _totalAdditionalPrice +
+                                                  el['amount'].toDouble();
+                                            }
+                                            setState(() {});
+                                          },
+                                        ),
                                       ],
                                     );
                                   },
@@ -212,10 +253,15 @@ class _RoomSettingsMobileState extends State<RoomSettingsMobile>
                                 ),
                               ),
                               Text(
-                                _room['roomStatus'],
+                                watchOnly((RoomViewModel x) => x.roomStatus) ??
+                                    "",
                                 style: TextStyle(
                                   fontSize: 18,
-                                  color: Colors.green,
+                                  color: generateRoomStatusColor(
+                                    roomSatus: watchOnly(
+                                      (RoomViewModel x) => x.roomStatus,
+                                    ),
+                                  ),
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
@@ -224,8 +270,8 @@ class _RoomSettingsMobileState extends State<RoomSettingsMobile>
                               EditButton(
                                 size: 34,
                                 message: "",
-                                onPressed: () {
-                                  showModalBottomSheet(
+                                onPressed: () async {
+                                  await showModalBottomSheet(
                                     isScrollControlled: true,
                                     constraints: BoxConstraints(
                                       minHeight: 440,
@@ -249,6 +295,7 @@ class _RoomSettingsMobileState extends State<RoomSettingsMobile>
                                       );
                                     },
                                   );
+                                  setState(() {});
                                 },
                               ),
                               SizedBox(width: 20),
@@ -270,7 +317,7 @@ class _RoomSettingsMobileState extends State<RoomSettingsMobile>
                               Navigator.pop(context);
                             },
                             child: Text(
-                              "Batalkan",
+                              "Kembali",
                               style: TextStyle(fontWeight: FontWeight.w600),
                             ),
                           ),
@@ -318,9 +365,9 @@ class _RoomSettingsMobileState extends State<RoomSettingsMobile>
         get<RoomViewModel>().errorMessage = null;
       } else if (get<RoomViewModel>().isSuccess) {
         _showSnackBar(
-          "Tambah penghuni baru berhasil",
+          get<RoomViewModel>().successMessage ?? "Success",
           color: Colors.green.shade400,
-          duration: Duration(seconds: 6),
+          duration: Duration(seconds: 2),
         );
         get<RoomViewModel>().isSuccess = false;
       }

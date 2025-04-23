@@ -263,12 +263,17 @@ class ApiService {
     required String? idImagePath,
     required bool isNIKCopyDone,
     required String tenancyStatus,
+    required String? roomStatus,
     required DateTime? startDate,
     required DateTime? dueDate,
+    required DateTime? banishDate,
     required DateTime? paymentDate,
     required String paymentStatus,
   }) async {
     String? token = await _getToken();
+    print(startDate == null ? null : generateDateString(startDate));
+    print(dueDate == null ? null : generateDateString(dueDate));
+    print(banishDate == null ? null : generateDateString(banishDate));
     final response = await http.post(
       Uri.parse('$baseUrl/tenant'),
       headers: {
@@ -282,9 +287,12 @@ class ApiService {
         'NIKNumber': idNumber,
         'startDate': startDate == null ? null : generateDateString(startDate),
         'dueDate': dueDate == null ? null : generateDateString(dueDate),
+        'banishDate':
+            banishDate == null ? null : generateDateString(banishDate),
         'NIKImagePath': idImagePath,
         'isNIKCopyDone': isNIKCopyDone,
         'tenancyStatus': tenancyStatus,
+        'roomStatus': roomStatus,
         'paymentDate':
             paymentDate == null ? null : generateDateString(paymentDate),
         'paymentStatus': paymentStatus,
@@ -301,7 +309,9 @@ class ApiService {
         idNumber: idNumber,
         idImagePath: idImagePath,
         tenancyStatus: tenancyStatus,
+        roomStatus: roomStatus,
         dueDate: dueDate,
+        banishDate: banishDate,
         paymentDate: paymentDate,
         startDate: startDate,
         isNIKCopyDone: isNIKCopyDone,

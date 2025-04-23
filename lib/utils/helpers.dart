@@ -27,10 +27,14 @@ String getYesOrNo(bool condition) {
   return condition ? 'Yes' : 'No';
 }
 
-String formatDateString(String dateTimeString) {
-  final dateTime = DateTime.parse(dateTimeString);
-  final formatter = DateFormat('yyyy-MM-dd');
-  return formatter.format(dateTime);
+String formatDateString(String? dateTimeString) {
+  String result = " -";
+  if (dateTimeString != null) {
+    final dateTime = DateTime.parse(dateTimeString);
+    final formatter = DateFormat('yyyy-MM-dd');
+    result = formatter.format(dateTime);
+  }
+  return result;
 }
 
 String formatCurrency(num number) {
@@ -80,4 +84,22 @@ Future<DateTime?> showCustomDatePicker({
   );
 
   return selectedDate;
+}
+
+Color generateRoomStatusColor({required String? roomSatus}) {
+  // 'Tersedia', 'Terisi', 'Dipesan', 'Pemeliharaan', 'Rusak'
+  switch (roomSatus) {
+    case 'Tersedia':
+      return Colors.green;
+    case 'Terisi':
+      return Colors.deepPurpleAccent.shade700;
+    case 'Dipesan':
+      return Colors.blue;
+    case 'Pemeliharaan':
+      return Colors.amber;
+    case 'Rusak':
+      return Colors.red;
+    default:
+      return Colors.black;
+  }
 }

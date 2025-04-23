@@ -9,13 +9,7 @@
       "request": "launch",
       "type": "dart",
       // "args": ["-d", "chrome", "--web-port", "2222", "--wasm"]
-      "args": [
-        "-d",
-        "chrome",
-        "--web-port",
-        "2222",
-        // "canvaskit"
-      ]
+      "args": [ "-d", "chrome", "--web-port", "2222"]
       // "args": [
       //     "-d",  
       //     "web-server",
