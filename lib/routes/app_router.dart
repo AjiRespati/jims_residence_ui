@@ -8,6 +8,7 @@ import 'package:frontend/features/room/room_settings/room_settings.dart';
 import 'package:frontend/features/room/room_view.dart';
 import 'package:frontend/features/room/room_detail/room_detail.dart';
 import 'package:frontend/features/settings/settings.dart';
+import 'package:frontend/features/tenant/tenant_detail/tenant_detail.dart';
 import 'package:frontend/features/tenant/tenant_view.dart';
 import '../widgets/not_found_page.dart';
 
@@ -41,6 +42,9 @@ class AppRouter {
           break;
         case tenantRoute:
           screen = TenantView();
+          break;
+        case tenantDetailRoute:
+          screen = TenantDetail();
           break;
         case settingRoute:
           screen = Settings();

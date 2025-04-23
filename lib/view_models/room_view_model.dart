@@ -183,6 +183,10 @@ class RoomViewModel extends ChangeNotifier {
   String _tenantStatus = "";
   String? _tenantRoomStatus = "";
   List<dynamic> _tenants = [];
+
+  String _tenantId = "";
+  dynamic _tenant;
+
   DateTime? _tenantStartDate;
   DateTime? _tenantPaymentDate;
   DateTime? _tenantDueDate;
@@ -238,6 +242,18 @@ class RoomViewModel extends ChangeNotifier {
   List<dynamic> get tenants => _tenants;
   set tenants(List<dynamic> val) {
     _tenants = val;
+    notifyListeners();
+  }
+
+  String get tenantId => _tenantId;
+  set tenantId(String val) {
+    _tenantId = val;
+    notifyListeners();
+  }
+
+  dynamic get tenant => _tenant;
+  set tenant(dynamic val) {
+    _tenant = val;
     notifyListeners();
   }
 
@@ -465,9 +481,20 @@ class RoomViewModel extends ChangeNotifier {
 
   Future<bool> fetchTenants() async {
     isBusy = true;
-    tenants = await apiService.fetchTenants();
+    dynamic resp = await apiService.fetchTenants();
+    tenants = resp['data'];
     isBusy = false;
     return tenants.isNotEmpty;
+  }
+
+  Future<bool> fetchTenant() async {
+    print('hmmmm');
+    isBusy = true;
+    dynamic resp = await apiService.fetchTenant(id: tenantId);
+    print(resp);
+    tenant = resp['data'];
+    isBusy = false;
+    return tenant != null;
   }
 
   // TODO: KOST (Boarding House) Section

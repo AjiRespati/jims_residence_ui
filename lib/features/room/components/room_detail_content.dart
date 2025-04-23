@@ -30,7 +30,7 @@ class _RoomDetailContentState extends State<RoomDetailContent>
     // _additionalPrices = _room['AdditionalPrices'];
 
     // print(_room);
-    print(_tenant);
+    // print(_tenant);
     // print(_payments);
     // print(_additionalPrices);
     setState(() {});

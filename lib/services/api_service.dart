@@ -1,7 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:frontend/utils/helpers.dart';
 
 import '../../application_info.dart';
@@ -271,9 +273,6 @@ class ApiService {
     required String paymentStatus,
   }) async {
     String? token = await _getToken();
-    print(startDate == null ? null : generateDateString(startDate));
-    print(dueDate == null ? null : generateDateString(dueDate));
-    print(banishDate == null ? null : generateDateString(banishDate));
     final response = await http.post(
       Uri.parse('$baseUrl/tenant'),
       headers: {
@@ -326,7 +325,7 @@ class ApiService {
     }
   }
 
-  Future<List<dynamic>> fetchTenants() async {
+  Future<dynamic> fetchTenants() async {
     String? token = await _getToken();
 
     final response = await http.get(
@@ -375,30 +374,121 @@ class ApiService {
   }
 
   Future<dynamic> updateTenant({
-    required String id,
-    required dynamic updateItems,
+    required String tenantId,
+    required Uint8List? imageWeb,
+    required XFile? imageDevice,
   }) async {
     String? token = await _getToken();
-    final response = await http.put(
-      Uri.parse('$baseUrl/tenant/$id'),
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": "Bearer $token",
-      },
-      body: jsonEncode(updateItems),
-    );
 
-    if (response.statusCode == 401) {
-      token = await refreshAccessToken();
-      if (token == null) throw Exception("please reLogin");
-      return updateTenant(id: id, updateItems: updateItems);
-    } else if (response.statusCode == 200) {
-      return jsonDecode(response.body);
-    } else {
-      throw Exception(
-        jsonDecode(response.body)['message'] ?? 'Internal service error',
-      );
+    var request = http.MultipartRequest(
+      "PUT",
+      Uri.parse('$baseUrl/tenant/$tenantId'),
+    );
+    request.headers['Authorization'] = "Bearer $token";
+
+    // request.fields["name"] = name;
+    // request.fields["description"] = description;
+    // request.fields["price"] = price.toString();
+    // request.fields["metricType"] = metric; // ✅ Add metric field
+
+    // ✅ Handle Web (File Picker)
+    if (kIsWeb && imageWeb != null) {
+      Uint8List imageBytes = imageWeb;
+      try {
+        request.files.add(
+          http.MultipartFile.fromBytes(
+            'image',
+            imageBytes,
+            filename: "NIK_image.png",
+            contentType: MediaType('image', 'png'),
+          ),
+        );
+        print('NIK image file added to the request.');
+      } catch (e) {
+        print('Error adding NIK image file to request: $e');
+        // Handle the error (e.g., file access issues)
+        rethrow; // Re-throw the exception
+      }
     }
+    // ✅ Handle Mobile (Gallery & Camera)
+    else if (!kIsWeb && imageDevice != null) {
+      XFile imageFile = XFile(imageDevice.path);
+      try {
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            'image',
+            imageFile.path,
+            contentType: MediaType('image', 'png'),
+          ),
+        );
+      } catch (e) {
+        print('Error adding NIK image file to request: $e');
+        // Handle the error (e.g., file access issues)
+        rethrow; // Re-throw the exception
+      }
+    }
+
+    // var response = await request.send();
+
+    // --- Send the Request ---
+    print('Sending update request');
+    try {
+      var streamedResponse = await request.send();
+
+      // --- Process the Response ---
+      // Convert the streamed response to a standard HTTP response
+      var response = await http.Response.fromStream(streamedResponse);
+
+      print('Response status code: ${response.statusCode}');
+      print(
+        'Response body: ${response.body}',
+      ); // Print response body for debugging
+
+      if (response.statusCode == 401) {
+        token = await refreshAccessToken();
+        if (token == null) throw Exception("please reLogin");
+        return updateTenant(
+          tenantId: tenantId,
+          imageWeb: imageWeb,
+          imageDevice: imageDevice,
+        );
+      } else if (response.statusCode == 200) {
+        print('Tenant updated successfully!');
+        // ✅ Success: You can parse the response body if your backend returns data
+        final responseData = json.decode(response.body);
+        print(responseData);
+        // return responseData; // Return the data if needed
+      } else {
+        // ❌ Failure: Handle different error status codes (400, 404, 500, etc.)
+        print('Failed to update tenant. Status: ${response.statusCode}');
+        // Throw an exception to indicate failure
+        throw Exception(
+          'Failed to update tenant. Status: ${response.statusCode}. Body: ${response.body}',
+        );
+      }
+    } catch (e) {
+      // ❌ Network or Request Error
+      print('Error sending update request: $e');
+      // Throw an exception
+      throw Exception('Error updating tenant: $e');
+    }
+  }
+
+  // ✅ Pick Image for Mobile (Gallery & Camera)
+  Future<XFile?> pickImageMobile(ImageSource source) async {
+    final ImagePicker picker = ImagePicker();
+    return await picker.pickImage(source: source);
+  }
+
+  // ✅ Pick Image for Web
+  Future<Uint8List?> pickImageWeb() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+    );
+    if (result != null) {
+      return result.files.first.bytes;
+    }
+    return null;
   }
 
   Future<bool> deleteTenant({required String id}) async {
