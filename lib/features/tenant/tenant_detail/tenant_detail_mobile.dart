@@ -1,8 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/application_info.dart';
+import 'package:frontend/routes/route_names.dart';
 import 'package:frontend/services/api_service.dart';
 import 'package:frontend/view_models/room_view_model.dart';
 import 'package:frontend/widgets/buttons/gradient_elevated_button.dart';
@@ -20,8 +23,17 @@ class TenantDetailMobile extends StatefulWidget with GetItStatefulWidgetMixin {
 class _TenantDetailMobileState extends State<TenantDetailMobile>
     with GetItStateMixin {
   dynamic _tenant;
-  XFile? _imageMobile;
+  XFile? _imageDevice;
   Uint8List? _imageWeb;
+
+  void _submit() async {
+    await get<RoomViewModel>().updateTenant(
+      tenantId: _tenant['id'],
+      imageWeb: _imageWeb,
+      imageDevice: _imageDevice,
+    );
+    Navigator.pushNamed(context, tenantRoute);
+  }
 
   Future _setup() async {
     await get<RoomViewModel>().fetchTenant();
@@ -72,9 +84,9 @@ class _TenantDetailMobileState extends State<TenantDetailMobile>
                         fontSize: 16,
                       ),
                     ),
-                    SizedBox(height: 4),
+                    SizedBox(height: 10),
                     // ✅ Image Preview
-                    _imageMobile != null || _imageWeb != null
+                    (_imageDevice != null || _imageWeb != null)
                         ? Container(
                           height: 150,
                           width: 200,
@@ -85,7 +97,19 @@ class _TenantDetailMobileState extends State<TenantDetailMobile>
                           child:
                               kIsWeb
                                   ? Image.memory(_imageWeb!)
-                                  : Image.file(File(_imageMobile!.path)),
+                                  : Image.file(File(_imageDevice!.path)),
+                        )
+                        : _tenant?['NIKImagePath'] != null
+                        ? Container(
+                          height: 150,
+                          width: 200,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                          ),
+                          child: Image.network(
+                            ApplicationInfo.baseUrl + _tenant['NIKImagePath'],
+                          ),
                         )
                         : Container(
                           height: 150,
@@ -112,7 +136,7 @@ class _TenantDetailMobileState extends State<TenantDetailMobile>
                             icon: Icon(Icons.camera),
                             label: Text("Camera"),
                             onPressed: () async {
-                              _imageMobile = await ApiService().pickImageMobile(
+                              _imageDevice = await ApiService().pickImageMobile(
                                 ImageSource.camera,
                               );
                               setState(() {});
@@ -124,7 +148,7 @@ class _TenantDetailMobileState extends State<TenantDetailMobile>
                             icon: Icon(Icons.photo),
                             label: Text("Gallery"),
                             onPressed: () async {
-                              _imageMobile = await ApiService().pickImageMobile(
+                              _imageDevice = await ApiService().pickImageMobile(
                                 ImageSource.gallery,
                               );
                               setState(() {});
@@ -153,6 +177,35 @@ class _TenantDetailMobileState extends State<TenantDetailMobile>
                       ],
                     ),
                     SizedBox(height: 10),
+
+                    // TextField(
+                    //   controller: _nameController,
+                    //   decoration: InputDecoration(labelText: "Name"),
+                    // ),
+                    // SizedBox(height: 4),
+                    // TextField(
+                    //   controller: _descriptionController,
+                    //   decoration: InputDecoration(labelText: "Description"),
+                    // ),
+                    // SizedBox(height: 4),
+                    // TextField(
+                    //   controller: _priceController,
+                    //   decoration: InputDecoration(labelText: "Price"),
+                    //   keyboardType: TextInputType.number,
+                    // ),
+                    // SizedBox(height: 4),
+                    SizedBox(height: 30),
+                    GradientElevatedButton(
+                      onPressed: _submit,
+                      child: Text(
+                        "Update Tenant",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 30),
                   ],
                 ),
               ),

@@ -431,18 +431,12 @@ class ApiService {
     // var response = await request.send();
 
     // --- Send the Request ---
-    print('Sending update request');
     try {
       var streamedResponse = await request.send();
 
       // --- Process the Response ---
       // Convert the streamed response to a standard HTTP response
       var response = await http.Response.fromStream(streamedResponse);
-
-      print('Response status code: ${response.statusCode}');
-      print(
-        'Response body: ${response.body}',
-      ); // Print response body for debugging
 
       if (response.statusCode == 401) {
         token = await refreshAccessToken();
@@ -453,14 +447,11 @@ class ApiService {
           imageDevice: imageDevice,
         );
       } else if (response.statusCode == 200) {
-        print('Tenant updated successfully!');
         // ✅ Success: You can parse the response body if your backend returns data
         final responseData = json.decode(response.body);
-        print(responseData);
-        // return responseData; // Return the data if needed
+        return responseData; // Return the data if needed
       } else {
         // ❌ Failure: Handle different error status codes (400, 404, 500, etc.)
-        print('Failed to update tenant. Status: ${response.statusCode}');
         // Throw an exception to indicate failure
         throw Exception(
           'Failed to update tenant. Status: ${response.statusCode}. Body: ${response.body}',
@@ -468,7 +459,6 @@ class ApiService {
       }
     } catch (e) {
       // ❌ Network or Request Error
-      print('Error sending update request: $e');
       // Throw an exception
       throw Exception('Error updating tenant: $e');
     }

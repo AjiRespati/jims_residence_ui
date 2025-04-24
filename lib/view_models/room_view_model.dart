@@ -1,7 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:frontend/services/api_service.dart';
+import 'package:image_picker/image_picker.dart';
 
 class RoomViewModel extends ChangeNotifier {
   final ApiService apiService = ApiService();
@@ -488,13 +491,43 @@ class RoomViewModel extends ChangeNotifier {
   }
 
   Future<bool> fetchTenant() async {
-    print('hmmmm');
     isBusy = true;
     dynamic resp = await apiService.fetchTenant(id: tenantId);
     print(resp);
     tenant = resp['data'];
     isBusy = false;
     return tenant != null;
+  }
+
+  Future<void> updateTenant({
+    required String tenantId,
+    required Uint8List? imageWeb,
+    required XFile? imageDevice,
+  }) async {
+    try {
+      isBusy = true;
+      dynamic resp = await apiService.updateTenant(
+        tenantId: tenantId,
+        imageWeb: imageWeb,
+        imageDevice: imageDevice,
+      );
+      tenant = resp['data'];
+      // await apiService.fetchTenants();
+      isBusy = false;
+      isSuccess = true;
+      successMessage = "Berhasil update data tenant";
+    } catch (e) {
+      if (e.toString().contains("please reLogin")) {
+        isBusy = false;
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isBusy = false;
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
   }
 
   // TODO: KOST (Boarding House) Section
@@ -510,6 +543,7 @@ class RoomViewModel extends ChangeNotifier {
       );
       await fetchKosts();
       isSuccess = true;
+      successMessage = "Berhasil create kost ";
     } catch (e) {
       if (e.toString().contains("please reLogin")) {
         isBusy = false;
