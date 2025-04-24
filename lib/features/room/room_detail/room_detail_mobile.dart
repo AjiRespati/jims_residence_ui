@@ -51,7 +51,7 @@ class _RoomDetailMobileState extends State<RoomDetailMobile>
         get<RoomViewModel>().errorMessage = null;
       } else if (get<RoomViewModel>().isSuccess) {
         _showSnackBar(
-          "Tambah penghuni baru berhasil",
+          get<RoomViewModel>().successMessage ?? "Success",
           color: Colors.green.shade400,
           duration: Duration(seconds: 6),
         );

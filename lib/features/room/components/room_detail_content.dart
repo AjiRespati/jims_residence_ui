@@ -29,9 +29,9 @@ class _RoomDetailContentState extends State<RoomDetailContent>
     // _payment = _tenant?['Payments'][0];
     // _additionalPrices = _room['AdditionalPrices'];
 
-    // print(_room);
-    // print(_tenant);
-    // print(_payments);
+    print(_room);
+    print(_tenant);
+    print(_payments);
     // print(_additionalPrices);
     setState(() {});
   }
@@ -75,7 +75,10 @@ class _RoomDetailContentState extends State<RoomDetailContent>
                         children: [
                           SizedBox(width: 20),
                           Text("Ukuran: "),
-                          Text(_room['Price']['roomSize'] ?? " -"),
+                          Text(
+                            _room['Price']['roomSize'] ?? " -",
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
                         ],
                       ),
                       Row(
@@ -122,7 +125,10 @@ class _RoomDetailContentState extends State<RoomDetailContent>
                                 SizedBox(width: 40),
                                 Text(item['name'] + ": "),
                                 SizedBox(width: 10),
-                                Text(formatCurrency(item['amount'])),
+                                Text(
+                                  formatCurrency(item['amount']),
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
                               ],
                             );
                           },
@@ -157,55 +163,92 @@ class _RoomDetailContentState extends State<RoomDetailContent>
                             ),
                             Row(
                               children: [
-                                SizedBox(width: 60),
+                                SizedBox(width: 40),
                                 Text("Nama: "),
-                                Text((_tenant?['name'] ?? " -")),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                SizedBox(width: 60),
-                                Text("Telepon: "),
-                                Text((_tenant?['phone'] ?? " -")),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                SizedBox(width: 60),
-                                Text("NIK: "),
-                                Text((_tenant?['NIKNumber'] ?? " -")),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                SizedBox(width: 60),
-                                Text("Fotocopy KTP: "),
+                                SizedBox(width: 4),
                                 Text(
-                                  (_tenant?['isIdCopyDone'] ?? false)
-                                      ? "Sudah"
-                                      : "Belum",
+                                  (_tenant?['name'] ?? " -"),
+                                  style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ],
                             ),
                             Row(
                               children: [
-                                SizedBox(width: 60),
-                                Text("Tanggal mulai: "),
-                                Text(formatDateString(_tenant['startDate'])),
+                                SizedBox(width: 40),
+                                Text("Telepon: "),
+                                SizedBox(width: 4),
+                                Text(
+                                  (_tenant?['phone'] ?? " -"),
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
                               ],
                             ),
                             Row(
                               children: [
-                                SizedBox(width: 60),
+                                SizedBox(width: 40),
+                                Text("NIK: "),
+                                SizedBox(width: 4),
+                                Text(
+                                  (_tenant?['NIKNumber'] ?? " -"),
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                SizedBox(width: 40),
+                                Text("Fotocopy KTP: "),
+                                SizedBox(width: 4),
+                                Text(
+                                  (_tenant?['isNIKCopyDone'] ?? false)
+                                      ? "Sudah"
+                                      : "Belum",
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                SizedBox(width: 40),
+                                Text("Mulai: "),
+                                SizedBox(width: 4),
+                                Text(
+                                  formatDateString(_tenant['startDate']),
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                SizedBox(width: 40),
+                                Text("Selesai: "),
+                                SizedBox(width: 4),
+                                Text(
+                                  formatDateString(_tenant['endDate']),
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                SizedBox(width: 40),
                                 Text("Batas pembayaran: "),
-                                Text(formatDateString(_tenant['dueDate'])),
+                                SizedBox(width: 4),
+                                Text(
+                                  formatDateString(_tenant['dueDate']),
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
                               ],
                             ),
                             Row(
                               children: [
-                                SizedBox(width: 60),
+                                SizedBox(width: 40),
                                 Text("Batas tinggal: "),
-                                Text(formatDateString(_tenant['banishDate'])),
+                                SizedBox(width: 4),
+                                Text(
+                                  formatDateString(_tenant['banishDate']),
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
                               ],
                             ),
                             Divider(),
@@ -231,7 +274,7 @@ class _RoomDetailContentState extends State<RoomDetailContent>
                                   children: [
                                     Row(
                                       children: [
-                                        SizedBox(width: 60),
+                                        SizedBox(width: 40),
                                         Text(
                                           formatCurrency(
                                             payment['totalAmount'],
@@ -245,7 +288,7 @@ class _RoomDetailContentState extends State<RoomDetailContent>
                                     ),
                                     Row(
                                       children: [
-                                        SizedBox(width: 60),
+                                        SizedBox(width: 40),
                                         Text(payment['description']),
                                       ],
                                     ),
@@ -291,7 +334,7 @@ class _RoomDetailContentState extends State<RoomDetailContent>
                                     MediaQuery.of(context).viewInsets.bottom,
                               ),
                               child: SingleChildScrollView(
-                                child: SizedBox(width: 600, child: AddTenant()),
+                                child: SizedBox(width: 400, child: AddTenant()),
                               ),
                             );
                           },
@@ -325,62 +368,62 @@ class _RoomDetailContentState extends State<RoomDetailContent>
                 ],
               ),
 
-            if (_tenant != null)
-              Stack(
-                alignment: AlignmentDirectional.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: GradientElevatedButton(
-                      inactiveDelay: Duration.zero,
-                      onPressed: () async {
-                        await showModalBottomSheet(
-                          isScrollControlled: true,
-                          constraints: BoxConstraints(
-                            minHeight: 490,
-                            maxHeight: 700,
-                          ),
-                          context: context,
-                          builder: (context) {
-                            return Padding(
-                              padding: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).viewInsets.bottom,
-                              ),
-                              child: SingleChildScrollView(
-                                child: SizedBox(width: 600, child: AddTenant()),
-                              ),
-                            );
-                          },
-                        );
-                        _setup();
-                      },
-                      child: Text(
-                        "Update Penghuni",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
-                  if (watchOnly((RoomViewModel x) => x.isBusy))
-                    Row(
-                      children: [
-                        SizedBox(width: 20),
-                        SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: Center(
-                            child: CircularProgressIndicator(
-                              color: Colors.grey[300],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                ],
-              ),
+            // if (_tenant != null)
+            //   Stack(
+            //     alignment: AlignmentDirectional.center,
+            //     children: [
+            //       Padding(
+            //         padding: const EdgeInsets.symmetric(horizontal: 20),
+            //         child: GradientElevatedButton(
+            //           inactiveDelay: Duration.zero,
+            //           onPressed: () async {
+            //             await showModalBottomSheet(
+            //               isScrollControlled: true,
+            //               constraints: BoxConstraints(
+            //                 minHeight: 490,
+            //                 maxHeight: 700,
+            //               ),
+            //               context: context,
+            //               builder: (context) {
+            //                 return Padding(
+            //                   padding: EdgeInsets.only(
+            //                     bottom:
+            //                         MediaQuery.of(context).viewInsets.bottom,
+            //                   ),
+            //                   child: SingleChildScrollView(
+            //                     child: SizedBox(width: 400, child: AddTenant()),
+            //                   ),
+            //                 );
+            //               },
+            //             );
+            //             _setup();
+            //           },
+            //           child: Text(
+            //             "Update Kamar",
+            //             style: TextStyle(
+            //               color: Colors.white,
+            //               fontWeight: FontWeight.w600,
+            //             ),
+            //           ),
+            //         ),
+            //       ),
+            //       if (watchOnly((RoomViewModel x) => x.isBusy))
+            //         Row(
+            //           children: [
+            //             SizedBox(width: 20),
+            //             SizedBox(
+            //               width: 20,
+            //               height: 20,
+            //               child: Center(
+            //                 child: CircularProgressIndicator(
+            //                   color: Colors.grey[300],
+            //                 ),
+            //               ),
+            //             ),
+            //           ],
+            //         ),
+            //     ],
+            //   ),
           ],
         );
   }

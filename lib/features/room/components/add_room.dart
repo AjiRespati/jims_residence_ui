@@ -74,7 +74,9 @@ class AddRoom extends StatelessWidget with GetItMixin {
             decoration: InputDecoration(labelText: "Status Kamar"),
             value: get<RoomViewModel>().roomStatus,
             items:
-                ["Tersedia", "Terisi", "Pemeliharaan", "Rusak"].map((item) {
+                ['Tersedia', 'Terisi', 'Dipesan', 'Pemeliharaan', 'Rusak'].map((
+                  item,
+                ) {
                   return DropdownMenuItem<String>(
                     value: item,
                     child: Text(item),

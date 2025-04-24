@@ -20,6 +20,13 @@ class _AddTenantState extends State<AddTenant> with GetItStateMixin {
   final List<String> _pilihDate = ['Sekarang', 'Nanti'];
 
   @override
+  void initState() {
+    super.initState();
+
+    get<RoomViewModel>().tenantStartDate = _selectedDateNow;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16),

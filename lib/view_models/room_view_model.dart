@@ -446,6 +446,7 @@ class RoomViewModel extends ChangeNotifier {
         paymentDate: tenantPaymentDate,
         dueDate: tenantStartDate?.add(Duration(days: 7)),
         banishDate: tenantStartDate?.add(Duration(days: 14)),
+        endDate: tenantStartDate?.add(Duration(days: 30)),
         paymentStatus: "unpaid",
         tenancyStatus: tenantStatus,
         roomStatus: tenantRoomStatus,
@@ -595,7 +596,7 @@ class RoomViewModel extends ChangeNotifier {
       roomKostId = null;
       roomNumber = "";
       roomSize = "";
-      roomStatus = "";
+      roomStatus = "Tersedia";
       basicPrice = 0;
       isSuccess = true;
     } catch (e) {

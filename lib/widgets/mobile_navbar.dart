@@ -16,7 +16,7 @@ class MobileNavbar extends StatelessWidget with GetItMixin {
             Navigator.pushNamed(context, homeRoute);
             break;
           case 1:
-            Navigator.pushNamed(context, roomRoute);
+            Navigator.pushNamed(context, roomRoute, arguments: false);
             break;
           case 2:
             Navigator.pushNamed(context, tenantRoute);

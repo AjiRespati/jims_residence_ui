@@ -6,7 +6,8 @@ import 'package:frontend/view_models/room_view_model.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
 class RoomView extends StatefulWidget with GetItStatefulWidgetMixin {
-  RoomView({super.key});
+  RoomView({required this.isSetting, super.key});
+  final bool isSetting;
 
   @override
   State<RoomView> createState() => _RoomViewState();
@@ -26,7 +27,7 @@ class _RoomViewState extends State<RoomView> with GetItStateMixin {
   Widget build(BuildContext context) {
     return ResponsiveLayout(
       desktopLayout: RoomDesktop(),
-      mobileLayout: RoomMobile(),
+      mobileLayout: RoomMobile(isSetting: widget.isSetting),
     );
   }
 }

@@ -11,7 +11,8 @@ import 'package:frontend/widgets/mobile_navbar.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
 class RoomMobile extends StatefulWidget with GetItStatefulWidgetMixin {
-  RoomMobile({super.key});
+  RoomMobile({required this.isSetting, super.key});
+  final bool isSetting;
 
   @override
   State<RoomMobile> createState() => _RoomMobileState();
@@ -30,25 +31,31 @@ class _RoomMobileState extends State<RoomMobile> with GetItStateMixin {
           "Kamar",
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
         ),
-        actions: [
-          Text("Tambah Kamar"),
-          SizedBox(width: 8),
-          AddButton(
-            size: 30,
-            message: "Tambah Kamar",
-            onPressed: () {
-              showModalBottomSheet(
-                isScrollControlled: true,
-                constraints: BoxConstraints(minHeight: 600, maxHeight: 620),
-                context: context,
-                builder: (context) {
-                  return SizedBox(width: 600, child: AddRoom());
-                },
-              );
-            },
-          ),
-          SizedBox(width: 20),
-        ],
+        actions:
+            !widget.isSetting
+                ? null
+                : [
+                  Text("Tambah Kamar"),
+                  SizedBox(width: 8),
+                  AddButton(
+                    size: 30,
+                    message: "Tambah Kamar",
+                    onPressed: () {
+                      showModalBottomSheet(
+                        isScrollControlled: true,
+                        constraints: BoxConstraints(
+                          minHeight: 600,
+                          maxHeight: 620,
+                        ),
+                        context: context,
+                        builder: (context) {
+                          return SizedBox(width: 600, child: AddRoom());
+                        },
+                      );
+                    },
+                  ),
+                  SizedBox(width: 20),
+                ],
       ),
       body: ListView.builder(
         itemCount: get<RoomViewModel>().rooms.length,
@@ -63,10 +70,13 @@ class _RoomMobileState extends State<RoomMobile> with GetItStateMixin {
               elevation: 2,
               child: ClipRRect(
                 child: InkWell(
-                  onTap: () {
-                    get<RoomViewModel>().roomId = item?['id'] ?? "";
-                    Navigator.pushNamed(context, roomDetailRoute);
-                  },
+                  onTap:
+                      widget.isSetting
+                          ? null
+                          : () {
+                            get<RoomViewModel>().roomId = item?['id'] ?? "";
+                            Navigator.pushNamed(context, roomDetailRoute);
+                          },
                   child: Banner(
                     message: item['roomStatus'],
                     textStyle: TextStyle(
@@ -131,17 +141,18 @@ class _RoomMobileState extends State<RoomMobile> with GetItStateMixin {
                           Expanded(child: SizedBox()),
                           Column(
                             children: [
-                              IconButton(
-                                onPressed: () async {
-                                  get<RoomViewModel>().roomId = item['id'];
-                                  Navigator.pushNamed(
-                                    context,
-                                    roomSettingsRoute,
-                                    arguments: item,
-                                  );
-                                },
-                                icon: Icon(Icons.settings),
-                              ),
+                              if (widget.isSetting)
+                                IconButton(
+                                  onPressed: () async {
+                                    get<RoomViewModel>().roomId = item['id'];
+                                    Navigator.pushNamed(
+                                      context,
+                                      roomSettingsRoute,
+                                      arguments: item,
+                                    );
+                                  },
+                                  icon: Icon(Icons.settings),
+                                ),
                             ],
                           ),
                         ],

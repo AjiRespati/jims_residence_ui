@@ -270,6 +270,7 @@ class ApiService {
     required DateTime? dueDate,
     required DateTime? banishDate,
     required DateTime? paymentDate,
+    required DateTime? endDate,
     required String paymentStatus,
   }) async {
     String? token = await _getToken();
@@ -288,6 +289,7 @@ class ApiService {
         'dueDate': dueDate == null ? null : generateDateString(dueDate),
         'banishDate':
             banishDate == null ? null : generateDateString(banishDate),
+        'endDate': endDate == null ? null : generateDateString(endDate),
         'NIKImagePath': idImagePath,
         'isNIKCopyDone': isNIKCopyDone,
         'tenancyStatus': tenancyStatus,
@@ -311,6 +313,7 @@ class ApiService {
         roomStatus: roomStatus,
         dueDate: dueDate,
         banishDate: banishDate,
+        endDate: endDate,
         paymentDate: paymentDate,
         startDate: startDate,
         isNIKCopyDone: isNIKCopyDone,
