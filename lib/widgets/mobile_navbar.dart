@@ -60,7 +60,7 @@ class MobileNavbar extends StatelessWidget with GetItMixin {
           ),
 
           icon: Icon(Icons.payments_rounded),
-          label: "Payments",
+          label: "Finance",
         ),
         NavigationDestination(
           selectedIcon: Icon(Icons.settings, color: Colors.blue.shade800),

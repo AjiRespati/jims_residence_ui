@@ -14,8 +14,13 @@ class _PaymentsMobileState extends State<PaymentsMobile> with GetItStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: AppBar(title: Text("Payments")),
+      appBar: AppBar(title: Text("Finance")),
       bottomNavigationBar: MobileNavbar(),
+      floatingActionButton: FloatingActionButton.small(
+        backgroundColor: Colors.blue.shade700,
+        onPressed: () {},
+        child: Icon(Icons.add, color: Colors.white),
+      ),
     );
   }
 }

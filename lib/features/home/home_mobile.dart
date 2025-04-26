@@ -38,8 +38,8 @@ class _HomeMobileState extends State<HomeMobile> with GetItStateMixin {
               shrinkWrap: true,
               itemCount: get<RoomViewModel>().kosts.length,
               itemBuilder: (context, index) {
-                var item = get<RoomViewModel>().kosts[index];
-
+                final item = get<RoomViewModel>().kosts[index];
+                print(item);
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Card(

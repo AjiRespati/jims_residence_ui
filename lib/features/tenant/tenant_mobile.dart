@@ -61,6 +61,7 @@ class _TenantMobileState extends State<TenantMobile> with GetItStateMixin {
                 itemCount: tenants.length,
                 itemBuilder: (context, idx) {
                   final item = tenants[idx];
+                  print(item);
                   return TenantCard(item: item);
                 },
               ),

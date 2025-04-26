@@ -594,8 +594,10 @@ class RoomViewModel extends ChangeNotifier {
       await fetchRooms();
 
       roomKostId = null;
+      roomKostName = null;
       roomNumber = "";
       roomSize = "";
+      selectedRoomSize = null;
       roomStatus = "Tersedia";
       basicPrice = 0;
       isSuccess = true;

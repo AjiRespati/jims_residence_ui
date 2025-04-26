@@ -170,7 +170,7 @@ class _TenantDetailMobileState extends State<TenantDetailMobile>
                             ),
                             // inactiveDelay: Duration.zero,
                             child: Text(
-                              "Upload Image",
+                              "Ambil Image",
                               style: TextStyle(color: Colors.white),
                             ),
                           ),

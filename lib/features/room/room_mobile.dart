@@ -80,13 +80,15 @@ class _RoomMobileState extends State<RoomMobile> with GetItStateMixin {
                   child: Banner(
                     message: item['roomStatus'],
                     textStyle: TextStyle(
-                      fontSize: 13,
+                      fontSize: 12,
                       fontWeight: FontWeight.w600,
+                      color: Colors.white,
                     ),
                     location: BannerLocation.topEnd,
                     color: generateRoomStatusColor(
                       roomSatus: item['roomStatus'],
                     ),
+
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(

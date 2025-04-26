@@ -50,7 +50,7 @@ class SettingsMobile extends StatelessWidget with GetItMixin {
                     // Text("Name: ${model.name}"),
                     // Text("Level: ${model.level ?? 0}"),
                     SizedBox(height: 30),
-                    Divider(),
+                    // Divider(),
                     watchOnly((SystemViewModel x) => x.isBusy)
                         ? Column(
                           children: [
@@ -81,6 +81,29 @@ class SettingsMobile extends StatelessWidget with GetItMixin {
                                   IconButton(
                                     onPressed: () {
                                       Navigator.pushNamed(context, kostRoute);
+                                    },
+                                    icon: Icon(
+                                      Icons.chevron_right_rounded,
+                                      size: 30,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Divider(),
+
+                            InkWell(
+                              onTap: () {
+                                Navigator.pushNamed(context, priceRoute);
+                              },
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text("Price Management"),
+                                  IconButton(
+                                    onPressed: () {
+                                      Navigator.pushNamed(context, priceRoute);
                                     },
                                     icon: Icon(
                                       Icons.chevron_right_rounded,
@@ -125,29 +148,6 @@ class SettingsMobile extends StatelessWidget with GetItMixin {
 
                             // InkWell(
                             //   onTap: () {
-                            //     Navigator.pushNamed(context, priceRoute);
-                            //   },
-                            //   child: Row(
-                            //     mainAxisAlignment:
-                            //         MainAxisAlignment.spaceBetween,
-                            //     children: [
-                            //       Text("Price Management"),
-                            //       IconButton(
-                            //         onPressed: () {
-                            //           Navigator.pushNamed(context, priceRoute);
-                            //         },
-                            //         icon: Icon(
-                            //           Icons.chevron_right_rounded,
-                            //           size: 30,
-                            //         ),
-                            //       ),
-                            //     ],
-                            //   ),
-                            // ),
-                            // Divider(),
-
-                            // InkWell(
-                            //   onTap: () {
                             //     Navigator.pushNamed(context, homeRoute);
                             //   },
                             //   child: Row(
@@ -168,28 +168,28 @@ class SettingsMobile extends StatelessWidget with GetItMixin {
                             //   ),
                             // ),
                             // Divider(),
-                            InkWell(
-                              onTap: () {
-                                Navigator.pushNamed(context, homeRoute);
-                              },
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text("Percentages Management"),
-                                  IconButton(
-                                    onPressed: () {
-                                      Navigator.pushNamed(context, homeRoute);
-                                    },
-                                    icon: Icon(
-                                      Icons.chevron_right_rounded,
-                                      size: 30,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Divider(),
+                            // InkWell(
+                            //   onTap: () {
+                            //     Navigator.pushNamed(context, homeRoute);
+                            //   },
+                            //   child: Row(
+                            //     mainAxisAlignment:
+                            //         MainAxisAlignment.spaceBetween,
+                            //     children: [
+                            //       Text("Percentages Management"),
+                            //       IconButton(
+                            //         onPressed: () {
+                            //           Navigator.pushNamed(context, homeRoute);
+                            //         },
+                            //         icon: Icon(
+                            //           Icons.chevron_right_rounded,
+                            //           size: 30,
+                            //         ),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
+                            // Divider(),
                           ],
                         )
                         : SizedBox(),
