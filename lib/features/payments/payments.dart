@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/features/payments/payments_desktop.dart';
 import 'package:frontend/features/payments/payments_mobile.dart';
 import 'package:frontend/utils/responsive_layout.dart';
+import 'package:frontend/view_models/room_view_model.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
 class Payments extends StatefulWidget with GetItStatefulWidgetMixin {
@@ -15,6 +16,7 @@ class _PaymentsState extends State<Payments> with GetItStateMixin {
   @override
   void initState() {
     super.initState();
+    get<RoomViewModel>().fetchTransactions();
   }
 
   @override

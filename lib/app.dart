@@ -36,7 +36,7 @@ class App extends StatelessWidget {
           scrollBehavior: CustomScrollBehavior(),
           localizationsDelegates: const [GlobalMaterialLocalizations.delegate],
           supportedLocales: const [Locale('en'), Locale('id')],
-          debugShowCheckedModeBanner: !ApplicationInfo.isProduction,
+          debugShowCheckedModeBanner: false,
         );
       },
     );

@@ -11,3 +11,4 @@ const String settingRoute = "/Setting";
 const String kostRoute = "/Kost";
 const String priceRoute = "/Price";
 const String paymentsRoute = "/Payments";
+const String paymentDetailRoute = "/Payments/Detail";

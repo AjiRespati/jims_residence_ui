@@ -405,11 +405,32 @@ class RoomViewModel extends ChangeNotifier {
 
   // TODO:  TRANSACTION AND INVOICE STATE
 
+  List<dynamic> _transactions = [];
+  dynamic _transaction;
+  String _choosenTransactionId = "";
   String _invoiceId = "";
   String _transactionMethod = "";
   double _transactionAmount = 0;
   DateTime _transactionDate = DateTime.now();
   String _transactionDescription = "";
+
+  List<dynamic> get transactions => _transactions;
+  set transactions(List<dynamic> val) {
+    _transactions = val;
+    notifyListeners();
+  }
+
+  dynamic get transaction => _transaction;
+  set transaction(dynamic val) {
+    _transaction = val;
+    notifyListeners();
+  }
+
+  String get choosenTransactionId => _choosenTransactionId;
+  set choosenTransactionId(String val) {
+    _choosenTransactionId = val;
+    notifyListeners();
+  }
 
   String get invoiceId => _invoiceId;
   set invoiceId(String val) {
@@ -795,6 +816,40 @@ class RoomViewModel extends ChangeNotifier {
       } else {
         errorMessage = e.toString().replaceAll('Exception: ', '');
         isBusy = false;
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
+  }
+
+  Future<void> fetchTransactions() async {
+    isBusy = true;
+    try {
+      var resp = await apiService.getAllTransacations();
+      transactions = resp['data'];
+    } catch (e) {
+      if (e.toString().contains("please reLogin")) {
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
+  }
+
+  Future<void> fetchTransaction() async {
+    isBusy = true;
+    try {
+      var resp = await apiService.getTransaction(id: choosenTransactionId);
+      transaction = resp['data'];
+    } catch (e) {
+      if (e.toString().contains("please reLogin")) {
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
         isError = true;
       }
     } finally {
