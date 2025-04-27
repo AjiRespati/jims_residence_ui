@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:frontend/application_info.dart';
+import 'package:residenza/application_info.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 

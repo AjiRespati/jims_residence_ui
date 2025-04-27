@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/widgets/page_container.dart';
+import 'package:residenza/widgets/page_container.dart';
 
 class SettingsDesktop extends StatelessWidget {
   const SettingsDesktop({super.key});

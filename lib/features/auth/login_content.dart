@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/application_info.dart';
-import 'package:frontend/features/auth/components/login_button.dart';
-import 'package:frontend/features/auth/components/login_password.dart';
-import 'package:frontend/features/auth/components/login_title.dart';
-import 'package:frontend/features/auth/components/login_username.dart';
-import 'package:frontend/view_models/system_view_model.dart';
+import 'package:residenza/application_info.dart';
+import 'package:residenza/features/auth/components/login_button.dart';
+import 'package:residenza/features/auth/components/login_password.dart';
+import 'package:residenza/features/auth/components/login_title.dart';
+import 'package:residenza/features/auth/components/login_username.dart';
+import 'package:residenza/view_models/system_view_model.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
 class LoginContent extends StatelessWidget with GetItMixin {

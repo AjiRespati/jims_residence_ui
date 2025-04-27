@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/features/payments/components/invoice_payment.dart';
-import 'package:frontend/utils/helpers.dart';
+import 'package:residenza/features/payments/components/invoice_payment.dart';
+import 'package:residenza/utils/helpers.dart';
 
 class InvoiceCard extends StatelessWidget {
   const InvoiceCard({super.key, required this.item});

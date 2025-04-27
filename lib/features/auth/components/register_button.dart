@@ -1,7 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:frontend/widgets/buttons/gradient_elevated_button.dart';
+import 'package:residenza/widgets/buttons/gradient_elevated_button.dart';
 
 class RegisterButton extends StatelessWidget {
   const RegisterButton({required this.handleRegister, super.key});

@@ -1,13 +1,13 @@
 // ignore_for_file: unused_import
 
 import 'package:flutter/material.dart';
-import 'package:frontend/features/tenant/components/add_tenant.dart';
-import 'package:frontend/features/tenant/components/tenant_card.dart';
-import 'package:frontend/routes/route_names.dart';
-import 'package:frontend/utils/helpers.dart';
-import 'package:frontend/view_models/room_view_model.dart';
-import 'package:frontend/widgets/buttons/add_button.dart';
-import 'package:frontend/widgets/mobile_navbar.dart';
+import 'package:residenza/features/tenant/components/add_tenant.dart';
+import 'package:residenza/features/tenant/components/tenant_card.dart';
+import 'package:residenza/routes/route_names.dart';
+import 'package:residenza/utils/helpers.dart';
+import 'package:residenza/view_models/room_view_model.dart';
+import 'package:residenza/widgets/buttons/add_button.dart';
+import 'package:residenza/widgets/mobile_navbar.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
 class TenantMobile extends StatefulWidget with GetItStatefulWidgetMixin {

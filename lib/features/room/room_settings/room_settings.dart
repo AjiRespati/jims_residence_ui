@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/features/room/room_settings/room_settings_desktop.dart';
-import 'package:frontend/features/room/room_settings/room_settings_mobile.dart';
-import 'package:frontend/utils/responsive_layout.dart';
+import 'package:residenza/features/room/room_settings/room_settings_desktop.dart';
+import 'package:residenza/features/room/room_settings/room_settings_mobile.dart';
+import 'package:residenza/utils/responsive_layout.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
 class RoomSettings extends StatefulWidget with GetItStatefulWidgetMixin {

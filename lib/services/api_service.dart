@@ -3,7 +3,7 @@
 import 'dart:convert';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
-import 'package:frontend/utils/helpers.dart';
+import 'package:residenza/utils/helpers.dart';
 
 import '../../application_info.dart';
 import 'package:image_picker/image_picker.dart';

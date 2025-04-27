@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:frontend/routes/route_names.dart';
-import 'package:frontend/view_models/room_view_model.dart';
+import 'package:residenza/routes/route_names.dart';
+import 'package:residenza/view_models/room_view_model.dart';
 import 'package:intl/intl.dart';
 
 String generateRandomValueKey() {

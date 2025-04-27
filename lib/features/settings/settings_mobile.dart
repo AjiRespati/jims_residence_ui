@@ -1,10 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:frontend/routes/route_names.dart';
-import 'package:frontend/view_models/system_view_model.dart';
-import 'package:frontend/widgets/buttons/edit_button.dart';
-import 'package:frontend/widgets/mobile_navbar.dart';
+import 'package:residenza/routes/route_names.dart';
+import 'package:residenza/view_models/system_view_model.dart';
+import 'package:residenza/widgets/buttons/edit_button.dart';
+import 'package:residenza/widgets/mobile_navbar.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
 class SettingsMobile extends StatelessWidget with GetItMixin {

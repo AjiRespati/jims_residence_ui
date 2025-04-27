@@ -1,8 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:frontend/routes/route_names.dart';
-import 'package:frontend/services/api_service.dart';
+import 'package:residenza/routes/route_names.dart';
+import 'package:residenza/services/api_service.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

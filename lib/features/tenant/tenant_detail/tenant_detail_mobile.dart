@@ -4,12 +4,12 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/application_info.dart';
-import 'package:frontend/features/payments/components/invoice_card.dart';
-import 'package:frontend/services/api_service.dart';
-import 'package:frontend/view_models/room_view_model.dart';
-import 'package:frontend/widgets/buttons/gradient_elevated_button.dart';
-import 'package:frontend/widgets/mobile_navbar.dart';
+import 'package:residenza/application_info.dart';
+import 'package:residenza/features/payments/components/invoice_card.dart';
+import 'package:residenza/services/api_service.dart';
+import 'package:residenza/view_models/room_view_model.dart';
+import 'package:residenza/widgets/buttons/gradient_elevated_button.dart';
+import 'package:residenza/widgets/mobile_navbar.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:image_picker/image_picker.dart';
 

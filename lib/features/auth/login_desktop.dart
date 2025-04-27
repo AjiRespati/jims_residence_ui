@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/features/auth/login_content.dart';
+import 'package:residenza/features/auth/login_content.dart';
 
 class LoginDesktop extends StatelessWidget {
   const LoginDesktop({super.key});

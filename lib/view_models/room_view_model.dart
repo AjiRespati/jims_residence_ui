@@ -3,7 +3,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:frontend/services/api_service.dart';
+import 'package:residenza/services/api_service.dart';
 import 'package:image_picker/image_picker.dart';
 
 class RoomViewModel extends ChangeNotifier {

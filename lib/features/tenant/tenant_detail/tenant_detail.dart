@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/features/tenant/tenant_detail/tenant_detail_desktop.dart';
-import 'package:frontend/features/tenant/tenant_detail/tenant_detail_mobile.dart';
-import 'package:frontend/utils/responsive_layout.dart';
+import 'package:residenza/features/tenant/tenant_detail/tenant_detail_desktop.dart';
+import 'package:residenza/features/tenant/tenant_detail/tenant_detail_mobile.dart';
+import 'package:residenza/utils/responsive_layout.dart';
 
 class TenantDetail extends StatelessWidget {
   const TenantDetail({super.key});

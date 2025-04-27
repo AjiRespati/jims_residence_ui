@@ -1,11 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:frontend/utils/helpers.dart';
-import 'package:frontend/view_models/room_view_model.dart';
-import 'package:frontend/widgets/buttons/add_button.dart';
-import 'package:frontend/widgets/buttons/gradient_elevated_button.dart';
-import 'package:frontend/widgets/mobile_navbar.dart';
+import 'package:residenza/utils/helpers.dart';
+import 'package:residenza/view_models/room_view_model.dart';
+import 'package:residenza/widgets/buttons/add_button.dart';
+import 'package:residenza/widgets/buttons/gradient_elevated_button.dart';
+import 'package:residenza/widgets/mobile_navbar.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
 class KostMobile extends StatefulWidget with GetItStatefulWidgetMixin {

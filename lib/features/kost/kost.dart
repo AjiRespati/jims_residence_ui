@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/features/kost/kost_desktop.dart';
-import 'package:frontend/features/kost/kost_mobile.dart';
-import 'package:frontend/utils/responsive_layout.dart';
+import 'package:residenza/features/kost/kost_desktop.dart';
+import 'package:residenza/features/kost/kost_mobile.dart';
+import 'package:residenza/utils/responsive_layout.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
 class Kost extends StatefulWidget with GetItStatefulWidgetMixin {

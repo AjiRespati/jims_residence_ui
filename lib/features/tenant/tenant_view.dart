@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/features/tenant/tenant_desktop.dart';
-import 'package:frontend/features/tenant/tenant_mobile.dart';
-import 'package:frontend/utils/responsive_layout.dart';
-import 'package:frontend/view_models/room_view_model.dart';
+import 'package:residenza/features/tenant/tenant_desktop.dart';
+import 'package:residenza/features/tenant/tenant_mobile.dart';
+import 'package:residenza/utils/responsive_layout.dart';
+import 'package:residenza/view_models/room_view_model.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
 class TenantView extends StatefulWidget with GetItStatefulWidgetMixin {

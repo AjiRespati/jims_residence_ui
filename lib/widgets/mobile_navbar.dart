@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/routes/route_names.dart';
-import 'package:frontend/view_models/system_view_model.dart';
+import 'package:residenza/routes/route_names.dart';
+import 'package:residenza/view_models/system_view_model.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
 class MobileNavbar extends StatelessWidget with GetItMixin {

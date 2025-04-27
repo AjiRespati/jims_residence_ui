@@ -1,11 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:frontend/features/settings/settings_desktop.dart';
-import 'package:frontend/features/settings/settings_mobile.dart';
-import 'package:frontend/utils/responsive_layout.dart';
-import 'package:frontend/view_models/room_view_model.dart';
-import 'package:frontend/view_models/system_view_model.dart';
+import 'package:residenza/features/settings/settings_desktop.dart';
+import 'package:residenza/features/settings/settings_mobile.dart';
+import 'package:residenza/utils/responsive_layout.dart';
+import 'package:residenza/view_models/room_view_model.dart';
+import 'package:residenza/view_models/system_view_model.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
 class Settings extends StatefulWidget with GetItStatefulWidgetMixin {
