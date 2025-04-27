@@ -5,9 +5,8 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/application_info.dart';
-import 'package:frontend/routes/route_names.dart';
+import 'package:frontend/features/payments/components/invoice_card.dart';
 import 'package:frontend/services/api_service.dart';
-import 'package:frontend/utils/helpers.dart';
 import 'package:frontend/view_models/room_view_model.dart';
 import 'package:frontend/widgets/buttons/gradient_elevated_button.dart';
 import 'package:frontend/widgets/mobile_navbar.dart';
@@ -27,14 +26,14 @@ class _TenantDetailMobileState extends State<TenantDetailMobile>
   XFile? _imageDevice;
   Uint8List? _imageWeb;
 
-  void _submit() async {
-    await get<RoomViewModel>().updateTenant(
-      tenantId: _tenant['id'],
-      imageWeb: _imageWeb,
-      imageDevice: _imageDevice,
-    );
-    Navigator.pushNamed(context, tenantRoute);
-  }
+  // void _submit() async {
+  //   await get<RoomViewModel>().updateTenant(
+  //     tenantId: _tenant['id'],
+  //     imageWeb: _imageWeb,
+  //     imageDevice: _imageDevice,
+  //   );
+  //   Navigator.pushNamed(context, tenantRoute);
+  // }
 
   Future _setup() async {
     await get<RoomViewModel>().fetchTenant();
@@ -193,55 +192,7 @@ class _TenantDetailMobileState extends State<TenantDetailMobile>
                         itemCount: _tenant?['Invoices'].length,
                         itemBuilder: (context, index) {
                           final item = _tenant['Invoices'][index];
-                          return Card(
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Text("Tanggal: "),
-                                    Text(formatDateString(item['issueDate'])),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text("Total: "),
-                                    Text(
-                                      formatCurrency(item['totalAmountDue']),
-                                    ),
-                                  ],
-                                ),
-                                ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  itemCount: item?['Charges'].length,
-                                  itemBuilder: (context, index) {
-                                    final item0 = item['Charges'][index];
-                                    return Row(
-                                      children: [
-                                        SizedBox(width: 20),
-                                        Text(item0['name'] + ": "),
-                                        Text(formatCurrency(item0['amount'])),
-                                      ],
-                                    );
-                                  },
-                                ),
-                                Row(
-                                  children: [
-                                    Text("Batas pembayaran: "),
-                                    Text(formatDateString(item['dueDate'])),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text("Jumlah terbayar: "),
-                                    Text(
-                                      formatCurrency(item['totalAmountPaid']),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          );
+                          return InvoiceCard(item: item);
                         },
                       ),
 
@@ -265,18 +216,18 @@ class _TenantDetailMobileState extends State<TenantDetailMobile>
                   ),
                 ),
               ),
-            SizedBox(height: 30),
-            GradientElevatedButton(
-              onPressed: _submit,
-              child: Text(
-                "Update Tenant",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-            SizedBox(height: 30),
+            // SizedBox(height: 30),
+            // GradientElevatedButton(
+            //   onPressed: _submit,
+            //   child: Text(
+            //     "Update Tenant",
+            //     style: TextStyle(
+            //       color: Colors.white,
+            //       fontWeight: FontWeight.w600,
+            //     ),
+            //   ),
+            // ),
+            // SizedBox(height: 30),
           ],
         ),
       ),
