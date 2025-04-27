@@ -32,15 +32,6 @@ class _PaymentsMobileState extends State<PaymentsMobile> with GetItStateMixin {
           dynamic tenant = invoice['Tenant'];
           dynamic room = invoice['Room'];
           dynamic transactions = invoice['Transactions'];
-
-          // print("==========================");
-          // print(invoice);
-          // print("==========================");
-          // print(tenant);
-          // print("==========================");
-          // print(room);
-          // print("==========================");
-          // print(transactions);
           return Padding(
             padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
             child: Card(
@@ -91,7 +82,12 @@ class _PaymentsMobileState extends State<PaymentsMobile> with GetItStateMixin {
 
                               Row(
                                 children: [
-                                  Text(invoiceStatusText(invoice['status'])),
+                                  Text(
+                                    invoiceStatusText(invoice['status']),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                   if (transactions.length > 0)
                                     Text(
                                       ": ${formatDateString(transactions[0]['transactionDate'])}",

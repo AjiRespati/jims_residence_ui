@@ -32,108 +32,110 @@ class _TenantCardState extends State<TenantCard> with GetItStateMixin {
               get<RoomViewModel>().tenantId = widget.item['id'];
               Navigator.pushNamed(context, tenantDetailRoute);
             },
-            child: Banner(
-              message: widget.item['tenancyStatus'] ?? '',
-              location: BannerLocation.topEnd,
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Stack(
-                  alignment: Alignment.centerRight,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Stack(
+                alignment: Alignment.centerRight,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${widget.item['boardingHouseName']} ${widget.item['roomNumber']}',
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                              widget.item['name'] ?? 'N/A',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(widget.item['phone'] ?? 'N/A'),
+                            SizedBox(height: 4),
+                            Text(
+                              "Fotocopy KTP: ${(widget.item['isNIKCopyDone'] == true) ? "Sudah" : "Belum"}",
+                            ),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(''),
+                            Text("Mulai:"),
+                            Row(
+                              children: [
+                                SizedBox(width: 20),
+                                Text(
+                                  formatDateString(widget.item['startDate']),
+                                ),
+                              ],
+                            ),
+                            Text("Sampai:"),
+                            Row(
+                              children: [
+                                SizedBox(width: 20),
+                                Text(formatDateString(widget.item['endDate'])),
+                              ],
+                            ),
+                            // Text("Batas Pembayaran:"),
+                            // Row(
+                            //   children: [
+                            //     SizedBox(width: 20),
+                            //     Text(formatDateString(widget.item['dueDate'])),
+                            //   ],
+                            // ),
+                            // Text("Batas tinggal:"),
+                            // Row(
+                            //   children: [
+                            //     SizedBox(width: 20),
+                            //     Text(formatDateString(widget.item['banishDate'])),
+                            //   ],
+                            // ),
+                          ],
+                          // (widget.item['Payments'] as List?)
+                          //     ?.map((p) => Text(p['description'] ?? ''))
+                          //     .toList() ??
+                          // [],
+                        ),
+                      ),
+                    ],
+                  ),
+                  if (widget.item['Invoices'].length == 0)
+                    Column(
                       children: [
-                        Expanded(
-                          flex: 1,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '${widget.item['boardingHouseName']} ${widget.item['roomNumber']}',
-                              ),
-                              Text(widget.item['name'] ?? 'N/A'),
-                              Text(widget.item['phone'] ?? 'N/A'),
-                              Text(
-                                "Fotocopy KTP: ${(widget.item['isNIKCopyDone'] == true) ? "Sudah" : "Belum"}",
-                              ),
-                            ],
-                          ),
+                        Icon(
+                          Icons.check,
+                          size: 30,
+                          color: Colors.greenAccent.shade700,
                         ),
-                        Expanded(
-                          flex: 1,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text("Mulai:"),
-                              Row(
-                                children: [
-                                  SizedBox(width: 20),
-                                  Text(
-                                    formatDateString(widget.item['startDate']),
-                                  ),
-                                ],
-                              ),
-                              Text("Sampai:"),
-                              Row(
-                                children: [
-                                  SizedBox(width: 20),
-                                  Text(
-                                    formatDateString(widget.item['endDate']),
-                                  ),
-                                ],
-                              ),
-                              // Text("Batas Pembayaran:"),
-                              // Row(
-                              //   children: [
-                              //     SizedBox(width: 20),
-                              //     Text(formatDateString(widget.item['dueDate'])),
-                              //   ],
-                              // ),
-                              // Text("Batas tinggal:"),
-                              // Row(
-                              //   children: [
-                              //     SizedBox(width: 20),
-                              //     Text(formatDateString(widget.item['banishDate'])),
-                              //   ],
-                              // ),
-                            ],
-                            // (widget.item['Payments'] as List?)
-                            //     ?.map((p) => Text(p['description'] ?? ''))
-                            //     .toList() ??
-                            // [],
-                          ),
-                        ),
+                        Text("Lunas"),
                       ],
                     ),
-                    if (widget.item['Invoices'].length == 0)
-                      Column(
-                        children: [
-                          Icon(
-                            Icons.check,
-                            size: 30,
-                            color: Colors.greenAccent.shade700,
+                  if (widget.item['Invoices'].length != 0)
+                    Column(
+                      children: [
+                        Text(
+                          "!",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w900,
+                            fontSize: 26,
+                            color: Colors.amber.shade900,
                           ),
-                          Text("Lunas"),
-                        ],
-                      ),
-                    if (widget.item['Invoices'].length != 0)
-                      Column(
-                        children: [
-                          Text(
-                            "!",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w900,
-                              fontSize: 26,
-                              color: Colors.amber.shade900,
-                            ),
-                          ),
-                          Text("Ada"),
-                          Text("Tagihan"),
-                        ],
-                      ),
-                  ],
-                ),
+                        ),
+                        Text("Ada"),
+                        Text("Tagihan"),
+                      ],
+                    ),
+                ],
               ),
             ),
           ),

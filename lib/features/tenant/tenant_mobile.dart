@@ -30,7 +30,7 @@ class _TenantMobileState extends State<TenantMobile> with GetItStateMixin {
       resizeToAvoidBottomInset: true, // Add this line
       appBar: AppBar(
         title: Text(
-          "Tenant",
+          "Penghuni",
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
         ),
         // actions: [
