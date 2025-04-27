@@ -10,87 +10,138 @@ class InvoiceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Row(
-        children: [
-          Expanded(
-            flex: 8,
-            child: Column(
+      elevation: 2,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Stack(
+          children: [
+            Row(
               children: [
-                Row(
-                  children: [
-                    Text("Tanggal: "),
-                    Text(formatDateString(item['issueDate'])),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text("Total: "),
-                    Text(formatCurrency(item['totalAmountDue'])),
-                  ],
-                ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: item?['Charges'].length,
-                  itemBuilder: (context, index) {
-                    final item0 = item['Charges'][index];
-                    return Row(
-                      children: [
-                        SizedBox(width: 20),
-                        Text(item0['name'] + ": "),
-                        Text(formatCurrency(item0['amount'])),
-                      ],
-                    );
-                  },
-                ),
-                Row(
-                  children: [
-                    Text("Batas pembayaran: "),
-                    Text(formatDateString(item['dueDate'])),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text("Jumlah terbayar: "),
-                    Text(formatCurrency(item['totalAmountPaid'])),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            flex: 3,
-            child: Column(
-              children: [
-                IconButton(
-                  style: IconButton.styleFrom(elevation: 4),
-                  onPressed: () async {
-                    await showModalBottomSheet(
-                      isScrollControlled: true,
-                      constraints: BoxConstraints(
-                        minHeight: 490,
-                        maxHeight: 750,
+                Expanded(
+                  flex: 9,
+                  child: Column(
+                    children: [
+                      SizedBox(height: 25),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: item?['Charges'].length,
+                        itemBuilder: (context, index) {
+                          final item0 = item['Charges'][index];
+                          return Row(
+                            children: [
+                              SizedBox(width: 20),
+                              Text(item0['name'] + ": "),
+                              Text(formatCurrency(item0['amount'])),
+                            ],
+                          );
+                        },
                       ),
-                      context: context,
-                      builder: (context) {
-                        return Padding(
-                          padding: EdgeInsets.only(
-                            bottom: MediaQuery.of(context).viewInsets.bottom,
+                      SizedBox(height: 5),
+                      Row(
+                        children: [
+                          Text("Batas pembayaran: "),
+                          Text(formatHariDateString(item['dueDate'])),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Text("Jumlah terbayar: "),
+                          Text(
+                            formatCurrency(item['totalAmountPaid']),
+                            style: TextStyle(
+                              fontWeight: FontWeight.w800,
+                              color: Colors.blue.shade600,
+                            ),
                           ),
-                          child: SingleChildScrollView(
-                            child: InvoicePayment(item: item),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+
+                Expanded(
+                  flex: 2,
+                  child: Column(
+                    children: [
+                      Text(
+                        _invoiceStatusText(item["status"]),
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      if (item['totalAmountPaid'] < item['totalAmountDue'])
+                        IconButton(
+                          padding: EdgeInsets.zero,
+                          visualDensity: VisualDensity.compact,
+                          style: IconButton.styleFrom(elevation: 8),
+                          onPressed: () async {
+                            await showModalBottomSheet(
+                              isScrollControlled: true,
+                              constraints: BoxConstraints(
+                                minHeight: 490,
+                                maxHeight: 750,
+                              ),
+                              context: context,
+                              builder: (context) {
+                                return Padding(
+                                  padding: EdgeInsets.only(
+                                    bottom:
+                                        MediaQuery.of(
+                                          context,
+                                        ).viewInsets.bottom,
+                                  ),
+                                  child: SingleChildScrollView(
+                                    child: InvoicePayment(item: item),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          icon: Icon(
+                            Icons.payment_sharp,
+                            color: Colors.amber.shade700,
                           ),
-                        );
-                      },
-                    );
-                  },
-                  icon: Icon(Icons.payment_rounded),
+                        ),
+                      if (item['totalAmountPaid'] >= item['totalAmountDue'])
+                        Icon(Icons.check, color: Colors.green, size: 40),
+                    ],
+                  ),
                 ),
               ],
             ),
-          ),
-        ],
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text("Total:  "),
+                Text(
+                  formatCurrency(item['totalAmountDue']),
+                  style: TextStyle(
+                    fontWeight: FontWeight.w800,
+                    color: Colors.blue.shade600,
+                  ),
+                ),
+                Spacer(),
+                Text(
+                  formatHariDateString(item['issueDate']),
+                  style: TextStyle(fontWeight: FontWeight.w600),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
+  }
+
+  String _invoiceStatusText(String status) {
+    // 'Draft', 'Issued', 'Unpaid', 'PartiallyPaid', 'Paid', 'Void'
+    switch (status) {
+      case 'Issued':
+        return 'Unpaid';
+      case 'PartiallyPaid':
+        return 'Sebagian';
+      default:
+        return status;
+    }
   }
 }

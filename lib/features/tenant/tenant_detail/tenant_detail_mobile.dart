@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/application_info.dart';
 import 'package:frontend/features/payments/components/invoice_card.dart';
+import 'package:frontend/routes/route_names.dart';
 import 'package:frontend/services/api_service.dart';
 import 'package:frontend/view_models/room_view_model.dart';
 import 'package:frontend/widgets/buttons/gradient_elevated_button.dart';
@@ -26,14 +27,14 @@ class _TenantDetailMobileState extends State<TenantDetailMobile>
   XFile? _imageDevice;
   Uint8List? _imageWeb;
 
-  // void _submit() async {
-  //   await get<RoomViewModel>().updateTenant(
-  //     tenantId: _tenant['id'],
-  //     imageWeb: _imageWeb,
-  //     imageDevice: _imageDevice,
-  //   );
-  //   Navigator.pushNamed(context, tenantRoute);
-  // }
+  Future<void> _submit() async {
+    await get<RoomViewModel>().updateTenant(
+      tenantId: _tenant['id'],
+      imageWeb: _imageWeb,
+      imageDevice: _imageDevice,
+    );
+    // Navigator.pushNamed(context, tenantRoute);
+  }
 
   Future _setup() async {
     await get<RoomViewModel>().fetchTenant();
@@ -76,7 +77,7 @@ class _TenantDetailMobileState extends State<TenantDetailMobile>
                         _tenant['boardingHouseName'],
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
-                          fontSize: 16,
+                          fontSize: 14,
                         ),
                       ),
                       Text(
@@ -147,6 +148,7 @@ class _TenantDetailMobileState extends State<TenantDetailMobile>
                                 _imageDevice = await ApiService()
                                     .pickImageMobile(ImageSource.camera);
                                 setState(() {});
+                                await _submit();
                               },
                             ),
                           if (!kIsWeb) SizedBox(width: 10),
@@ -158,6 +160,7 @@ class _TenantDetailMobileState extends State<TenantDetailMobile>
                                 _imageDevice = await ApiService()
                                     .pickImageMobile(ImageSource.gallery);
                                 setState(() {});
+                                await _submit();
                               },
                               // () => _pickImageMobile(ImageSource.gallery),
                             ),
@@ -166,6 +169,7 @@ class _TenantDetailMobileState extends State<TenantDetailMobile>
                               onPressed: () async {
                                 _imageWeb = await ApiService().pickImageWeb();
                                 setState(() {});
+                                await _submit();
                               },
                               buttonHeight: 30,
                               gradient: LinearGradient(
@@ -184,6 +188,16 @@ class _TenantDetailMobileState extends State<TenantDetailMobile>
                       ),
                       SizedBox(height: 10),
                       Divider(),
+
+                      SizedBox(height: 10),
+                      Text(
+                        "Daftar Tagihan",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                        ),
+                      ),
+                      SizedBox(height: 10),
 
                       //TODO: TENANT PAYMENTS LIST
                       ListView.builder(

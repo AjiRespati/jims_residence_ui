@@ -1,5 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
+import 'package:frontend/routes/route_names.dart';
 import 'package:frontend/utils/helpers.dart';
+import 'package:frontend/view_models/room_view_model.dart';
 import 'package:frontend/widgets/buttons/gradient_elevated_button.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
@@ -17,10 +21,20 @@ class _InvoicdPaymentState extends State<InvoicePayment> with GetItStateMixin {
 
   @override
   void initState() {
+    RoomViewModel model = get<RoomViewModel>();
     super.initState();
-    print(widget.item);
     _invoice = widget.item;
     _charges = widget.item['Charges'];
+
+    model.invoiceId = _invoice['id'];
+    model.transactionDescription = "testing masih hardcode";
+    model.transactionDate = DateTime.now(); // ini nanti diganti tanggal pilih
+    model.transactionAmount =
+        _invoice['totalAmountDue'].toDouble() -
+        _invoice['totalAmountPaid']
+            .toDouble(); // diganti input dengan default disamping
+    // method is one of: 'Cash', 'Bank Transfer', 'Online Payment', 'Other'
+    model.transactionMethod = "Cash"; // diganti dropdown pilihan
   }
 
   @override
@@ -96,7 +110,10 @@ class _InvoicdPaymentState extends State<InvoicePayment> with GetItStateMixin {
                       end: Alignment.bottomRight,
                     ),
                     elevation: 3,
-                    onPressed: () {},
+                    onPressed: () async {
+                      await get<RoomViewModel>().recordTransaction();
+                      Navigator.pushNamed(context, tenantDetailRoute);
+                    },
                     child: Text("Bayar"),
                   ),
                 ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/routes/route_names.dart';
+import 'package:frontend/utils/helpers.dart';
 import 'package:frontend/view_models/room_view_model.dart';
 
 import 'package:frontend/widgets/mobile_navbar.dart';
@@ -16,9 +17,12 @@ class _HomeMobileState extends State<HomeMobile> with GetItStateMixin {
   @override
   Widget build(BuildContext context) {
     watchOnly((RoomViewModel x) => x.isError);
+    watchOnly((RoomViewModel x) => x.isSuccess);
     watchOnly((RoomViewModel x) => x.isNoSession);
     watchOnly((RoomViewModel x) => x.kosts);
-    _snackbarGenerator(context);
+    if (mounted) {
+      snackbarGenerator(context, get<RoomViewModel>());
+    }
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -39,7 +43,6 @@ class _HomeMobileState extends State<HomeMobile> with GetItStateMixin {
               itemCount: get<RoomViewModel>().kosts.length,
               itemBuilder: (context, index) {
                 final item = get<RoomViewModel>().kosts[index];
-                print(item);
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Card(
@@ -100,47 +103,5 @@ class _HomeMobileState extends State<HomeMobile> with GetItStateMixin {
       ),
       bottomNavigationBar: MobileNavbar(),
     );
-  }
-
-  void _snackbarGenerator(BuildContext context) {
-    return WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (get<RoomViewModel>().isNoSession) {
-        Navigator.pushNamed(context, signInRoute);
-        get<RoomViewModel>().isNoSession = false;
-      } else if (get<RoomViewModel>().isError == true) {
-        _showSnackBar(
-          get<RoomViewModel>().errorMessage ?? "Error",
-          color: Colors.red.shade400,
-          duration: Duration(seconds: 2),
-        );
-        get<RoomViewModel>().isError = null;
-        get<RoomViewModel>().errorMessage = null;
-      } else if (get<RoomViewModel>().isSuccess) {
-        _showSnackBar(
-          "Tambah kost berhasil",
-          color: Colors.green.shade400,
-          duration: Duration(seconds: 2),
-        );
-        get<RoomViewModel>().isSuccess = false;
-      }
-    });
-  }
-
-  // Helper function to show SnackBars
-  void _showSnackBar(
-    String message, {
-    Color color = Colors.blue,
-    Duration duration = const Duration(seconds: 4),
-  }) {
-    // Ensure context is still valid before showing SnackBar
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(message),
-          backgroundColor: color,
-          duration: duration,
-        ),
-      );
-    }
   }
 }

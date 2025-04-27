@@ -744,4 +744,49 @@ class ApiService {
       );
     }
   }
+
+  //TODO: TRANSACTION AND INVOICE ROUTE
+
+  Future<bool> recordTransaction({
+    required String invoiceId,
+    required DateTime transactionDate,
+    // method is one of: 'Cash', 'Bank Transfer', 'Online Payment', 'Other'
+    required String method,
+    required double amount,
+    required String? description,
+  }) async {
+    String? token = await _getToken();
+    final response = await http.post(
+      Uri.parse('$baseUrl/transaction'),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
+      body: jsonEncode({
+        'invoiceId': invoiceId,
+        'transactionDate': generateDateString(transactionDate),
+        'method': method,
+        'amount': amount,
+        'description': description,
+      }),
+    );
+
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) throw Exception("please reLogin");
+      return await recordTransaction(
+        invoiceId: invoiceId,
+        transactionDate: transactionDate,
+        amount: amount,
+        method: method,
+        description: description,
+      );
+    } else if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
+    }
+  }
 }

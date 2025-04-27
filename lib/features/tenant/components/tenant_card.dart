@@ -1,11 +1,8 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:frontend/routes/route_names.dart';
 import 'package:frontend/utils/helpers.dart';
 import 'package:frontend/view_models/room_view_model.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
-import 'package:image_picker/image_picker.dart';
 
 class TenantCard extends StatefulWidget with GetItStatefulWidgetMixin {
   TenantCard({super.key, required this.item});
@@ -17,9 +14,6 @@ class TenantCard extends StatefulWidget with GetItStatefulWidgetMixin {
 }
 
 class _TenantCardState extends State<TenantCard> with GetItStateMixin {
-  XFile? _imageMobile;
-  Uint8List? _imageWeb;
-
   @override
   Widget build(BuildContext context) {
     print(widget.item);

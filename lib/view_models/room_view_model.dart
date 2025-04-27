@@ -403,6 +403,44 @@ class RoomViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  // TODO:  TRANSACTION AND INVOICE STATE
+
+  String _invoiceId = "";
+  String _transactionMethod = "";
+  double _transactionAmount = 0;
+  DateTime _transactionDate = DateTime.now();
+  String _transactionDescription = "";
+
+  String get invoiceId => _invoiceId;
+  set invoiceId(String val) {
+    _invoiceId = val;
+    notifyListeners();
+  }
+
+  String get transactionMethod => _transactionMethod;
+  set transactionMethod(String val) {
+    _transactionMethod = val;
+    notifyListeners();
+  }
+
+  double get transactionAmount => _transactionAmount;
+  set transactionAmount(double val) {
+    _transactionAmount = val;
+    notifyListeners();
+  }
+
+  DateTime get transactionDate => _transactionDate;
+  set transactionDate(DateTime val) {
+    _transactionDate = val;
+    notifyListeners();
+  }
+
+  String get transactionDescription => _transactionDescription;
+  set transactionDescription(String val) {
+    _transactionDescription = val;
+    notifyListeners();
+  }
+
   /// ################## ///
   ///       METHOD       ///
   /// ################## ///
@@ -468,7 +506,7 @@ class RoomViewModel extends ChangeNotifier {
 
       isBusy = false;
       isSuccess = true;
-      successMessage = "Berhasil menambah harga";
+      successMessage = "Berhasil menambah penghuni";
     } catch (e) {
       if (e.toString().contains("please reLogin")) {
         isBusy = false;
@@ -494,7 +532,6 @@ class RoomViewModel extends ChangeNotifier {
   Future<bool> fetchTenant() async {
     isBusy = true;
     dynamic resp = await apiService.fetchTenant(id: tenantId);
-    print(resp);
     tenant = resp['data'];
     isBusy = false;
     return tenant != null;
@@ -723,6 +760,41 @@ class RoomViewModel extends ChangeNotifier {
         isNoSession = true;
       } else {
         errorMessage = e.toString().replaceAll('Exception: ', '');
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
+  }
+
+  // TODO:  TRANSACTION AND INVOICE
+
+  Future<void> recordTransaction() async {
+    try {
+      isBusy = true;
+      await apiService.recordTransaction(
+        invoiceId: invoiceId,
+        transactionDate: transactionDate,
+        method: transactionMethod,
+        amount: transactionAmount,
+        description: transactionDescription,
+      );
+      // await fetchPrices();
+
+      invoiceId = "";
+      transactionAmount = 0;
+      transactionMethod = "";
+      transactionDescription = "";
+      transactionDate = DateTime.now();
+      isSuccess = true;
+      successMessage = "Pembayaran berhasil";
+    } catch (e) {
+      if (e.toString().contains("please reLogin")) {
+        isBusy = false;
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isBusy = false;
         isError = true;
       }
     } finally {
