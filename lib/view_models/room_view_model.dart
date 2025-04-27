@@ -405,14 +405,36 @@ class RoomViewModel extends ChangeNotifier {
 
   // TODO:  TRANSACTION AND INVOICE STATE
 
+  List<dynamic> _invoices = [];
+  dynamic _invoice;
+  String _choosenInvoiceId = "";
   List<dynamic> _transactions = [];
   dynamic _transaction;
   String _choosenTransactionId = "";
+
   String _invoiceId = "";
   String _transactionMethod = "";
   double _transactionAmount = 0;
   DateTime _transactionDate = DateTime.now();
   String _transactionDescription = "";
+
+  List<dynamic> get invoices => _invoices;
+  set invoices(List<dynamic> val) {
+    _invoices = val;
+    notifyListeners();
+  }
+
+  dynamic get invoice => _invoice;
+  set invoice(dynamic val) {
+    _invoice = val;
+    notifyListeners();
+  }
+
+  String get choosenInvoiceId => _choosenInvoiceId;
+  set choosenInvoiceId(String val) {
+    _choosenInvoiceId = val;
+    notifyListeners();
+  }
 
   List<dynamic> get transactions => _transactions;
   set transactions(List<dynamic> val) {
@@ -720,6 +742,8 @@ class RoomViewModel extends ChangeNotifier {
           otherCost: updatedOtherCost,
         );
         room = resp['data'];
+        isSuccess = true;
+        successMessage = "Berhasil menambah harga";
         isBusy = false;
       }
       isBusy = false;
@@ -789,6 +813,40 @@ class RoomViewModel extends ChangeNotifier {
   }
 
   // TODO:  TRANSACTION AND INVOICE
+
+  Future<void> fetchInvoices() async {
+    isBusy = true;
+    try {
+      var resp = await apiService.getAllInvoices();
+      invoices = resp['data'];
+    } catch (e) {
+      if (e.toString().contains("please reLogin")) {
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
+  }
+
+  Future<void> fetchInvoice() async {
+    isBusy = true;
+    try {
+      var resp = await apiService.getInvoice(id: choosenInvoiceId);
+      invoice = resp['data'];
+    } catch (e) {
+      if (e.toString().contains("please reLogin")) {
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
+  }
 
   Future<void> recordTransaction() async {
     try {

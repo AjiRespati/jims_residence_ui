@@ -5,8 +5,8 @@ import 'package:frontend/view_models/room_view_model.dart';
 import 'package:frontend/widgets/buttons/gradient_elevated_button.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
-class AddPrice extends StatelessWidget with GetItMixin {
-  AddPrice({super.key});
+class AddRoomPrice extends StatelessWidget with GetItMixin {
+  AddRoomPrice({super.key});
 
   @override
   Widget build(BuildContext context) {

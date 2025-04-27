@@ -17,7 +17,7 @@ class _PaymentDetailState extends State<PaymentDetail> with GetItStateMixin {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      get<RoomViewModel>().fetchTransaction();
+      get<RoomViewModel>().fetchInvoice();
     });
   }
 

@@ -1,7 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:frontend/features/price/components/add_price.dart';
+import 'package:frontend/features/price/components/add_room_price.dart';
 import 'package:frontend/routes/route_names.dart';
 import 'package:frontend/utils/helpers.dart';
 import 'package:frontend/view_models/room_view_model.dart';
@@ -41,7 +41,7 @@ class _PriceMobileState extends State<PriceMobile> with GetItStateMixin {
                 constraints: BoxConstraints(minHeight: 600, maxHeight: 620),
                 context: context,
                 builder: (context) {
-                  return SizedBox(width: 600, child: AddPrice());
+                  return SizedBox(width: 600, child: AddRoomPrice());
                 },
               );
             },

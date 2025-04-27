@@ -77,6 +77,7 @@ class _AddPriceState extends State<AddPrice> with GetItStateMixin {
               ),
             ),
           ),
+          SizedBox(height: 20),
         ],
       ),
     );

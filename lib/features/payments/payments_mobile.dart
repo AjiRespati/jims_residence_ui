@@ -20,25 +20,27 @@ class _PaymentsMobileState extends State<PaymentsMobile> with GetItStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    watchOnly((RoomViewModel x) => x.transactions);
+    watchOnly((RoomViewModel x) => x.invoices);
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(title: Text("Keuangan")),
       body: ListView.builder(
-        itemCount: get<RoomViewModel>().transactions.length,
+        itemCount: get<RoomViewModel>().invoices.length,
         itemBuilder: (context, idx) {
-          dynamic transaction = get<RoomViewModel>().transactions[idx];
-          dynamic invoice = transaction['Invoice'];
-          dynamic tenant = transaction['Invoice']['Tenant'];
-          dynamic room = transaction['Invoice']['Room'];
-          // print(transaction);
-          // print("==========================");
-          // print(invoice);
-          // print("==========================");
-          // print(tenant);
-          // print("==========================");
-          // print(room);
-          // print("==========================");
+          dynamic invoice = get<RoomViewModel>().invoices[idx];
+          // dynamic invoice = invoice['Invoice'];
+          dynamic tenant = invoice['Tenant'];
+          dynamic room = invoice['Room'];
+          dynamic transactions = invoice['Transactions'];
+
+          print("==========================");
+          print(invoice);
+          print("==========================");
+          print(tenant);
+          print("==========================");
+          print(room);
+          print("==========================");
+          print(transactions);
           return Padding(
             padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
             child: Card(
@@ -48,7 +50,10 @@ class _PaymentsMobileState extends State<PaymentsMobile> with GetItStateMixin {
               elevation: 2,
               child: ClipRRect(
                 child: InkWell(
-                  onTap: () => Navigator.pushNamed(context, paymentDetailRoute),
+                  onTap: () {
+                    get<RoomViewModel>().choosenInvoiceId = invoice['id'];
+                    Navigator.pushNamed(context, paymentDetailRoute);
+                  },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
@@ -60,7 +65,7 @@ class _PaymentsMobileState extends State<PaymentsMobile> with GetItStateMixin {
                               if (tenant == null && room == null)
                                 Flexible(
                                   child: Text(
-                                    transaction['description'],
+                                    invoice['description'],
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -81,12 +86,18 @@ class _PaymentsMobileState extends State<PaymentsMobile> with GetItStateMixin {
                                     Text(room['roomNumber']),
                                   ],
                                 ),
-                              Text(
-                                formatHariDateString(
-                                  transaction['transactionDate'],
-                                ),
+
+                              SizedBox(height: 10),
+
+                              Row(
+                                children: [
+                                  Text(_invoiceStatusText(invoice['status'])),
+                                  if (transactions.length > 0)
+                                    Text(
+                                      ": ${formatDateString(transactions[0]['transactionDate'])}",
+                                    ),
+                                ],
                               ),
-                              Text(_invoiceStatusText(invoice['status'])),
                             ],
                           ),
                         ),
@@ -95,7 +106,7 @@ class _PaymentsMobileState extends State<PaymentsMobile> with GetItStateMixin {
                             children: [
                               Text(
                                 formatCurrency(
-                                  transaction['amount'].toDouble(),
+                                  invoice['totalAmountDue'].toDouble(),
                                 ),
                               ),
                             ],

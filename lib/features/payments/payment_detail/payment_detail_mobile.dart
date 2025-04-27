@@ -15,13 +15,13 @@ class _PaymentDetailMobileState extends State<PaymentDetailMobile>
     with GetItStateMixin {
   @override
   Widget build(BuildContext context) {
-    final transaction = watchOnly((RoomViewModel x) => x.transaction);
+    final invoice = watchOnly((RoomViewModel x) => x.invoice);
     watchOnly((RoomViewModel x) => x.isError);
     watchOnly((RoomViewModel x) => x.isSuccess);
     if (mounted) {
       snackbarGenerator(context, get<RoomViewModel>());
     }
-    print(transaction);
+    print(invoice?['Transactions']);
     return Scaffold(
       appBar: AppBar(title: Text("Detail Transaksi")),
       bottomNavigationBar: MobileNavbar(selectedindex: 3),
