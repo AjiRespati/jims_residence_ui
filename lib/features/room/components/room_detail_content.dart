@@ -18,7 +18,7 @@ class _RoomDetailContentState extends State<RoomDetailContent>
   dynamic _kost;
   dynamic _tenant;
   dynamic _payments;
-  dynamic _payment;
+  // dynamic _payment;
 
   _setup() async {
     await get<RoomViewModel>().fetchRoom();

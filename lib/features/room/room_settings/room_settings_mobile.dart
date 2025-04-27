@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/features/room/components/add_price.dart';
 import 'package:frontend/features/room/components/edit_room_status.dart';
-import 'package:frontend/routes/route_names.dart';
 import 'package:frontend/utils/helpers.dart';
 import 'package:frontend/view_models/room_view_model.dart';
 import 'package:frontend/widgets/buttons/add_button.dart';
@@ -25,7 +24,7 @@ class _RoomSettingsMobileState extends State<RoomSettingsMobile>
     with GetItStateMixin {
   dynamic _room;
   dynamic _kost;
-  dynamic _tenant;
+  // dynamic _tenant;
   // dynamic _payment;
   double _totalAdditionalPrice = 0;
 
@@ -33,7 +32,7 @@ class _RoomSettingsMobileState extends State<RoomSettingsMobile>
     await get<RoomViewModel>().fetchRoom();
     _room = get<RoomViewModel>().room;
     _kost = _room['BoardingHouse'];
-    _tenant = _room['latestTenant'];
+    // _tenant = _room['latestTenant'];
     // _payment = _tenant?['Payments'][0];
     get<RoomViewModel>().updatedAdditionalPrices = _room['AdditionalPrices'];
     get<RoomViewModel>().roomStatus = _room['roomStatus'];
@@ -352,7 +351,7 @@ class _RoomSettingsMobileState extends State<RoomSettingsMobile>
                   ),
                 ],
               ),
-      bottomNavigationBar: MobileNavbar(),
+      bottomNavigationBar: MobileNavbar(selectedindex: 1),
     );
   }
 }

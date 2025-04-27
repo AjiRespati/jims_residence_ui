@@ -70,7 +70,7 @@ class _TenantMobileState extends State<TenantMobile> with GetItStateMixin {
                   return TenantCard(item: item);
                 },
               ),
-      bottomNavigationBar: MobileNavbar(),
+      bottomNavigationBar: MobileNavbar(selectedindex: 2),
     );
   }
 }

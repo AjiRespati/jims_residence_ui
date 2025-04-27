@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:frontend/features/room/components/room_detail_content.dart';
-import 'package:frontend/routes/route_names.dart';
 import 'package:frontend/utils/helpers.dart';
 import 'package:frontend/view_models/room_view_model.dart';
 import 'package:frontend/widgets/mobile_navbar.dart';
@@ -36,7 +35,7 @@ class _RoomDetailMobileState extends State<RoomDetailMobile>
         padding: const EdgeInsets.all(20),
         child: RoomDetailContent(),
       ),
-      bottomNavigationBar: MobileNavbar(),
+      bottomNavigationBar: MobileNavbar(selectedindex: 1),
     );
   }
 }

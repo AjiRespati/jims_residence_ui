@@ -15,7 +15,7 @@ class _PaymentsMobileState extends State<PaymentsMobile> with GetItStateMixin {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(title: Text("Finance")),
-      bottomNavigationBar: MobileNavbar(),
+      bottomNavigationBar: MobileNavbar(selectedindex: 3),
       floatingActionButton: FloatingActionButton.small(
         backgroundColor: Colors.blue.shade700,
         onPressed: () {},

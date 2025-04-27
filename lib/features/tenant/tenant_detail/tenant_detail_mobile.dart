@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/application_info.dart';
 import 'package:frontend/features/payments/components/invoice_card.dart';
-import 'package:frontend/routes/route_names.dart';
 import 'package:frontend/services/api_service.dart';
 import 'package:frontend/view_models/room_view_model.dart';
 import 'package:frontend/widgets/buttons/gradient_elevated_button.dart';
@@ -245,7 +244,7 @@ class _TenantDetailMobileState extends State<TenantDetailMobile>
           ],
         ),
       ),
-      bottomNavigationBar: MobileNavbar(),
+      bottomNavigationBar: MobileNavbar(selectedindex: 2),
     );
   }
 }

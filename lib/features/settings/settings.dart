@@ -5,6 +5,7 @@ import 'package:frontend/features/settings/settings_desktop.dart';
 import 'package:frontend/features/settings/settings_mobile.dart';
 import 'package:frontend/utils/responsive_layout.dart';
 import 'package:frontend/view_models/room_view_model.dart';
+import 'package:frontend/view_models/system_view_model.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
 class Settings extends StatefulWidget with GetItStatefulWidgetMixin {
@@ -33,7 +34,7 @@ class _SettingsState extends State<Settings> with GetItStateMixin {
   @override
   void initState() {
     super.initState();
-
+    get<SystemViewModel>().currentPageIndex = 4;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _setup();
     });

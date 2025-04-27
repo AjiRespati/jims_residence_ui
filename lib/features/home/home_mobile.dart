@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/routes/route_names.dart';
 import 'package:frontend/utils/helpers.dart';
 import 'package:frontend/view_models/room_view_model.dart';
 
@@ -101,7 +100,7 @@ class _HomeMobileState extends State<HomeMobile> with GetItStateMixin {
           ),
         ],
       ),
-      bottomNavigationBar: MobileNavbar(),
+      bottomNavigationBar: MobileNavbar(selectedindex: 0),
     );
   }
 }

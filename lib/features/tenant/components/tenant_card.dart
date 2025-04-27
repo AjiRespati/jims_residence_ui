@@ -16,7 +16,6 @@ class TenantCard extends StatefulWidget with GetItStatefulWidgetMixin {
 class _TenantCardState extends State<TenantCard> with GetItStateMixin {
   @override
   Widget build(BuildContext context) {
-    print(widget.item);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: Card(

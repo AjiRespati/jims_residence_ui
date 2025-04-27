@@ -4,7 +4,8 @@ import 'package:frontend/view_models/system_view_model.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
 class MobileNavbar extends StatelessWidget with GetItMixin {
-  MobileNavbar({super.key});
+  MobileNavbar({required this.selectedindex, super.key});
+  final int selectedindex;
 
   @override
   Widget build(BuildContext context) {
@@ -28,12 +29,13 @@ class MobileNavbar extends StatelessWidget with GetItMixin {
             Navigator.pushNamed(context, settingRoute);
         }
       },
-      selectedIndex: get<SystemViewModel>().currentPageIndex,
+      selectedIndex: selectedindex,
+      // selectedIndex: watchOnly((SystemViewModel x) => x.currentPageIndex),
       destinations: [
         NavigationDestination(
           selectedIcon: Icon(Icons.home, color: Colors.blue.shade800),
           icon: Icon(Icons.home),
-          label: "Home",
+          label: "Beranda",
         ),
         NavigationDestination(
           selectedIcon: Icon(
@@ -42,7 +44,7 @@ class MobileNavbar extends StatelessWidget with GetItMixin {
           ),
 
           icon: Icon(Icons.meeting_room_rounded),
-          label: "Rooms",
+          label: "Kamar",
         ),
         NavigationDestination(
           selectedIcon: Icon(
@@ -51,7 +53,7 @@ class MobileNavbar extends StatelessWidget with GetItMixin {
           ),
 
           icon: Icon(Icons.people_alt_rounded),
-          label: "Tenants",
+          label: "Penghuni",
         ),
         NavigationDestination(
           selectedIcon: Icon(
@@ -60,12 +62,12 @@ class MobileNavbar extends StatelessWidget with GetItMixin {
           ),
 
           icon: Icon(Icons.payments_rounded),
-          label: "Finance",
+          label: "Keuangan",
         ),
         NavigationDestination(
           selectedIcon: Icon(Icons.settings, color: Colors.blue.shade800),
           icon: Icon(Icons.settings),
-          label: "Setting",
+          label: "Pengaturan",
         ),
       ],
     );

@@ -170,7 +170,7 @@ class _PriceMobileState extends State<PriceMobile> with GetItStateMixin {
           );
         },
       ),
-      bottomNavigationBar: MobileNavbar(),
+      bottomNavigationBar: MobileNavbar(selectedindex: 3),
     );
   }
 }
