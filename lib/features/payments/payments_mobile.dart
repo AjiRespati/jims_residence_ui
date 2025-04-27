@@ -24,98 +24,138 @@ class _PaymentsMobileState extends State<PaymentsMobile> with GetItStateMixin {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(title: Text("Transaksi")),
-      body: ListView.builder(
-        itemCount: get<RoomViewModel>().invoices.length,
-        itemBuilder: (context, idx) {
-          dynamic invoice = get<RoomViewModel>().invoices[idx];
-          // dynamic invoice = invoice['Invoice'];
-          dynamic tenant = invoice['Tenant'];
-          dynamic room = invoice['Room'];
-          dynamic transactions = invoice['Transactions'];
-          return Padding(
-            padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
-            child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              elevation: 2,
-              child: ClipRRect(
-                child: InkWell(
-                  onTap: () {
-                    get<RoomViewModel>().choosenInvoiceId = invoice['id'];
-                    Navigator.pushNamed(context, paymentDetailRoute);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              if (tenant == null && room == null)
-                                Flexible(
-                                  child: Text(
-                                    invoice['description'],
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              if (tenant != null)
-                                Text(
-                                  tenant['name'],
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              if (room != null)
-                                Row(
-                                  children: [
-                                    Text(room['BoardingHouse']['name'] + ","),
-                                    SizedBox(width: 5),
-                                    Text(room['roomNumber']),
-                                  ],
-                                ),
-
-                              SizedBox(height: 10),
-
-                              Row(
-                                children: [
-                                  Text(
-                                    invoiceStatusText(invoice['status']),
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  if (transactions.length > 0)
-                                    Text(
-                                      ": ${formatDateString(transactions[0]['transactionDate'])}",
-                                    ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Text(
-                                formatCurrency(
-                                  invoice['totalAmountDue'].toDouble(),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+      body: Column(
+        children: [
+          SizedBox(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: DropdownButtonFormField<String>(
+                    decoration: InputDecoration(labelText: "Pilih Kost"),
+                    value: get<RoomViewModel>().roomKostName,
+                    items:
+                        get<RoomViewModel>().kosts.map((item) {
+                          return DropdownMenuItem<String>(
+                            value: item['name'],
+                            child: Text(item['name']),
+                          );
+                        }).toList(),
+                    onChanged: (value) async {
+                      get<RoomViewModel>().roomKostName = value;
+                      var item =
+                          get<RoomViewModel>().kosts
+                              .where((el) => el['name'] == value)
+                              .toList()
+                              .first;
+                      get<RoomViewModel>().roomKostId = item['id'];
+                      await get<RoomViewModel>().fetchInvoices(
+                        boardingHouseId: item['id'],
+                      );
+                    },
                   ),
                 ),
-              ),
+              ],
             ),
-          );
-        },
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: get<RoomViewModel>().invoices.length,
+              itemBuilder: (context, idx) {
+                dynamic invoice = get<RoomViewModel>().invoices[idx];
+                // dynamic invoice = invoice['Invoice'];
+                dynamic tenant = invoice['Tenant'];
+                dynamic room = invoice['Room'];
+                dynamic transactions = invoice['Transactions'];
+                return Padding(
+                  padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    elevation: 2,
+                    child: ClipRRect(
+                      child: InkWell(
+                        onTap: () {
+                          get<RoomViewModel>().choosenInvoiceId = invoice['id'];
+                          Navigator.pushNamed(context, paymentDetailRoute);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    if (tenant == null && room == null)
+                                      Flexible(
+                                        child: Text(
+                                          invoice['description'],
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    if (tenant != null)
+                                      Text(
+                                        tenant['name'],
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    if (room != null)
+                                      Row(
+                                        children: [
+                                          Text(
+                                            room['BoardingHouse']['name'] + ",",
+                                          ),
+                                          SizedBox(width: 5),
+                                          Text(room['roomNumber']),
+                                        ],
+                                      ),
+
+                                    SizedBox(height: 10),
+
+                                    Row(
+                                      children: [
+                                        Text(
+                                          invoiceStatusText(invoice['status']),
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        if (transactions.length > 0)
+                                          Text(
+                                            ": ${formatDateString(transactions[0]['transactionDate'])}",
+                                          ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      formatCurrency(
+                                        invoice['totalAmountDue'].toDouble(),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: MobileNavbar(selectedindex: 3),
       floatingActionButton: FloatingActionButton.small(

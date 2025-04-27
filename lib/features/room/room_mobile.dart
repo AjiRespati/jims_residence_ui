@@ -61,115 +61,154 @@ class _RoomMobileState extends State<RoomMobile> with GetItStateMixin {
                   SizedBox(width: 20),
                 ],
       ),
-      body: ListView.builder(
-        itemCount: get<RoomViewModel>().rooms.length,
-        itemBuilder: (context, idx) {
-          dynamic item = get<RoomViewModel>().rooms[idx];
-          return Padding(
-            padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
-            child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              elevation: 2,
-              child: ClipRRect(
-                child: InkWell(
-                  onTap:
-                      widget.isSetting
-                          ? null
-                          : () {
-                            get<RoomViewModel>().roomId = item?['id'] ?? "";
-                            Navigator.pushNamed(context, roomDetailRoute);
-                          },
-                  child: Banner(
-                    message: item['roomStatus'],
-                    textStyle: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
+      body: Column(
+        children: [
+          SizedBox(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: DropdownButtonFormField<String>(
+                    decoration: InputDecoration(labelText: "Pilih Kost"),
+                    value: get<RoomViewModel>().roomKostName,
+                    items:
+                        get<RoomViewModel>().kosts.map((item) {
+                          return DropdownMenuItem<String>(
+                            value: item['name'],
+                            child: Text(item['name']),
+                          );
+                        }).toList(),
+                    onChanged: (value) {
+                      get<RoomViewModel>().roomKostName = value;
+                      var item =
+                          get<RoomViewModel>().kosts
+                              .where((el) => el['name'] == value)
+                              .toList()
+                              .first;
+                      get<RoomViewModel>().roomKostId = item['id'];
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: get<RoomViewModel>().rooms.length,
+              itemBuilder: (context, idx) {
+                dynamic item = get<RoomViewModel>().rooms[idx];
+                return Padding(
+                  padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    location: BannerLocation.topEnd,
-                    color: generateRoomStatusColor(
-                      roomSatus: item['roomStatus'],
-                    ),
-
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          SizedBox(width: 5),
-                          SizedBox(
-                            width: 50,
-                            child: Text(
-                              item['roomNumber'],
-                              style: TextStyle(
-                                fontSize: 35,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
+                    elevation: 2,
+                    child: ClipRRect(
+                      child: InkWell(
+                        onTap:
+                            widget.isSetting
+                                ? null
+                                : () {
+                                  get<RoomViewModel>().roomId =
+                                      item?['id'] ?? "";
+                                  Navigator.pushNamed(context, roomDetailRoute);
+                                },
+                        child: Banner(
+                          message: item['roomStatus'],
+                          textStyle: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
                           ),
-                          SizedBox(width: 5),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    item['BoardingHouse']['name'],
+                          location: BannerLocation.topEnd,
+                          color: generateRoomStatusColor(
+                            roomSatus: item['roomStatus'],
+                          ),
+
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                SizedBox(width: 5),
+                                SizedBox(
+                                  width: 50,
+                                  child: Text(
+                                    item['roomNumber'],
                                     style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 20,
+                                      fontSize: 35,
+                                      fontWeight: FontWeight.w500,
                                     ),
                                   ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Text("Ukuran: "),
-                                  Text(item['roomSize']),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Text("Status: "),
-                                  Text(item['roomStatus']),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Text("Harga: "),
-                                  Text(formatCurrency(item['totalPrice'])),
-                                ],
-                              ),
-                            ],
-                          ),
-                          SizedBox(width: 10),
-                          Expanded(child: SizedBox()),
-                          Column(
-                            children: [
-                              if (widget.isSetting)
-                                IconButton(
-                                  onPressed: () async {
-                                    get<RoomViewModel>().roomId = item['id'];
-                                    Navigator.pushNamed(
-                                      context,
-                                      roomSettingsRoute,
-                                      arguments: item,
-                                    );
-                                  },
-                                  icon: Icon(Icons.settings),
                                 ),
-                            ],
+                                SizedBox(width: 5),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          item['BoardingHouse']['name'],
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text("Ukuran: "),
+                                        Text(item['roomSize']),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text("Status: "),
+                                        Text(item['roomStatus']),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text("Harga: "),
+                                        Text(
+                                          formatCurrency(item['totalPrice']),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(width: 10),
+                                Expanded(child: SizedBox()),
+                                Column(
+                                  children: [
+                                    if (widget.isSetting)
+                                      IconButton(
+                                        onPressed: () async {
+                                          get<RoomViewModel>().roomId =
+                                              item['id'];
+                                          Navigator.pushNamed(
+                                            context,
+                                            roomSettingsRoute,
+                                            arguments: item,
+                                          );
+                                        },
+                                        icon: Icon(Icons.settings),
+                                      ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                        ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ),
+                );
+              },
             ),
-          );
-        },
+          ),
+        ],
       ),
       bottomNavigationBar: MobileNavbar(selectedindex: 1),
     );

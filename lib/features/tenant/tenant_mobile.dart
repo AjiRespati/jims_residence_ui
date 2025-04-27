@@ -60,16 +60,59 @@ class _TenantMobileState extends State<TenantMobile> with GetItStateMixin {
         //   SizedBox(width: 20),
         // ],
       ),
-      body:
+      body: Column(
+        children: [
+          SizedBox(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: DropdownButtonFormField<String>(
+                    decoration: InputDecoration(labelText: "Pilih Kost"),
+                    value: get<RoomViewModel>().roomKostName,
+                    items:
+                        get<RoomViewModel>().kosts.map((item) {
+                          return DropdownMenuItem<String>(
+                            value: item['name'],
+                            child: Text(item['name']),
+                          );
+                        }).toList(),
+                    onChanged: (value) {
+                      get<RoomViewModel>().roomKostName = value;
+                      var item =
+                          get<RoomViewModel>().kosts
+                              .where((el) => el['name'] == value)
+                              .toList()
+                              .first;
+                      get<RoomViewModel>().roomKostId = item['id'];
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
           get<RoomViewModel>().tenants.isEmpty
               ? Center(child: Text("No tenants found"))
-              : ListView.builder(
-                itemCount: tenants.length,
-                itemBuilder: (context, idx) {
-                  final item = tenants[idx];
-                  return TenantCard(item: item);
-                },
+              : Expanded(
+                child: ListView.builder(
+                  itemCount: tenants.length,
+                  itemBuilder: (context, idx) {
+                    final item = tenants[idx];
+                    return TenantCard(item: item);
+                  },
+                ),
               ),
+        ],
+      ),
+      // get<RoomViewModel>().tenants.isEmpty
+      //     ? Center(child: Text("No tenants found"))
+      //     : ListView.builder(
+      //       itemCount: tenants.length,
+      //       itemBuilder: (context, idx) {
+      //         final item = tenants[idx];
+      //         return TenantCard(item: item);
+      //       },
+      //     ),
       bottomNavigationBar: MobileNavbar(selectedindex: 2),
     );
   }

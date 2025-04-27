@@ -747,11 +747,15 @@ class ApiService {
 
   //TODO: TRANSACTION AND INVOICE ROUTE
 
-  Future<dynamic> getAllInvoices() async {
+  Future<dynamic> getAllInvoices({required String? boardingHouseId}) async {
     String? token = await _getToken();
+    String url = "$baseUrl/invoice";
+    if (boardingHouseId != null && boardingHouseId.isNotEmpty) {
+      url = "$url?boardingHouseId=$boardingHouseId";
+    }
 
     final response = await http.get(
-      Uri.parse('$baseUrl/invoice'),
+      Uri.parse(url),
       headers: {
         'Content-Type': 'application/json',
         "Authorization": "Bearer $token",

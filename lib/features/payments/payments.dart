@@ -17,7 +17,9 @@ class _PaymentsState extends State<Payments> with GetItStateMixin {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      get<RoomViewModel>().fetchInvoices();
+      get<RoomViewModel>().fetchInvoices(
+        boardingHouseId: get<RoomViewModel>().roomKostId,
+      );
     });
   }
 

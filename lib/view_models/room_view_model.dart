@@ -814,10 +814,12 @@ class RoomViewModel extends ChangeNotifier {
 
   // TODO:  TRANSACTION AND INVOICE
 
-  Future<void> fetchInvoices() async {
+  Future<void> fetchInvoices({required String? boardingHouseId}) async {
     isBusy = true;
     try {
-      var resp = await apiService.getAllInvoices();
+      var resp = await apiService.getAllInvoices(
+        boardingHouseId: boardingHouseId,
+      );
       invoices = resp['data'];
     } catch (e) {
       if (e.toString().contains("please reLogin")) {

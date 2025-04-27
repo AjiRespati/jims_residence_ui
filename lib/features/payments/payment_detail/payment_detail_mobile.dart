@@ -21,7 +21,7 @@ class _PaymentDetailMobileState extends State<PaymentDetailMobile>
     if (mounted) {
       snackbarGenerator(context, get<RoomViewModel>());
     }
-    print(invoice['Tenant']);
+    print(invoice?['Tenant']);
     return Scaffold(
       appBar: AppBar(title: Text("Detail Transaksi")),
       body: Padding(
