@@ -15,6 +15,12 @@ class TenantCard extends StatefulWidget with GetItStatefulWidgetMixin {
 
 class _TenantCardState extends State<TenantCard> with GetItStateMixin {
   @override
+  void initState() {
+    super.initState();
+    print(widget.item);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -31,66 +37,101 @@ class _TenantCardState extends State<TenantCard> with GetItStateMixin {
               location: BannerLocation.topEnd,
               child: Padding(
                 padding: const EdgeInsets.all(12),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Stack(
+                  alignment: Alignment.centerRight,
                   children: [
-                    Expanded(
-                      flex: 1,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${widget.item['boardingHouseName']} ${widget.item['roomNumber']}',
-                          ),
-                          Text(widget.item['name'] ?? 'N/A'),
-                          Text(widget.item['phone'] ?? 'N/A'),
-                          Text(
-                            "Fotocopy KTP: ${(widget.item['isNIKCopyDone'] == true) ? "Sudah" : "Belum"}",
-                          ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text("Mulai:"),
-                          Row(
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              SizedBox(width: 20),
-                              Text(formatDateString(widget.item['startDate'])),
+                              Text(
+                                '${widget.item['boardingHouseName']} ${widget.item['roomNumber']}',
+                              ),
+                              Text(widget.item['name'] ?? 'N/A'),
+                              Text(widget.item['phone'] ?? 'N/A'),
+                              Text(
+                                "Fotocopy KTP: ${(widget.item['isNIKCopyDone'] == true) ? "Sudah" : "Belum"}",
+                              ),
                             ],
                           ),
-                          Text("Sampai:"),
-                          Row(
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              SizedBox(width: 20),
-                              Text(formatDateString(widget.item['endDate'])),
+                              Text("Mulai:"),
+                              Row(
+                                children: [
+                                  SizedBox(width: 20),
+                                  Text(
+                                    formatDateString(widget.item['startDate']),
+                                  ),
+                                ],
+                              ),
+                              Text("Sampai:"),
+                              Row(
+                                children: [
+                                  SizedBox(width: 20),
+                                  Text(
+                                    formatDateString(widget.item['endDate']),
+                                  ),
+                                ],
+                              ),
+                              // Text("Batas Pembayaran:"),
+                              // Row(
+                              //   children: [
+                              //     SizedBox(width: 20),
+                              //     Text(formatDateString(widget.item['dueDate'])),
+                              //   ],
+                              // ),
+                              // Text("Batas tinggal:"),
+                              // Row(
+                              //   children: [
+                              //     SizedBox(width: 20),
+                              //     Text(formatDateString(widget.item['banishDate'])),
+                              //   ],
+                              // ),
                             ],
+                            // (widget.item['Payments'] as List?)
+                            //     ?.map((p) => Text(p['description'] ?? ''))
+                            //     .toList() ??
+                            // [],
                           ),
-                          // Text("Batas Pembayaran:"),
-                          // Row(
-                          //   children: [
-                          //     SizedBox(width: 20),
-                          //     Text(formatDateString(widget.item['dueDate'])),
-                          //   ],
-                          // ),
-                          // Text("Batas tinggal:"),
-                          // Row(
-                          //   children: [
-                          //     SizedBox(width: 20),
-                          //     Text(formatDateString(widget.item['banishDate'])),
-                          //   ],
-                          // ),
-                        ],
-                        // (widget.item['Payments'] as List?)
-                        //     ?.map((p) => Text(p['description'] ?? ''))
-                        //     .toList() ??
-                        // [],
-                      ),
+                        ),
+                      ],
                     ),
+                    if (widget.item['Invoices'].length == 0)
+                      Column(
+                        children: [
+                          Icon(
+                            Icons.check,
+                            size: 30,
+                            color: Colors.greenAccent.shade700,
+                          ),
+                          Text("Lunas"),
+                        ],
+                      ),
+                    if (widget.item['Invoices'].length != 0)
+                      Column(
+                        children: [
+                          Text(
+                            "!",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w900,
+                              fontSize: 26,
+                              color: Colors.amber.shade900,
+                            ),
+                          ),
+                          Text("Ada"),
+                          Text("Tagihan"),
+                        ],
+                      ),
                   ],
                 ),
               ),

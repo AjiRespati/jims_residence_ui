@@ -33,7 +33,17 @@ String formatDateString(String? dateTimeString) {
   String result = " -";
   if (dateTimeString != null) {
     final dateTime = DateTime.parse(dateTimeString);
-    final formatter = DateFormat('yyyy-MM-dd');
+    final formatter = DateFormat('dd-MM-yyyy');
+    result = formatter.format(dateTime);
+  }
+  return result;
+}
+
+String formatDateMinuteString(String? dateTimeString) {
+  String result = " -";
+  if (dateTimeString != null) {
+    final dateTime = DateTime.parse(dateTimeString);
+    final formatter = DateFormat('dd-MM-yyyy, HH:mm', 'id_ID');
     result = formatter.format(dateTime);
   }
   return result;
@@ -157,4 +167,20 @@ void _showSnackBar(
       duration: duration,
     ),
   );
+}
+
+String invoiceStatusText(String status) {
+  // 'Draft', 'Issued', 'Unpaid', 'PartiallyPaid', 'Paid', 'Void'
+  switch (status) {
+    case 'Paid':
+      return 'Lunas';
+    case 'Issued':
+      return 'Belum dibayar';
+    case 'Unpaid':
+      return 'Belum dibayar';
+    case 'PartiallyPaid':
+      return 'Sebagian';
+    default:
+      return status;
+  }
 }

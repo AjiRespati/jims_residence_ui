@@ -65,8 +65,12 @@ class InvoiceCard extends StatelessWidget {
                   child: Column(
                     children: [
                       Text(
-                        _invoiceStatusText(item["status"]),
-                        style: TextStyle(fontWeight: FontWeight.w600),
+                        invoiceStatusText(item["status"]),
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
                       if (item['totalAmountPaid'] < item['totalAmountDue'])
                         IconButton(
@@ -131,17 +135,5 @@ class InvoiceCard extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String _invoiceStatusText(String status) {
-    // 'Draft', 'Issued', 'Unpaid', 'PartiallyPaid', 'Paid', 'Void'
-    switch (status) {
-      case 'Issued':
-        return 'Unpaid';
-      case 'PartiallyPaid':
-        return 'Sebagian';
-      default:
-        return status;
-    }
   }
 }

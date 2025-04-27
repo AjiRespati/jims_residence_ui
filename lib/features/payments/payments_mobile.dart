@@ -23,7 +23,7 @@ class _PaymentsMobileState extends State<PaymentsMobile> with GetItStateMixin {
     watchOnly((RoomViewModel x) => x.invoices);
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: AppBar(title: Text("Keuangan")),
+      appBar: AppBar(title: Text("Transaksi")),
       body: ListView.builder(
         itemCount: get<RoomViewModel>().invoices.length,
         itemBuilder: (context, idx) {
@@ -33,14 +33,14 @@ class _PaymentsMobileState extends State<PaymentsMobile> with GetItStateMixin {
           dynamic room = invoice['Room'];
           dynamic transactions = invoice['Transactions'];
 
-          print("==========================");
-          print(invoice);
-          print("==========================");
-          print(tenant);
-          print("==========================");
-          print(room);
-          print("==========================");
-          print(transactions);
+          // print("==========================");
+          // print(invoice);
+          // print("==========================");
+          // print(tenant);
+          // print("==========================");
+          // print(room);
+          // print("==========================");
+          // print(transactions);
           return Padding(
             padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
             child: Card(
@@ -91,7 +91,7 @@ class _PaymentsMobileState extends State<PaymentsMobile> with GetItStateMixin {
 
                               Row(
                                 children: [
-                                  Text(_invoiceStatusText(invoice['status'])),
+                                  Text(invoiceStatusText(invoice['status'])),
                                   if (transactions.length > 0)
                                     Text(
                                       ": ${formatDateString(transactions[0]['transactionDate'])}",
@@ -128,17 +128,5 @@ class _PaymentsMobileState extends State<PaymentsMobile> with GetItStateMixin {
         child: Icon(Icons.add, color: Colors.white),
       ),
     );
-  }
-
-  String _invoiceStatusText(String status) {
-    // 'Draft', 'Issued', 'Unpaid', 'PartiallyPaid', 'Paid', 'Void'
-    switch (status) {
-      case 'Issued':
-        return 'Unpaid';
-      case 'PartiallyPaid':
-        return 'Sebagian';
-      default:
-        return status;
-    }
   }
 }
