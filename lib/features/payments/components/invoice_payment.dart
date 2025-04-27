@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/utils/helpers.dart';
+import 'package:frontend/widgets/buttons/gradient_elevated_button.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
 class InvoicePayment extends StatefulWidget with GetItStatefulWidgetMixin {
@@ -10,6 +12,17 @@ class InvoicePayment extends StatefulWidget with GetItStatefulWidgetMixin {
 }
 
 class _InvoicdPaymentState extends State<InvoicePayment> with GetItStateMixin {
+  dynamic _invoice;
+  List<dynamic> _charges = [];
+
+  @override
+  void initState() {
+    super.initState();
+    print(widget.item);
+    _invoice = widget.item;
+    _charges = widget.item['Charges'];
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -19,6 +32,7 @@ class _InvoicdPaymentState extends State<InvoicePayment> with GetItStateMixin {
           children: [
             SizedBox(height: 6),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   "Pembayaran",
@@ -26,7 +40,68 @@ class _InvoicdPaymentState extends State<InvoicePayment> with GetItStateMixin {
                 ),
               ],
             ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Flexible(child: Text(_invoice['description'], maxLines: 2)),
+                ],
+              ),
+            ),
             SizedBox(height: 6),
+            Row(
+              children: [
+                Text("Total pembayaran: "),
+                Text(
+                  formatCurrency(
+                    _invoice['totalAmountDue'] - _invoice['totalAmountPaid'],
+                  ),
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            SizedBox(height: 6),
+            ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: _charges.length,
+              itemBuilder: (context, index) {
+                var charge = _charges[index];
+                return Row(
+                  children: [
+                    SizedBox(width: 40),
+                    Text(charge['name'] + ": "),
+                    Text(formatCurrency(charge['amount'])),
+                  ],
+                );
+              },
+            ),
+            SizedBox(height: 6),
+            Text("Pastikan pembayaran telah diterima."),
+            SizedBox(height: 26),
+            SizedBox(
+              height: 35,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  GradientElevatedButton(
+                    elevation: 3,
+                    onPressed: () => Navigator.pop(context),
+                    child: Text("Kembali"),
+                  ),
+                  GradientElevatedButton(
+                    gradient: LinearGradient(
+                      colors: [Colors.green.shade400, Colors.green.shade800],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    elevation: 3,
+                    onPressed: () {},
+                    child: Text("Bayar"),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
