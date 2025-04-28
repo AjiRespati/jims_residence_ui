@@ -5,11 +5,11 @@ class ApplicationInfo {
   /// Prevents from object instantiation.
   ApplicationInfo._();
 
-  static const appName = "Jim's Residence";
+  static const appName = "Residenza";
 
   static const mainUrlDev =
       kIsWeb ? 'http://localhost:3300' : "http://10.0.2.2:3300";
-  static const mainUrlProd = 'https://jims.com';
+  static const mainUrlProd = 'https://residenza.id';
 
   // static const mainUrl = mainUrlDev;
   static const mainUrl = mainUrlProd;

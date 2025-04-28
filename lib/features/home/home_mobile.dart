@@ -10,7 +10,7 @@ class HomeMobile extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Jim's Residence",
+          "Residenza",
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
         ),
       ),
