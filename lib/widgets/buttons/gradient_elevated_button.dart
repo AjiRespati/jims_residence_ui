@@ -29,93 +29,32 @@ class GradientElevatedButton extends StatefulWidget {
 }
 
 class _GradientElevatedButtonState extends State<GradientElevatedButton> {
-  bool _isPressed = false;
-  bool _isInactive = false;
-
-  @override
-  void dispose() {
-    super.dispose();
-    _isPressed = false;
-    _isInactive = false;
-  }
-
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapDown:
-          _isInactive
-              ? null
-              : widget.onPressed == null
-              ? null
-              : (_) => setState(() => _isPressed = true),
-      onTapUp:
-          _isInactive
-              ? null
-              : widget.onPressed == null
-              ? null
-              : (_) => setState(() => _isPressed = false),
-      onTapCancel:
-          _isInactive
-              ? null
-              : widget.onPressed == null
-              ? null
-              : () => setState(() => _isPressed = false),
-      child: InkWell(
-        onTap:
-            _isInactive
-                ? null
-                : widget.onPressed == null
-                ? null
-                : () async {
-                  setState(() => _isPressed = true);
-                  await Future.delayed(Durations.short3, () {
-                    setState(() {
-                      _isPressed = false;
-                      _isInactive = true;
-                    });
-                  });
-                  await Future.delayed(widget.inactiveDelay, () {
-                    setState(() {
-                      _isInactive = false;
-                    });
-                  });
-                  await Future.delayed(Durations.short3, () {
-                    widget.onPressed!();
-                  });
-                },
+    return Container(
+      height: widget.buttonHeight,
+      decoration: BoxDecoration(
+        // Define the gradient here
+        gradient: widget.gradient,
+        // Optional: Add border radius to match button shape
         borderRadius: BorderRadius.circular(widget.borderRadius),
-        splashColor: Colors.white.withAlpha(200),
-        highlightColor: Colors.white.withAlpha(100),
-        child: Container(
-          height: widget.buttonHeight,
-          decoration: BoxDecoration(
-            gradient:
-                widget.onPressed == null
-                    ? LinearGradient(
-                      colors: [Colors.grey.shade300, Colors.grey.shade500],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    )
-                    : widget.gradient,
+      ),
+
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(widget.borderRadius),
-            boxShadow:
-                _isPressed
-                    ? []
-                    : [
-                      const BoxShadow(
-                        color: Colors.black26,
-                        offset: Offset(0, 3),
-                        blurRadius: 8.0,
-                      ),
-                    ],
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [Center(child: widget.child)],
-          ),
+          elevation: widget.elevation, // Shadow elevation
+          backgroundColor:
+              Colors.transparent, // Make button background transparent
+          shadowColor: Colors.transparent, // Remove shadow if any
+          foregroundColor: Colors.white, // Set text/icon color to be visible
+
+          iconColor: Colors.white, // Icon color
         ),
+        onPressed: widget.onPressed,
+        child: widget.child,
       ),
     );
   }

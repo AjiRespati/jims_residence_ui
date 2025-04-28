@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/features/room/room_settings/room_settings_desktop.dart';
-import 'package:frontend/features/room/room_settings/room_settings_mobile.dart';
-import 'package:frontend/utils/responsive_layout.dart';
-import 'package:frontend/view_models/room_view_model.dart';
+import 'package:residenza/features/room/room_settings/room_settings_desktop.dart';
+import 'package:residenza/features/room/room_settings/room_settings_mobile.dart';
+import 'package:residenza/utils/responsive_layout.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
 class RoomSettings extends StatefulWidget with GetItStatefulWidgetMixin {
@@ -17,7 +16,6 @@ class _RoomSettingsState extends State<RoomSettings> with GetItStateMixin {
   @override
   void initState() {
     super.initState();
-    print(widget.datas);
     // get<RoomViewModel>().roomId = widget.datas['id'] ?? "";
   }
 

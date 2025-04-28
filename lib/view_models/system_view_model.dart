@@ -1,8 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:frontend/routes/route_names.dart';
-import 'package:frontend/services/api_service.dart';
+import 'package:residenza/routes/route_names.dart';
+import 'package:residenza/services/api_service.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,8 +19,9 @@ class SystemViewModel extends ChangeNotifier {
       TextEditingController();
   bool _showPassword = false;
   int _currentPageIndex = 0;
-  List<String> pageLabels = ["Home", "Products", "Stock", "Sales"];
-  // List<String> pageLabels = ["Home", "Stock", "Products", "Sales", "Setting"];
+
+  dynamic _user;
+  List<dynamic> _users = [];
 
   //====================//
   //  GETTER n SETTER   //
@@ -50,6 +51,18 @@ class SystemViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  List<dynamic> get users => _users;
+  set users(List<dynamic> val) {
+    _users = val;
+    notifyListeners();
+  }
+
+  dynamic get user => _user;
+  set user(dynamic val) {
+    _user = val;
+    notifyListeners();
+  }
+
   //====================//
   //       METHOD       //
   //====================//
@@ -62,22 +75,25 @@ class SystemViewModel extends ChangeNotifier {
 
     if (!isTokenExpired(token)) {
       Navigator.pushNamed(context, homeRoute);
-      isBusy = false;
-    } else {
-      isBusy = false;
     }
+    isBusy = false;
   }
 
   bool isTokenExpired(String? token) {
     if (token == null) {
       return true;
     }
-
-    bool isNeedRefresh = JwtDecoder.isExpired(token);
-    if (isNeedRefresh) {
-      apiService.refreshAccessToken();
+    try {
+      return JwtDecoder.isExpired(token);
+    } catch (e) {
+      return true;
     }
-    return JwtDecoder.isExpired(token);
+
+    // bool isNeedRefresh = JwtDecoder.isExpired(token);
+    // if (isNeedRefresh) {
+    //   apiService.refreshAccessToken();
+    // }
+    // return JwtDecoder.isExpired(token);
   }
 
   void onLogin({required BuildContext context}) async {
@@ -101,5 +117,44 @@ class SystemViewModel extends ChangeNotifier {
       emailController.text,
       passwordController.text,
     );
+  }
+
+  Future<bool> logout() async {
+    isBusy = true;
+    return await apiService.logout();
+  }
+
+  Future<bool> self({required BuildContext context}) async {
+    SharedPreferences prefs = await _prefs;
+    String? refreshToken = prefs.getString('refreshToken');
+    try {
+      isBusy = true;
+      user = await apiService.self(refreshToken: refreshToken ?? "-");
+      isBusy = false;
+      return true;
+    } catch (e) {
+      if (e.toString().contains("please reLogin")) {
+        isBusy = false;
+        Navigator.pushNamed(context, signInRoute);
+        return false;
+      } else {
+        isBusy = false;
+        return false;
+      }
+    }
+  }
+
+  Future<void> getAllUser() async {
+    isBusy = true;
+    try {
+      dynamic resp = await apiService.getAllUsers();
+      users = resp;
+    } catch (e) {
+      if (e.toString().contains("please reLogin")) {
+        isBusy = false;
+      } else {
+        isBusy = false;
+      }
+    }
   }
 }

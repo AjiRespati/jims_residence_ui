@@ -2,8 +2,8 @@
 
 import 'dart:convert';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:residenza/utils/helpers.dart';
 
 import '../../application_info.dart';
 import 'package:image_picker/image_picker.dart';
@@ -19,7 +19,7 @@ class ApiService {
     return prefs.getString('accessToken');
   }
 
-  /// AUTH ROUTES
+  /// TODO: AUTH ROUTES
   /// /register'
   /// /login',
   /// /refresh',
@@ -42,7 +42,7 @@ class ApiService {
     return false;
   }
 
-  Future<bool> logout(String refreshToken) async {
+  Future<bool> logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('accessToken');
     String? refreshToken = prefs.getString('refreshToken');
@@ -66,7 +66,11 @@ class ApiService {
     final response = await http.post(
       Uri.parse('$baseUrl/auth/register'),
       headers: {"Content-Type": "application/json"},
-      body: jsonEncode({"username": username, "password": password}),
+      body: jsonEncode({
+        "username": username,
+        "email": username,
+        "password": password,
+      }),
     );
     return response.statusCode < 400;
   }
@@ -87,16 +91,69 @@ class ApiService {
       return newAccessToken;
     } else {
       return null;
+      // throw Exception(
+      //   jsonDecode(response.body)['message'] ?? 'Internal service error',
+      // );
     }
   }
 
+  Future<dynamic> self({required String refreshToken}) async {
+    String? token = await _getToken();
+
+    final response = await http.post(
+      Uri.parse('$baseUrl/auth/self'),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
+      body: jsonEncode({"refreshToken": refreshToken}),
+    );
+
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) throw Exception("please reLogin");
+      return self(refreshToken: refreshToken);
+    } else if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
+    }
+  }
   // TODO: ROOMS ROUTES
 
+  Future<List<dynamic>> getAllUsers() async {
+    String? token = await _getToken();
+
+    final response = await http.get(
+      Uri.parse('$baseUrl/user/users'),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
+    );
+
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) throw Exception("please reLogin");
+      return fetchKosts();
+    } else if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
+    }
+  }
+
   Future<bool> createRoom({
+    required String? boardingHouseId,
     required String roomNumber,
     required String roomSize,
     required String roomStatus,
-    required double basicPrice,
+    required String priceId,
+    required String description,
   }) async {
     String? token = await _getToken();
     final response = await http.post(
@@ -106,34 +163,60 @@ class ApiService {
         "Authorization": "Bearer $token",
       },
       body: jsonEncode({
+        'boardingHouseId': boardingHouseId,
         'roomNumber': roomNumber,
         'roomSize': roomSize,
         'roomStatus': roomStatus,
-        'basicPrice': basicPrice,
+        'description': description,
+        'priceId': priceId,
       }),
     );
 
     if (response.statusCode == 401) {
       token = await refreshAccessToken();
-      if (token == null) return false;
+      if (token == null) throw Exception("please reLogin");
       return createRoom(
+        boardingHouseId: boardingHouseId,
         roomNumber: roomNumber,
         roomSize: roomSize,
         roomStatus: roomStatus,
-        basicPrice: basicPrice,
+        description: description,
+        priceId: priceId,
       );
     } else if (response.statusCode == 200) {
       return true;
     } else {
-      return false;
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
     }
   }
 
-  Future<List<dynamic>> fetchRooms() async {
+  Future<dynamic> fetchRooms({
+    required String? boardingHouseId,
+    required DateTime? dateFrom,
+    required DateTime? dateTo,
+  }) async {
     String? token = await _getToken();
+    String url = "$baseUrl/room";
+    if (boardingHouseId != null && boardingHouseId.isNotEmpty) {
+      url =
+          url.contains("?")
+              ? "$url&boardingHouseId=$boardingHouseId"
+              : "$url?boardingHouseId=$boardingHouseId";
+    }
+    if (dateFrom != null) {
+      url =
+          url.contains("?")
+              ? "$url&dateFrom=$dateFrom"
+              : "$url?dateFrom=$dateFrom";
+    }
+    if (dateTo != null) {
+      url = url.contains("?") ? "$url&dateTo=$dateTo" : "$url?dateTo=$dateTo";
+    }
 
     final response = await http.get(
-      Uri.parse('$baseUrl/room'),
+      Uri.parse(url),
       headers: {
         'Content-Type': 'application/json',
         "Authorization": "Bearer $token",
@@ -142,12 +225,18 @@ class ApiService {
 
     if (response.statusCode == 401) {
       token = await refreshAccessToken();
-      if (token == null) return [];
-      return fetchRooms();
+      if (token == null) throw Exception("please reLogin");
+      return fetchRooms(
+        boardingHouseId: boardingHouseId,
+        dateFrom: dateFrom,
+        dateTo: dateTo,
+      );
     } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      return [];
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
     }
   }
 
@@ -164,12 +253,53 @@ class ApiService {
 
     if (response.statusCode == 401) {
       token = await refreshAccessToken();
-      if (token == null) return null;
+      if (token == null) throw Exception("please reLogin");
       return fetchRoom(roomId: roomId);
     } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      return null;
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
+    }
+  }
+
+  Future<dynamic> updateRoom({
+    required String roomId,
+    required dynamic roomUpdateData,
+    required List<dynamic> additionalPrices,
+    required List<dynamic> otherCost,
+  }) async {
+    String? token = await _getToken();
+
+    final response = await http.put(
+      Uri.parse('$baseUrl/room/$roomId'),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
+      body: jsonEncode({
+        'roomUpdateData': roomUpdateData,
+        'additionalPrices': additionalPrices,
+        'otherCost': otherCost,
+      }),
+    );
+
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) throw Exception("please reLogin");
+      return updateRoom(
+        roomId: roomId,
+        roomUpdateData: roomUpdateData,
+        additionalPrices: additionalPrices,
+        otherCost: otherCost,
+      );
+    } else if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
     }
   }
 
@@ -189,12 +319,14 @@ class ApiService {
 
     if (response.statusCode == 401) {
       token = await refreshAccessToken();
-      if (token == null) return null;
+      if (token == null) throw Exception("please reLogin");
       return fetchRoom(roomId: roomId);
     } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      return null;
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
     }
   }
 
@@ -206,8 +338,15 @@ class ApiService {
     required String phone,
     required String idNumber,
     required String? idImagePath,
-    required bool isIdCopyDone,
+    required bool isNIKCopyDone,
     required String tenancyStatus,
+    required String? roomStatus,
+    required DateTime? startDate,
+    required DateTime? dueDate,
+    required DateTime? banishDate,
+    required DateTime? paymentDate,
+    required DateTime? endDate,
+    required String paymentStatus,
   }) async {
     String? token = await _getToken();
     final response = await http.post(
@@ -220,37 +359,75 @@ class ApiService {
         'roomId': roomId,
         'name': name,
         'phone': phone,
-        'idNumber': idNumber,
-        'idImagePath': idImagePath,
-        'isIdCopyDone': isIdCopyDone,
+        'NIKNumber': idNumber,
+        'startDate': startDate == null ? null : generateDateString(startDate),
+        'dueDate': dueDate == null ? null : generateDateString(dueDate),
+        'banishDate':
+            banishDate == null ? null : generateDateString(banishDate),
+        'endDate': endDate == null ? null : generateDateString(endDate),
+        'NIKImagePath': idImagePath,
+        'isNIKCopyDone': isNIKCopyDone,
         'tenancyStatus': tenancyStatus,
+        'roomStatus': roomStatus,
+        'paymentDate':
+            paymentDate == null ? null : generateDateString(paymentDate),
+        'paymentStatus': paymentStatus,
       }),
     );
 
     if (response.statusCode == 401) {
       token = await refreshAccessToken();
-      if (token == null) return false;
+      if (token == null) throw Exception("please reLogin");
       return createTenant(
         roomId: roomId,
         name: name,
         phone: phone,
         idNumber: idNumber,
         idImagePath: idImagePath,
-        isIdCopyDone: isIdCopyDone,
         tenancyStatus: tenancyStatus,
+        roomStatus: roomStatus,
+        dueDate: dueDate,
+        banishDate: banishDate,
+        endDate: endDate,
+        paymentDate: paymentDate,
+        startDate: startDate,
+        isNIKCopyDone: isNIKCopyDone,
+        paymentStatus: paymentStatus,
       );
     } else if (response.statusCode == 200) {
       return true;
     } else {
-      return false;
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
     }
   }
 
-  Future<List<dynamic>> fetchTenants() async {
+  Future<dynamic> fetchTenants({
+    required String? boardingHouseId,
+    required DateTime? dateFrom,
+    required DateTime? dateTo,
+  }) async {
     String? token = await _getToken();
+    String url = "$baseUrl/tenant";
+    if (boardingHouseId != null && boardingHouseId.isNotEmpty) {
+      url =
+          url.contains("?")
+              ? "$url&boardingHouseId=$boardingHouseId"
+              : "$url?boardingHouseId=$boardingHouseId";
+    }
+    if (dateFrom != null) {
+      url =
+          url.contains("?")
+              ? "$url&dateFrom=$dateFrom"
+              : "$url?dateFrom=$dateFrom";
+    }
+    if (dateTo != null) {
+      url = url.contains("?") ? "$url&dateTo=$dateTo" : "$url?dateTo=$dateTo";
+    }
 
     final response = await http.get(
-      Uri.parse('$baseUrl/tenant'),
+      Uri.parse(url),
       headers: {
         'Content-Type': 'application/json',
         "Authorization": "Bearer $token",
@@ -259,12 +436,170 @@ class ApiService {
 
     if (response.statusCode == 401) {
       token = await refreshAccessToken();
-      if (token == null) return [];
-      return fetchRooms();
+      if (token == null) throw Exception("please reLogin");
+      return fetchTenants(
+        boardingHouseId: boardingHouseId,
+        dateFrom: dateFrom,
+        dateTo: dateTo,
+      );
     } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      return [];
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
+    }
+  }
+
+  Future<dynamic> fetchTenant({required String id}) async {
+    String? token = await _getToken();
+
+    final response = await http.get(
+      Uri.parse('$baseUrl/tenant/$id'),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
+    );
+
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) throw Exception("please reLogin");
+      return fetchTenant(id: id);
+    } else if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
+    }
+  }
+
+  Future<dynamic> updateTenant({
+    required String tenantId,
+    required Uint8List? imageWeb,
+    required XFile? imageDevice,
+  }) async {
+    String? token = await _getToken();
+
+    var request = http.MultipartRequest(
+      "PUT",
+      Uri.parse('$baseUrl/tenant/$tenantId'),
+    );
+    request.headers['Authorization'] = "Bearer $token";
+
+    // request.fields["name"] = name;
+    // request.fields["description"] = description;
+    // request.fields["price"] = price.toString();
+    // request.fields["metricType"] = metric; // ✅ Add metric field
+
+    // ✅ Handle Web (File Picker)
+    if (kIsWeb && imageWeb != null) {
+      Uint8List imageBytes = imageWeb;
+      try {
+        request.files.add(
+          http.MultipartFile.fromBytes(
+            'image',
+            imageBytes,
+            filename: "NIK_image.png",
+            contentType: MediaType('image', 'png'),
+          ),
+        );
+      } catch (e) {
+        // Handle the error (e.g., file access issues)
+        rethrow; // Re-throw the exception
+      }
+    }
+    // ✅ Handle Mobile (Gallery & Camera)
+    else if (!kIsWeb && imageDevice != null) {
+      XFile imageFile = XFile(imageDevice.path);
+      try {
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            'image',
+            imageFile.path,
+            contentType: MediaType('image', 'png'),
+          ),
+        );
+      } catch (e) {
+        // Handle the error (e.g., file access issues)
+        rethrow; // Re-throw the exception
+      }
+    }
+
+    // var response = await request.send();
+
+    // --- Send the Request ---
+    try {
+      var streamedResponse = await request.send();
+
+      // --- Process the Response ---
+      // Convert the streamed response to a standard HTTP response
+      var response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 401) {
+        token = await refreshAccessToken();
+        if (token == null) throw Exception("please reLogin");
+        return updateTenant(
+          tenantId: tenantId,
+          imageWeb: imageWeb,
+          imageDevice: imageDevice,
+        );
+      } else if (response.statusCode == 200) {
+        // ✅ Success: You can parse the response body if your backend returns data
+        final responseData = json.decode(response.body);
+        return responseData; // Return the data if needed
+      } else {
+        // ❌ Failure: Handle different error status codes (400, 404, 500, etc.)
+        // Throw an exception to indicate failure
+        throw Exception(
+          'Failed to update tenant. Status: ${response.statusCode}. Body: ${response.body}',
+        );
+      }
+    } catch (e) {
+      // ❌ Network or Request Error
+      // Throw an exception
+      throw Exception('Error updating tenant: $e');
+    }
+  }
+
+  // ✅ Pick Image for Mobile (Gallery & Camera)
+  Future<XFile?> pickImageMobile(ImageSource source) async {
+    final ImagePicker picker = ImagePicker();
+    return await picker.pickImage(source: source);
+  }
+
+  // ✅ Pick Image for Web
+  Future<Uint8List?> pickImageWeb() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+    );
+    if (result != null) {
+      return result.files.first.bytes;
+    }
+    return null;
+  }
+
+  Future<bool> deleteTenant({required String id}) async {
+    String? token = await _getToken();
+    final response = await http.delete(
+      Uri.parse('$baseUrl/tenant/$id'),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
+    );
+
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) throw Exception("please reLogin");
+      return deleteTenant(id: id);
+    } else if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
     }
   }
 
@@ -293,7 +628,7 @@ class ApiService {
 
     if (response.statusCode == 401) {
       token = await refreshAccessToken();
-      if (token == null) return false;
+      if (token == null) throw Exception("please reLogin");
       return createAdditionalPrice(
         roomId: roomId,
         name: name,
@@ -303,186 +638,52 @@ class ApiService {
     } else if (response.statusCode == 200) {
       return true;
     } else {
-      return false;
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
     }
   }
 
-  // TODO: PRODUCTS ROUTES
+  // TODO: BOARDING HOUSE ROUTES
   /// GET /
   /// POST /
-  Future<dynamic> fetchProduct(String productId) async {
-    String? token = await _getToken();
 
-    final response = await http.get(
-      Uri.parse('$baseUrl/products/$productId'),
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": "Bearer $token",
-      },
-    );
-
-    if (response.statusCode == 401) {
-      token = await refreshAccessToken();
-      if (token == null) return null;
-      return fetchProduct(productId);
-    } else if (response.statusCode == 200) {
-      return jsonDecode(response.body);
-    } else {
-      return null;
-    }
-  }
-
-  Future<List<dynamic>> fetchProducts() async {
-    String? token = await _getToken();
-
-    final response = await http.get(
-      Uri.parse('$baseUrl/products'),
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": "Bearer $token",
-      },
-    );
-
-    if (response.statusCode == 401) {
-      token = await refreshAccessToken();
-      if (token == null) return [];
-      return fetchProducts();
-    } else if (response.statusCode == 200) {
-      return jsonDecode(response.body);
-    } else {
-      return [];
-    }
-  }
-
-  // ✅ Create Product API with Image Upload
-  Future<bool> createProduct(
-    String name,
-    String description,
-    String metric,
-    double price,
-    Uint8List? imageWeb,
-    XFile? imageDevice,
-  ) async {
-    String? token = await _getToken();
-    var request = http.MultipartRequest("POST", Uri.parse('$baseUrl/products'));
-    request.headers['Authorization'] = "Bearer $token";
-    request.fields["name"] = name;
-    request.fields["description"] = description;
-
-    //TODO: ambil dari user JWT
-    request.fields["updateBy"] = "ambil dari user";
-    request.fields["price"] = price.toString();
-    request.fields["metricType"] = metric; // ✅ Add metric field
-
-    // ✅ Handle Web (File Picker)
-    if (kIsWeb && imageWeb != null) {
-      Uint8List imageBytes = imageWeb;
-      request.files.add(
-        http.MultipartFile.fromBytes(
-          'image',
-          imageBytes,
-          filename: "product_image.png",
-          contentType: MediaType('image', 'png'),
-        ),
-      );
-    }
-    // ✅ Handle Mobile (Gallery & Camera)
-    else if (!kIsWeb && imageDevice != null) {
-      XFile imageFile = XFile(imageDevice.path);
-      request.files.add(
-        await http.MultipartFile.fromPath(
-          'image',
-          imageFile.path,
-          contentType: MediaType('image', 'png'),
-        ),
-      );
-    }
-
-    var response = await request.send();
-    return response.statusCode == 200;
-  }
-
-  // ✅ Pick Image for Mobile (Gallery & Camera)
-  Future<XFile?> pickImageMobile(ImageSource source) async {
-    final ImagePicker picker = ImagePicker();
-    return await picker.pickImage(source: source);
-  }
-
-  // ✅ Pick Image for Web
-  Future<Uint8List?> pickImageWeb() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.image,
-    );
-    if (result != null) {
-      return result.files.first.bytes;
-    }
-    return null;
-  }
-
-  Future<Map<String, dynamic>> fetchCommissionSummary({
-    required BuildContext context,
+  Future<bool> createKost({
+    required String name,
+    required String address,
+    required String description,
   }) async {
     String? token = await _getToken();
-    final response = await http.get(
-      Uri.parse('$baseUrl/dashboard/commissionSummary'),
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": "Bearer $token",
-      },
-    );
-    if (response.statusCode == 200) {
-      return json.decode(response.body);
-    } else {
-      if (response.body.contains("Invalid token")) {
-        return json.decode(response.body);
-      } else {
-        throw Exception('Failed to fetch commission data');
-      }
-    }
-  }
-
-  // TODO: METRIC ROUTES
-  /// GET /
-  /// POST /
-  ///
-  Future<bool> createMetric(
-    BuildContext context,
-    String productId,
-    String metricType,
-    double price,
-  ) async {
-    String? token = await _getToken();
     final response = await http.post(
-      Uri.parse('$baseUrl/metrics'),
+      Uri.parse('$baseUrl/boardingHouse'),
       headers: {
         'Content-Type': 'application/json',
         "Authorization": "Bearer $token",
       },
       body: jsonEncode({
-        'productId': productId,
-        'metricType': metricType,
-        'price': price,
+        'name': name,
+        'address': address,
+        'description': description,
       }),
     );
-
-    if (response.statusCode == 200) {
-      fetchProduct(productId);
-      Navigator.pop(context);
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) throw Exception("please reLogin");
+      return createKost(name: name, address: address, description: description);
+    } else if (response.statusCode == 200) {
       return true;
     } else {
-      return false;
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
     }
   }
 
-  // TODO: STOCKS ROUTES
-  /// GET /
-  /// POST /
-
-  Future<dynamic> fetchStockByProduct(String productId) async {
+  Future<List<dynamic>> fetchKosts() async {
     String? token = await _getToken();
 
     final response = await http.get(
-      Uri.parse('$baseUrl/stocks/product/$productId'),
+      Uri.parse('$baseUrl/boardingHouse'),
       headers: {
         'Content-Type': 'application/json',
         "Authorization": "Bearer $token",
@@ -491,246 +692,321 @@ class ApiService {
 
     if (response.statusCode == 401) {
       token = await refreshAccessToken();
-      if (token == null) return null;
-      return fetchStockByProduct(productId);
+      if (token == null) throw Exception("please reLogin");
+      return fetchKosts();
     } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      return null;
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
     }
   }
 
-  // controller parameters:
-  // metricId, stockEvent, amount, createdBy,
-  // salesId, subAgentId, agentId, shopId, status, description
-  Future<bool> createStock({
-    required BuildContext context,
-    required String? metricId,
-    required String stockEvent,
-    required int amount,
-    required String? salesId,
-    required String? subAgentId,
-    required String? agentId,
-    required String? shopId,
-    required String status,
+  // TODO: PRICE ROUTES
+
+  Future<bool> createPrice({
+    required String? roomSize,
+    required String? boardingHouseId,
+    required String name,
+    required double amount,
     required String? description,
   }) async {
     String? token = await _getToken();
     final response = await http.post(
-      Uri.parse('$baseUrl/stocks'),
+      Uri.parse('$baseUrl/price'),
       headers: {
         'Content-Type': 'application/json',
         "Authorization": "Bearer $token",
       },
       body: jsonEncode({
-        'metricId': metricId,
-        'stockEvent': stockEvent,
+        'boardingHouseId': boardingHouseId,
+        'roomSize': roomSize,
+        'name': name,
         'amount': amount,
-        'salesId': salesId,
-        'subAgentId': subAgentId,
-        'agentId': agentId,
-        'status': status,
         'description': description,
       }),
     );
 
-    if (response.statusCode == 200) {
-      Navigator.pop(context);
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) throw Exception("please reLogin");
+      return createPrice(
+        boardingHouseId: boardingHouseId,
+        name: name,
+        amount: amount,
+        roomSize: roomSize,
+        description: description,
+      );
+    } else if (response.statusCode == 200) {
       return true;
     } else {
-      return false;
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
     }
   }
 
-  /// Date String yyyy-mm-dd, 2025-03-01
-  Future<List<dynamic>> getStockTable({
-    required String fromDate,
-    required String toDate,
-  }) async {
+  Future<dynamic> fetchPrices() async {
     String? token = await _getToken();
 
     final response = await http.get(
-      Uri.parse('$baseUrl/stocks/table?fromDate=$fromDate&toDate=$toDate'),
+      Uri.parse('$baseUrl/price'),
       headers: {
         'Content-Type': 'application/json',
         "Authorization": "Bearer $token",
       },
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) throw Exception("please reLogin");
+      return fetchPrices();
+    } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      return [];
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
     }
   }
 
-  /// Date String yyyy-mm-dd, 2025-03-01
-  Future<List<dynamic>> getStockHistoryTable({
-    required String fromDate,
-    required String toDate,
-    required String metricId,
-  }) async {
+  Future<dynamic> fetchPrice({required String id}) async {
     String? token = await _getToken();
 
     final response = await http.get(
-      Uri.parse(
-        '$baseUrl/stocks/history?metricId=$metricId&fromDate=$fromDate&toDate=$toDate',
-      ),
+      Uri.parse('$baseUrl/price/$id'),
       headers: {
         'Content-Type': 'application/json',
         "Authorization": "Bearer $token",
       },
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) throw Exception("please reLogin");
+      return fetchPrice(id: id);
+    } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      return [];
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
     }
   }
 
-  // TODO: CLIENTS ROUTES
-  /// GET /
-  /// POST /
-
-  Future<bool> createSalesman({
-    required String name,
-    required String address,
-    required String phone,
-    required String email,
+  Future<dynamic> updatePrice({
+    required String id,
+    required dynamic updateItems,
   }) async {
     String? token = await _getToken();
+    final response = await http.put(
+      Uri.parse('$baseUrl/price/$id'),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
+      body: jsonEncode(updateItems),
+    );
 
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) throw Exception("please reLogin");
+      return updatePrice(id: id, updateItems: updateItems);
+    } else if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
+    }
+  }
+
+  Future<bool> deletePrice({required String id}) async {
+    String? token = await _getToken();
+    final response = await http.delete(
+      Uri.parse('$baseUrl/price/$id'),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
+    );
+
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) throw Exception("please reLogin");
+      return deletePrice(id: id);
+    } else if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
+    }
+  }
+
+  //TODO: TRANSACTION AND INVOICE ROUTE
+
+  Future<dynamic> getAllInvoices({
+    required String? boardingHouseId,
+    required DateTime? dateFrom,
+    required DateTime? dateTo,
+  }) async {
+    String? token = await _getToken();
+    String url = "$baseUrl/invoice";
+    if (boardingHouseId != null && boardingHouseId.isNotEmpty) {
+      url =
+          url.contains("?")
+              ? "$url&boardingHouseId=$boardingHouseId"
+              : "$url?boardingHouseId=$boardingHouseId";
+    }
+    if (dateFrom != null) {
+      url =
+          url.contains("?")
+              ? "$url&dateFrom=$dateFrom"
+              : "$url?dateFrom=$dateFrom";
+    }
+    if (dateTo != null) {
+      url = url.contains("?") ? "$url&dateTo=$dateTo" : "$url?dateTo=$dateTo";
+    }
+
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
+    );
+
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) throw Exception("please reLogin");
+      return getAllInvoices(
+        boardingHouseId: boardingHouseId,
+        dateFrom: dateFrom,
+        dateTo: dateTo,
+      );
+    } else if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
+    }
+  }
+
+  Future<dynamic> getInvoice({required String id}) async {
+    String? token = await _getToken();
+
+    final response = await http.get(
+      Uri.parse('$baseUrl/invoice/$id'),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
+    );
+
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) throw Exception("please reLogin");
+      return fetchPrice(id: id);
+    } else if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
+    }
+  }
+
+  Future<bool> recordTransaction({
+    required String invoiceId,
+    required DateTime transactionDate,
+    // method is one of: 'Cash', 'Bank Transfer', 'Online Payment', 'Other'
+    required String method,
+    required double amount,
+    required String? description,
+  }) async {
+    String? token = await _getToken();
     final response = await http.post(
-      Uri.parse('$baseUrl/salesmen'),
+      Uri.parse('$baseUrl/transaction'),
       headers: {
         'Content-Type': 'application/json',
         "Authorization": "Bearer $token",
       },
       body: jsonEncode({
-        'name': name,
-        'address': address,
-        'phone': phone,
-        'email': email,
+        'invoiceId': invoiceId,
+        'transactionDate': generateDateString(transactionDate),
+        'method': method,
+        'amount': amount,
+        'description': description,
       }),
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) throw Exception("please reLogin");
+      return await recordTransaction(
+        invoiceId: invoiceId,
+        transactionDate: transactionDate,
+        amount: amount,
+        method: method,
+        description: description,
+      );
+    } else if (response.statusCode == 200) {
       return true;
     } else {
-      return false;
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
     }
   }
 
-  Future<List<dynamic>> getSalesmen() async {
+  Future<dynamic> getAllTransacations() async {
     String? token = await _getToken();
 
     final response = await http.get(
-      Uri.parse('$baseUrl/salesmen'),
+      Uri.parse('$baseUrl/transaction'),
       headers: {
         'Content-Type': 'application/json',
         "Authorization": "Bearer $token",
       },
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) throw Exception("please reLogin");
+      return getAllTransacations();
+    } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      return [];
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
     }
   }
 
-  Future<bool> createSubAgent({
-    required String name,
-    required String address,
-    required String phone,
-    required String email,
-  }) async {
-    String? token = await _getToken();
-
-    final response = await http.post(
-      Uri.parse('$baseUrl/subagents'),
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": "Bearer $token",
-      },
-      body: jsonEncode({
-        'name': name,
-        'address': address,
-        'phone': phone,
-        'email': email,
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  Future<List<dynamic>> getSubAgents() async {
+  Future<dynamic> getTransaction({required String id}) async {
     String? token = await _getToken();
 
     final response = await http.get(
-      Uri.parse('$baseUrl/subagents'),
+      Uri.parse('$baseUrl/transaction/$id'),
       headers: {
         'Content-Type': 'application/json',
         "Authorization": "Bearer $token",
       },
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) throw Exception("please reLogin");
+      return fetchPrice(id: id);
+    } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      return [];
-    }
-  }
-
-  Future<bool> createAgent({
-    required String name,
-    required String address,
-    required String phone,
-    required String email,
-  }) async {
-    String? token = await _getToken();
-
-    final response = await http.post(
-      Uri.parse('$baseUrl/agents'),
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": "Bearer $token",
-      },
-      body: jsonEncode({
-        'name': name,
-        'address': address,
-        'phone': phone,
-        'email': email,
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  Future<List<dynamic>> getAgents() async {
-    String? token = await _getToken();
-
-    final response = await http.get(
-      Uri.parse('$baseUrl/agents'),
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": "Bearer $token",
-      },
-    );
-
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body);
-    } else {
-      return [];
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
     }
   }
 }

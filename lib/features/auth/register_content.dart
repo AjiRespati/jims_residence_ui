@@ -1,13 +1,13 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:frontend/application_info.dart';
-import 'package:frontend/features/auth/components/confirm_password.dart';
-import 'package:frontend/features/auth/components/email_register.dart';
-import 'package:frontend/features/auth/components/login_password.dart';
-import 'package:frontend/features/auth/components/login_title.dart';
-import 'package:frontend/features/auth/components/register_button.dart';
-import 'package:frontend/view_models/system_view_model.dart';
+import 'package:residenza/application_info.dart';
+import 'package:residenza/features/auth/components/confirm_password.dart';
+import 'package:residenza/features/auth/components/email_register.dart';
+import 'package:residenza/features/auth/components/login_password.dart';
+import 'package:residenza/features/auth/components/login_title.dart';
+import 'package:residenza/features/auth/components/register_button.dart';
+import 'package:residenza/view_models/system_view_model.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
 class RegisterContent extends StatelessWidget with GetItMixin {

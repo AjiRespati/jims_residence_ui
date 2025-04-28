@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/features/room/room_desktop.dart';
-import 'package:frontend/features/room/room_mobile.dart';
-import 'package:frontend/utils/responsive_layout.dart';
-import 'package:frontend/view_models/room_view_model.dart';
+import 'package:residenza/features/room/room_desktop.dart';
+import 'package:residenza/features/room/room_mobile.dart';
+import 'package:residenza/utils/responsive_layout.dart';
+import 'package:residenza/view_models/room_view_model.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
 class RoomView extends StatefulWidget with GetItStatefulWidgetMixin {
-  RoomView({super.key});
+  RoomView({required this.isSetting, super.key});
+  final bool isSetting;
 
   @override
   State<RoomView> createState() => _RoomViewState();
@@ -17,7 +18,12 @@ class _RoomViewState extends State<RoomView> with GetItStateMixin {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      get<RoomViewModel>().fetchRooms(isAfterEvent: false);
+      get<RoomViewModel>().fetchRooms(
+        boardingHouseId: get<RoomViewModel>().roomKostId,
+        dateFrom: null,
+        dateTo: null,
+      );
+      get<RoomViewModel>().fetchKosts();
     });
   }
 
@@ -25,7 +31,7 @@ class _RoomViewState extends State<RoomView> with GetItStateMixin {
   Widget build(BuildContext context) {
     return ResponsiveLayout(
       desktopLayout: RoomDesktop(),
-      mobileLayout: RoomMobile(),
+      mobileLayout: RoomMobile(isSetting: widget.isSetting),
     );
   }
 }
