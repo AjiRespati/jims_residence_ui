@@ -4,6 +4,7 @@ import 'package:residenza/utils/helpers.dart';
 import 'package:residenza/view_models/room_view_model.dart';
 import 'package:residenza/widgets/mobile_navbar.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
+import 'package:residenza/widgets/month_selector_dropdown.dart';
 
 class PaymentsMobile extends StatefulWidget with GetItStatefulWidgetMixin {
   PaymentsMobile({super.key});
@@ -13,6 +14,10 @@ class PaymentsMobile extends StatefulWidget with GetItStatefulWidgetMixin {
 }
 
 class _PaymentsMobileState extends State<PaymentsMobile> with GetItStateMixin {
+  String? _boardingHouseId;
+  DateTime? _dateFrom;
+  DateTime? _dateTo;
+
   @override
   void initState() {
     super.initState();
@@ -29,8 +34,32 @@ class _PaymentsMobileState extends State<PaymentsMobile> with GetItStateMixin {
           SizedBox(
             child: Column(
               children: [
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text("Periode: "),
+                    SizedBox(width: 10),
+                    MonthSelectorDropdown(
+                      onMonthSelected: (
+                        DateTime dateFrom,
+                        DateTime dateTo,
+                      ) async {
+                        print('Selected range: $dateFrom -> $dateTo');
+                        _dateFrom = dateFrom;
+                        _dateTo = dateTo;
+                        await get<RoomViewModel>().fetchInvoices(
+                          boardingHouseId: _boardingHouseId,
+                          dateFrom: _dateFrom,
+                          dateTo: _dateTo,
+                        );
+                      },
+                    ),
+                    SizedBox(width: 20),
+                  ],
+                ),
                 Padding(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: DropdownButtonFormField<String>(
                     decoration: InputDecoration(labelText: "Pilih Kost"),
                     value: get<RoomViewModel>().roomKostName,
@@ -51,6 +80,8 @@ class _PaymentsMobileState extends State<PaymentsMobile> with GetItStateMixin {
                       get<RoomViewModel>().roomKostId = item['id'];
                       await get<RoomViewModel>().fetchInvoices(
                         boardingHouseId: item['id'],
+                        dateFrom: _dateFrom,
+                        dateTo: _dateTo,
                       );
                     },
                   ),
@@ -58,6 +89,8 @@ class _PaymentsMobileState extends State<PaymentsMobile> with GetItStateMixin {
               ],
             ),
           ),
+          SizedBox(height: 6),
+          Divider(),
           Expanded(
             child: ListView.builder(
               itemCount: get<RoomViewModel>().invoices.length,

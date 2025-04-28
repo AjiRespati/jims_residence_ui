@@ -19,7 +19,7 @@ class ApiService {
     return prefs.getString('accessToken');
   }
 
-  /// AUTH ROUTES
+  /// TODO: AUTH ROUTES
   /// /register'
   /// /login',
   /// /refresh',
@@ -140,11 +140,27 @@ class ApiService {
     }
   }
 
-  Future<dynamic> fetchRooms({required String? boardingHouseId}) async {
+  Future<dynamic> fetchRooms({
+    required String? boardingHouseId,
+    required DateTime? dateFrom,
+    required DateTime? dateTo,
+  }) async {
     String? token = await _getToken();
     String url = "$baseUrl/room";
     if (boardingHouseId != null && boardingHouseId.isNotEmpty) {
-      url = "$url?boardingHouseId=$boardingHouseId";
+      url =
+          url.contains("?")
+              ? "$url&boardingHouseId=$boardingHouseId"
+              : "$url?boardingHouseId=$boardingHouseId";
+    }
+    if (dateFrom != null) {
+      url =
+          url.contains("?")
+              ? "$url&dateFrom=$dateFrom"
+              : "$url?dateFrom=$dateFrom";
+    }
+    if (dateTo != null) {
+      url = url.contains("?") ? "$url&dateTo=$dateTo" : "$url?dateTo=$dateTo";
     }
 
     final response = await http.get(
@@ -158,7 +174,11 @@ class ApiService {
     if (response.statusCode == 401) {
       token = await refreshAccessToken();
       if (token == null) throw Exception("please reLogin");
-      return fetchRooms(boardingHouseId: boardingHouseId);
+      return fetchRooms(
+        boardingHouseId: boardingHouseId,
+        dateFrom: dateFrom,
+        dateTo: dateTo,
+      );
     } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
@@ -331,11 +351,27 @@ class ApiService {
     }
   }
 
-  Future<dynamic> fetchTenants({required String? boardingHouseId}) async {
+  Future<dynamic> fetchTenants({
+    required String? boardingHouseId,
+    required DateTime? dateFrom,
+    required DateTime? dateTo,
+  }) async {
     String? token = await _getToken();
     String url = "$baseUrl/tenant";
     if (boardingHouseId != null && boardingHouseId.isNotEmpty) {
-      url = "$url?boardingHouseId=$boardingHouseId";
+      url =
+          url.contains("?")
+              ? "$url&boardingHouseId=$boardingHouseId"
+              : "$url?boardingHouseId=$boardingHouseId";
+    }
+    if (dateFrom != null) {
+      url =
+          url.contains("?")
+              ? "$url&dateFrom=$dateFrom"
+              : "$url?dateFrom=$dateFrom";
+    }
+    if (dateTo != null) {
+      url = url.contains("?") ? "$url&dateTo=$dateTo" : "$url?dateTo=$dateTo";
     }
 
     final response = await http.get(
@@ -349,7 +385,11 @@ class ApiService {
     if (response.statusCode == 401) {
       token = await refreshAccessToken();
       if (token == null) throw Exception("please reLogin");
-      return fetchTenants(boardingHouseId: boardingHouseId);
+      return fetchTenants(
+        boardingHouseId: boardingHouseId,
+        dateFrom: dateFrom,
+        dateTo: dateTo,
+      );
     } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
@@ -755,11 +795,27 @@ class ApiService {
 
   //TODO: TRANSACTION AND INVOICE ROUTE
 
-  Future<dynamic> getAllInvoices({required String? boardingHouseId}) async {
+  Future<dynamic> getAllInvoices({
+    required String? boardingHouseId,
+    required DateTime? dateFrom,
+    required DateTime? dateTo,
+  }) async {
     String? token = await _getToken();
     String url = "$baseUrl/invoice";
     if (boardingHouseId != null && boardingHouseId.isNotEmpty) {
-      url = "$url?boardingHouseId=$boardingHouseId";
+      url =
+          url.contains("?")
+              ? "$url&boardingHouseId=$boardingHouseId"
+              : "$url?boardingHouseId=$boardingHouseId";
+    }
+    if (dateFrom != null) {
+      url =
+          url.contains("?")
+              ? "$url&dateFrom=$dateFrom"
+              : "$url?dateFrom=$dateFrom";
+    }
+    if (dateTo != null) {
+      url = url.contains("?") ? "$url&dateTo=$dateTo" : "$url?dateTo=$dateTo";
     }
 
     final response = await http.get(
@@ -773,7 +829,11 @@ class ApiService {
     if (response.statusCode == 401) {
       token = await refreshAccessToken();
       if (token == null) throw Exception("please reLogin");
-      return getAllInvoices(boardingHouseId: boardingHouseId);
+      return getAllInvoices(
+        boardingHouseId: boardingHouseId,
+        dateFrom: dateFrom,
+        dateTo: dateTo,
+      );
     } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {

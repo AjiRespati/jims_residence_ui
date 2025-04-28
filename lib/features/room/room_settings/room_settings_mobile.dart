@@ -321,6 +321,8 @@ class _RoomSettingsMobileState extends State<RoomSettingsMobile>
                               await get<RoomViewModel>().fetchRooms(
                                 boardingHouseId:
                                     get<RoomViewModel>().roomKostId,
+                                dateFrom: null,
+                                dateTo: null,
                               );
                               Navigator.pop(context);
                             },

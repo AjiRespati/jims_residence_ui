@@ -75,8 +75,9 @@ String formatCurrency(num number) {
 }
 
 String generateDateString(DateTime time) {
-  final formatter = DateFormat('yyyy-MM-dd');
-  return formatter.format(time);
+  return time.toIso8601String();
+  // final formatter = DateFormat('yyyy-MM-dd');
+  // return formatter.format(time);
 }
 
 Future<DateTime?> showCustomDatePicker({

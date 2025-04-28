@@ -88,6 +88,8 @@ class _RoomMobileState extends State<RoomMobile> with GetItStateMixin {
                       get<RoomViewModel>().roomKostId = item['id'];
                       get<RoomViewModel>().fetchRooms(
                         boardingHouseId: item['id'],
+                        dateFrom: null,
+                        dateTo: null,
                       );
                     },
                   ),

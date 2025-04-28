@@ -564,10 +564,16 @@ class RoomViewModel extends ChangeNotifier {
     }
   }
 
-  Future<bool> fetchTenants({required String? boardingHouseId}) async {
+  Future<bool> fetchTenants({
+    required String? boardingHouseId,
+    required DateTime? dateFrom,
+    required DateTime? dateTo,
+  }) async {
     isBusy = true;
     dynamic resp = await apiService.fetchTenants(
       boardingHouseId: boardingHouseId,
+      dateFrom: dateFrom,
+      dateTo: dateTo,
     );
     tenants = resp['data'];
     isBusy = false;
@@ -673,7 +679,11 @@ class RoomViewModel extends ChangeNotifier {
         priceId: selectedRoomSize['id'],
       );
 
-      await fetchRooms(boardingHouseId: roomKostId);
+      await fetchRooms(
+        boardingHouseId: roomKostId,
+        dateFrom: null,
+        dateTo: null,
+      );
 
       roomKostId = null;
       roomKostName = null;
@@ -697,10 +707,18 @@ class RoomViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchRooms({required String? boardingHouseId}) async {
+  Future<void> fetchRooms({
+    required String? boardingHouseId,
+    required DateTime? dateFrom,
+    required DateTime? dateTo,
+  }) async {
     try {
       isBusy = true;
-      var resp = await apiService.fetchRooms(boardingHouseId: boardingHouseId);
+      var resp = await apiService.fetchRooms(
+        boardingHouseId: boardingHouseId,
+        dateFrom: dateFrom,
+        dateTo: dateTo,
+      );
       rooms = resp['data'];
     } catch (e) {
       if (e.toString().contains("please reLogin")) {
@@ -816,11 +834,17 @@ class RoomViewModel extends ChangeNotifier {
 
   // TODO:  TRANSACTION AND INVOICE
 
-  Future<void> fetchInvoices({required String? boardingHouseId}) async {
+  Future<void> fetchInvoices({
+    required String? boardingHouseId,
+    required DateTime? dateFrom,
+    required DateTime? dateTo,
+  }) async {
     isBusy = true;
     try {
       var resp = await apiService.getAllInvoices(
         boardingHouseId: boardingHouseId,
+        dateFrom: dateFrom,
+        dateTo: dateTo,
       );
       invoices = resp['data'];
     } catch (e) {

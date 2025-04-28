@@ -87,6 +87,8 @@ class _TenantMobileState extends State<TenantMobile> with GetItStateMixin {
                       get<RoomViewModel>().roomKostId = item['id'];
                       get<RoomViewModel>().fetchTenants(
                         boardingHouseId: item['id'],
+                        dateFrom: null,
+                        dateTo: null,
                       );
                     },
                   ),
