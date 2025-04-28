@@ -45,7 +45,6 @@ class _PaymentsMobileState extends State<PaymentsMobile> with GetItStateMixin {
                         DateTime dateFrom,
                         DateTime dateTo,
                       ) async {
-                        print('Selected range: $dateFrom -> $dateTo');
                         _dateFrom = dateFrom;
                         _dateTo = dateTo;
                         await get<RoomViewModel>().fetchInvoices(
@@ -78,6 +77,7 @@ class _PaymentsMobileState extends State<PaymentsMobile> with GetItStateMixin {
                               .toList()
                               .first;
                       get<RoomViewModel>().roomKostId = item['id'];
+                      _boardingHouseId = item['id'];
                       await get<RoomViewModel>().fetchInvoices(
                         boardingHouseId: item['id'],
                         dateFrom: _dateFrom,

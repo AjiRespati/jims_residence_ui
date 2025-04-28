@@ -9,6 +9,7 @@ import 'package:residenza/view_models/room_view_model.dart';
 import 'package:residenza/widgets/buttons/add_button.dart';
 import 'package:residenza/widgets/mobile_navbar.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
+import 'package:residenza/widgets/month_selector_dropdown.dart';
 
 class TenantMobile extends StatefulWidget with GetItStatefulWidgetMixin {
   TenantMobile({super.key});
@@ -18,6 +19,10 @@ class TenantMobile extends StatefulWidget with GetItStatefulWidgetMixin {
 }
 
 class _TenantMobileState extends State<TenantMobile> with GetItStateMixin {
+  String? _boardingHouseId;
+  DateTime? _dateFrom;
+  DateTime? _dateTo;
+
   @override
   Widget build(BuildContext context) {
     final tenants = watchOnly((RoomViewModel x) => x.tenants);
@@ -33,40 +38,37 @@ class _TenantMobileState extends State<TenantMobile> with GetItStateMixin {
           "Penghuni",
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
         ),
-        // actions: [
-        //   Text("Tambah Tenant"),
-        //   SizedBox(width: 8),
-        //   AddButton(
-        //     size: 30,
-        //     message: "Tambah Tenant",
-        //     onPressed: () {
-        //       showModalBottomSheet(
-        //         isScrollControlled: true,
-        //         constraints: BoxConstraints(minHeight: 440, maxHeight: 450),
-        //         context: context,
-        //         builder: (context) {
-        //           return Padding(
-        //             padding: EdgeInsets.only(
-        //               bottom: MediaQuery.of(context).viewInsets.bottom,
-        //             ),
-        //             child: SingleChildScrollView(
-        //               child: SizedBox(width: 600, child: AddTenant()),
-        //             ),
-        //           );
-        //         },
-        //       );
-        //     },
-        //   ),
-        //   SizedBox(width: 20),
-        // ],
       ),
       body: Column(
         children: [
           SizedBox(
             child: Column(
               children: [
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text("Periode: "),
+                    SizedBox(width: 10),
+                    MonthSelectorDropdown(
+                      onMonthSelected: (
+                        DateTime dateFrom,
+                        DateTime dateTo,
+                      ) async {
+                        _dateFrom = dateFrom;
+                        _dateTo = dateTo;
+                        get<RoomViewModel>().fetchTenants(
+                          boardingHouseId: _boardingHouseId,
+                          dateFrom: _dateFrom,
+                          dateTo: _dateTo,
+                        );
+                      },
+                    ),
+                    SizedBox(width: 20),
+                  ],
+                ),
                 Padding(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: DropdownButtonFormField<String>(
                     decoration: InputDecoration(labelText: "Pilih Kost"),
                     value: get<RoomViewModel>().roomKostName,
@@ -85,10 +87,11 @@ class _TenantMobileState extends State<TenantMobile> with GetItStateMixin {
                               .toList()
                               .first;
                       get<RoomViewModel>().roomKostId = item['id'];
+                      _boardingHouseId = item['id'];
                       get<RoomViewModel>().fetchTenants(
                         boardingHouseId: item['id'],
-                        dateFrom: null,
-                        dateTo: null,
+                        dateFrom: _dateFrom,
+                        dateTo: _dateTo,
                       );
                     },
                   ),
@@ -96,6 +99,8 @@ class _TenantMobileState extends State<TenantMobile> with GetItStateMixin {
               ],
             ),
           ),
+          SizedBox(height: 6),
+          Divider(),
           get<RoomViewModel>().tenants.isEmpty
               ? Center(child: Text("No tenants found"))
               : Expanded(
@@ -109,15 +114,6 @@ class _TenantMobileState extends State<TenantMobile> with GetItStateMixin {
               ),
         ],
       ),
-      // get<RoomViewModel>().tenants.isEmpty
-      //     ? Center(child: Text("No tenants found"))
-      //     : ListView.builder(
-      //       itemCount: tenants.length,
-      //       itemBuilder: (context, idx) {
-      //         final item = tenants[idx];
-      //         return TenantCard(item: item);
-      //       },
-      //     ),
       bottomNavigationBar: MobileNavbar(selectedindex: 2),
     );
   }

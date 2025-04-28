@@ -9,6 +9,7 @@ import 'package:residenza/widgets/buttons/add_button.dart';
 
 import 'package:residenza/widgets/mobile_navbar.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
+import 'package:residenza/widgets/month_selector_dropdown.dart';
 
 class RoomMobile extends StatefulWidget with GetItStatefulWidgetMixin {
   RoomMobile({required this.isSetting, super.key});
@@ -19,6 +20,10 @@ class RoomMobile extends StatefulWidget with GetItStatefulWidgetMixin {
 }
 
 class _RoomMobileState extends State<RoomMobile> with GetItStateMixin {
+  String? _boardingHouseId;
+  DateTime? _dateFrom;
+  DateTime? _dateTo;
+
   @override
   Widget build(BuildContext context) {
     watchOnly((RoomViewModel x) => x.rooms);
@@ -66,8 +71,31 @@ class _RoomMobileState extends State<RoomMobile> with GetItStateMixin {
           SizedBox(
             child: Column(
               children: [
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text("Periode: "),
+                    SizedBox(width: 10),
+                    MonthSelectorDropdown(
+                      onMonthSelected: (
+                        DateTime dateFrom,
+                        DateTime dateTo,
+                      ) async {
+                        _dateFrom = dateFrom;
+                        _dateTo = dateTo;
+                        get<RoomViewModel>().fetchRooms(
+                          boardingHouseId: _boardingHouseId,
+                          dateFrom: _dateFrom,
+                          dateTo: _dateTo,
+                        );
+                      },
+                    ),
+                    SizedBox(width: 20),
+                  ],
+                ),
                 Padding(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: DropdownButtonFormField<String>(
                     decoration: InputDecoration(labelText: "Pilih Kost"),
                     value: get<RoomViewModel>().roomKostName,
@@ -86,10 +114,11 @@ class _RoomMobileState extends State<RoomMobile> with GetItStateMixin {
                               .toList()
                               .first;
                       get<RoomViewModel>().roomKostId = item['id'];
+                      _boardingHouseId = item['id'];
                       get<RoomViewModel>().fetchRooms(
                         boardingHouseId: item['id'],
-                        dateFrom: null,
-                        dateTo: null,
+                        dateFrom: _dateFrom,
+                        dateTo: _dateTo,
                       );
                     },
                   ),
@@ -97,6 +126,8 @@ class _RoomMobileState extends State<RoomMobile> with GetItStateMixin {
               ],
             ),
           ),
+          SizedBox(height: 6),
+          Divider(),
           Expanded(
             child: ListView.builder(
               itemCount: get<RoomViewModel>().rooms.length,
