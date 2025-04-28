@@ -140,11 +140,15 @@ class ApiService {
     }
   }
 
-  Future<dynamic> fetchRooms() async {
+  Future<dynamic> fetchRooms({required String? boardingHouseId}) async {
     String? token = await _getToken();
+    String url = "$baseUrl/room";
+    if (boardingHouseId != null && boardingHouseId.isNotEmpty) {
+      url = "$url?boardingHouseId=$boardingHouseId";
+    }
 
     final response = await http.get(
-      Uri.parse('$baseUrl/room'),
+      Uri.parse(url),
       headers: {
         'Content-Type': 'application/json',
         "Authorization": "Bearer $token",
@@ -154,7 +158,7 @@ class ApiService {
     if (response.statusCode == 401) {
       token = await refreshAccessToken();
       if (token == null) throw Exception("please reLogin");
-      return fetchRooms();
+      return fetchRooms(boardingHouseId: boardingHouseId);
     } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
@@ -327,11 +331,15 @@ class ApiService {
     }
   }
 
-  Future<dynamic> fetchTenants() async {
+  Future<dynamic> fetchTenants({required String? boardingHouseId}) async {
     String? token = await _getToken();
+    String url = "$baseUrl/tenant";
+    if (boardingHouseId != null && boardingHouseId.isNotEmpty) {
+      url = "$url?boardingHouseId=$boardingHouseId";
+    }
 
     final response = await http.get(
-      Uri.parse('$baseUrl/tenant'),
+      Uri.parse(url),
       headers: {
         'Content-Type': 'application/json',
         "Authorization": "Bearer $token",
@@ -341,7 +349,7 @@ class ApiService {
     if (response.statusCode == 401) {
       token = await refreshAccessToken();
       if (token == null) throw Exception("please reLogin");
-      return fetchTenants();
+      return fetchTenants(boardingHouseId: boardingHouseId);
     } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
@@ -765,7 +773,7 @@ class ApiService {
     if (response.statusCode == 401) {
       token = await refreshAccessToken();
       if (token == null) throw Exception("please reLogin");
-      return getAllTransacations();
+      return getAllInvoices(boardingHouseId: boardingHouseId);
     } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {

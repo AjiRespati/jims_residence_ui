@@ -564,9 +564,11 @@ class RoomViewModel extends ChangeNotifier {
     }
   }
 
-  Future<bool> fetchTenants() async {
+  Future<bool> fetchTenants({required String? boardingHouseId}) async {
     isBusy = true;
-    dynamic resp = await apiService.fetchTenants();
+    dynamic resp = await apiService.fetchTenants(
+      boardingHouseId: boardingHouseId,
+    );
     tenants = resp['data'];
     isBusy = false;
     return tenants.isNotEmpty;
@@ -671,7 +673,7 @@ class RoomViewModel extends ChangeNotifier {
         priceId: selectedRoomSize['id'],
       );
 
-      await fetchRooms();
+      await fetchRooms(boardingHouseId: roomKostId);
 
       roomKostId = null;
       roomKostName = null;
@@ -695,10 +697,10 @@ class RoomViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchRooms() async {
+  Future<void> fetchRooms({required String? boardingHouseId}) async {
     try {
       isBusy = true;
-      var resp = await apiService.fetchRooms();
+      var resp = await apiService.fetchRooms(boardingHouseId: boardingHouseId);
       rooms = resp['data'];
     } catch (e) {
       if (e.toString().contains("please reLogin")) {

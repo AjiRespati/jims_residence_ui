@@ -318,7 +318,10 @@ class _RoomSettingsMobileState extends State<RoomSettingsMobile>
                           GradientElevatedButton(
                             buttonHeight: 30,
                             onPressed: () async {
-                              await get<RoomViewModel>().fetchRooms();
+                              await get<RoomViewModel>().fetchRooms(
+                                boardingHouseId:
+                                    get<RoomViewModel>().roomKostId,
+                              );
                               Navigator.pop(context);
                             },
                             child: Text(

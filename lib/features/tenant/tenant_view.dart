@@ -17,7 +17,9 @@ class _TenantViewState extends State<TenantView> with GetItStateMixin {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      get<RoomViewModel>().fetchTenants();
+      get<RoomViewModel>().fetchTenants(
+        boardingHouseId: get<RoomViewModel>().roomKostId,
+      );
     });
   }
 
