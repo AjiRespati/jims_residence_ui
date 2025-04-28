@@ -11,8 +11,8 @@ class ApplicationInfo {
       kIsWeb ? 'http://localhost:3300' : "http://10.0.2.2:3300";
   static const mainUrlProd = 'https://jims.com';
 
-  static const mainUrl = mainUrlDev;
-  // static const mainUrl = mainUrlProd;
+  // static const mainUrl = mainUrlDev;
+  static const mainUrl = mainUrlProd;
 
   static const isProduction = mainUrl == mainUrlProd;
 
