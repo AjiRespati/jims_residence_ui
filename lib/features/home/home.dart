@@ -4,6 +4,7 @@ import 'package:residenza/features/home/home_mobile.dart';
 import 'package:residenza/utils/responsive_layout.dart';
 import 'package:residenza/view_models/room_view_model.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
+import 'package:residenza/view_models/system_view_model.dart';
 
 class Home extends StatefulWidget with GetItStatefulWidgetMixin {
   Home({super.key});
@@ -16,10 +17,9 @@ class _HomeState extends State<Home> with GetItStateMixin {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      get<RoomViewModel>().fetchKosts();
-      get<RoomViewModel>().fetchPrices();
-    });
+    get<SystemViewModel>().self(context: context);
+    get<RoomViewModel>().fetchKosts();
+    get<RoomViewModel>().fetchPrices();
   }
 
   @override

@@ -146,50 +146,50 @@ class SettingsMobile extends StatelessWidget with GetItMixin {
                             ),
                             Divider(),
 
-                            // InkWell(
-                            //   onTap: () {
-                            //     Navigator.pushNamed(context, homeRoute);
-                            //   },
-                            //   child: Row(
-                            //     mainAxisAlignment:
-                            //         MainAxisAlignment.spaceBetween,
-                            //     children: [
-                            //       Text("Product Management"),
-                            //       IconButton(
-                            //         onPressed: () {
-                            //           Navigator.pushNamed(context, homeRoute);
-                            //         },
-                            //         icon: Icon(
-                            //           Icons.chevron_right_rounded,
-                            //           size: 30,
-                            //         ),
-                            //       ),
-                            //     ],
-                            //   ),
-                            // ),
-                            // Divider(),
-                            // InkWell(
-                            //   onTap: () {
-                            //     Navigator.pushNamed(context, homeRoute);
-                            //   },
-                            //   child: Row(
-                            //     mainAxisAlignment:
-                            //         MainAxisAlignment.spaceBetween,
-                            //     children: [
-                            //       Text("Percentages Management"),
-                            //       IconButton(
-                            //         onPressed: () {
-                            //           Navigator.pushNamed(context, homeRoute);
-                            //         },
-                            //         icon: Icon(
-                            //           Icons.chevron_right_rounded,
-                            //           size: 30,
-                            //         ),
-                            //       ),
-                            //     ],
-                            //   ),
-                            // ),
-                            // Divider(),
+                            InkWell(
+                              onTap: () {
+                                Navigator.pushNamed(context, homeRoute);
+                              },
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text("Product Management"),
+                                  IconButton(
+                                    onPressed: () {
+                                      Navigator.pushNamed(context, homeRoute);
+                                    },
+                                    icon: Icon(
+                                      Icons.chevron_right_rounded,
+                                      size: 30,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Divider(),
+                            InkWell(
+                              onTap: () {
+                                Navigator.pushNamed(context, userRoute);
+                              },
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text("User Management"),
+                                  IconButton(
+                                    onPressed: () {
+                                      Navigator.pushNamed(context, userRoute);
+                                    },
+                                    icon: Icon(
+                                      Icons.chevron_right_rounded,
+                                      size: 30,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Divider(),
                           ],
                         )
                         : SizedBox(),

@@ -11,6 +11,7 @@ import 'package:residenza/features/room/room_detail/room_detail.dart';
 import 'package:residenza/features/settings/settings.dart';
 import 'package:residenza/features/tenant/tenant_detail/tenant_detail.dart';
 import 'package:residenza/features/tenant/tenant_view.dart';
+import 'package:residenza/features/user_management/user_management.dart';
 import '../widgets/not_found_page.dart';
 
 import 'animate_route_transitions.dart';
@@ -51,6 +52,9 @@ class AppRouter {
           screen = Settings();
         case kostRoute:
           screen = Kost();
+          break;
+        case userRoute:
+          screen = UserManagement();
           break;
         case priceRoute:
           screen = Price();
