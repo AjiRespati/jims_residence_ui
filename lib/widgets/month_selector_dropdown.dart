@@ -35,7 +35,7 @@ class _MonthSelectorDropdownState extends State<MonthSelectorDropdown> {
     availableMonths.add(selectedMonth);
 
     // Generate 3 months after
-    for (int i = 1; i <= 3; i++) {
+    for (int i = 1; i <= 2; i++) {
       final date = DateTime(now.year, now.month + i);
       availableMonths.add(date);
     }
@@ -50,7 +50,8 @@ class _MonthSelectorDropdownState extends State<MonthSelectorDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<DateTime>(
+    return DropdownButtonFormField<DateTime>(
+      decoration: InputDecoration(labelText: "Periode", isDense: true),
       value: selectedMonth,
       items:
           availableMonths.map((date) {
@@ -79,7 +80,6 @@ class _MonthSelectorDropdownState extends State<MonthSelectorDropdown> {
           });
         }
       },
-      isDense: true,
       menuMaxHeight: 300,
     );
   }

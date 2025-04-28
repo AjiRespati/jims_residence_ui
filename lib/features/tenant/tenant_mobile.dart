@@ -44,57 +44,78 @@ class _TenantMobileState extends State<TenantMobile> with GetItStateMixin {
           SizedBox(
             child: Column(
               children: [
-                SizedBox(height: 10),
+                SizedBox(height: 5),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text("Periode: "),
+                    SizedBox(width: 20),
+                    Flexible(
+                      flex: 7,
+                      child: DropdownButtonFormField<String>(
+                        decoration: InputDecoration(
+                          labelText: "Pilih Kost",
+                          isDense: true,
+                        ),
+                        value: get<RoomViewModel>().roomKostName,
+                        items:
+                            get<RoomViewModel>().kosts.map((item) {
+                              final isSelected =
+                                  item['name'] ==
+                                  get<RoomViewModel>().roomKostName;
+
+                              return DropdownMenuItem<String>(
+                                value: item['name'],
+                                child: Text(
+                                  item['name'],
+                                  style: TextStyle(
+                                    fontWeight:
+                                        isSelected
+                                            ? FontWeight.bold
+                                            : FontWeight.normal,
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              );
+                            }).toList(),
+                        onChanged: (value) async {
+                          get<RoomViewModel>().roomKostName = value;
+                          var item =
+                              get<RoomViewModel>().kosts
+                                  .where((el) => el['name'] == value)
+                                  .toList()
+                                  .first;
+                          get<RoomViewModel>().roomKostId = item['id'];
+                          _boardingHouseId = item['id'];
+                          await get<RoomViewModel>().fetchTenants(
+                            boardingHouseId: item['id'],
+                            dateFrom: _dateFrom,
+                            dateTo: _dateTo,
+                          );
+                        },
+                      ),
+                    ),
                     SizedBox(width: 10),
-                    MonthSelectorDropdown(
-                      onMonthSelected: (
-                        DateTime dateFrom,
-                        DateTime dateTo,
-                      ) async {
-                        _dateFrom = dateFrom;
-                        _dateTo = dateTo;
-                        get<RoomViewModel>().fetchTenants(
-                          boardingHouseId: _boardingHouseId,
-                          dateFrom: _dateFrom,
-                          dateTo: _dateTo,
-                        );
-                      },
+                    Expanded(
+                      flex: 5,
+                      child: MonthSelectorDropdown(
+                        onMonthSelected: (
+                          DateTime dateFrom,
+                          DateTime dateTo,
+                        ) async {
+                          _dateFrom = dateFrom;
+                          _dateTo = dateTo;
+                          await get<RoomViewModel>().fetchTenants(
+                            boardingHouseId: _boardingHouseId,
+                            dateFrom: _dateFrom,
+                            dateTo: _dateTo,
+                          );
+                        },
+                      ),
                     ),
                     SizedBox(width: 20),
                   ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: DropdownButtonFormField<String>(
-                    decoration: InputDecoration(labelText: "Pilih Kost"),
-                    value: get<RoomViewModel>().roomKostName,
-                    items:
-                        get<RoomViewModel>().kosts.map((item) {
-                          return DropdownMenuItem<String>(
-                            value: item['name'],
-                            child: Text(item['name']),
-                          );
-                        }).toList(),
-                    onChanged: (value) {
-                      get<RoomViewModel>().roomKostName = value;
-                      var item =
-                          get<RoomViewModel>().kosts
-                              .where((el) => el['name'] == value)
-                              .toList()
-                              .first;
-                      get<RoomViewModel>().roomKostId = item['id'];
-                      _boardingHouseId = item['id'];
-                      get<RoomViewModel>().fetchTenants(
-                        boardingHouseId: item['id'],
-                        dateFrom: _dateFrom,
-                        dateTo: _dateTo,
-                      );
-                    },
-                  ),
                 ),
               ],
             ),
