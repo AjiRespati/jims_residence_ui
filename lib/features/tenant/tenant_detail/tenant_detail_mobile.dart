@@ -66,7 +66,7 @@ class _TenantDetailMobileState extends State<TenantDetailMobile>
                   child: Column(
                     children: [
                       Text(
-                        _tenant['name'],
+                        _tenant?['name'] ?? "-",
                         style: TextStyle(
                           fontWeight: FontWeight.w800,
                           fontSize: 18,
@@ -205,42 +205,14 @@ class _TenantDetailMobileState extends State<TenantDetailMobile>
                         itemCount: _tenant?['Invoices'].length,
                         itemBuilder: (context, index) {
                           final item = _tenant['Invoices'][index];
+                          item['Tenant'] = {'id': _tenant['id']};
                           return InvoiceCard(item: item);
                         },
                       ),
-
-                      // TextField(
-                      //   controller: _nameController,
-                      //   decoration: InputDecoration(labelText: "Name"),
-                      // ),
-                      // SizedBox(height: 4),
-                      // TextField(
-                      //   controller: _descriptionController,
-                      //   decoration: InputDecoration(labelText: "Description"),
-                      // ),
-                      // SizedBox(height: 4),
-                      // TextField(
-                      //   controller: _priceController,
-                      //   decoration: InputDecoration(labelText: "Price"),
-                      //   keyboardType: TextInputType.number,
-                      // ),
-                      // SizedBox(height: 4),
                     ],
                   ),
                 ),
               ),
-            // SizedBox(height: 30),
-            // GradientElevatedButton(
-            //   onPressed: _submit,
-            //   child: Text(
-            //     "Update Tenant",
-            //     style: TextStyle(
-            //       color: Colors.white,
-            //       fontWeight: FontWeight.w600,
-            //     ),
-            //   ),
-            // ),
-            // SizedBox(height: 30),
           ],
         ),
       ),

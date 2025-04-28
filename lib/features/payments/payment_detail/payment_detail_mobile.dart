@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:residenza/features/payments/components/invoice_payment.dart';
 import 'package:residenza/utils/helpers.dart';
 import 'package:residenza/view_models/room_view_model.dart';
+import 'package:residenza/widgets/buttons/gradient_elevated_button.dart';
 import 'package:residenza/widgets/mobile_navbar.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
@@ -198,6 +200,29 @@ class _PaymentDetailMobileState extends State<PaymentDetailMobile>
                   ),
                 ),
               ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: GradientElevatedButton(
+                onPressed: () async {
+                  await showModalBottomSheet(
+                    isScrollControlled: true,
+                    constraints: BoxConstraints(),
+                    context: context,
+                    builder: (context) {
+                      return Padding(
+                        padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewInsets.bottom,
+                        ),
+                        child: SingleChildScrollView(
+                          child: InvoicePayment(item: invoice),
+                        ),
+                      );
+                    },
+                  );
+                },
+                child: Text("Pembayaran"),
+              ),
+            ),
           ],
         ),
       ),

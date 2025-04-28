@@ -180,7 +180,7 @@ String invoiceStatusText(String status) {
     case 'Unpaid':
       return 'Belum dibayar';
     case 'PartiallyPaid':
-      return 'Sebagian';
+      return 'Bayar sebagian';
     default:
       return status;
   }

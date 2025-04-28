@@ -139,6 +139,7 @@ class _PaymentsMobileState extends State<PaymentsMobile> with GetItStateMixin {
                           child: Row(
                             children: [
                               Expanded(
+                                flex: 9,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -189,6 +190,7 @@ class _PaymentsMobileState extends State<PaymentsMobile> with GetItStateMixin {
                                 ),
                               ),
                               Expanded(
+                                flex: 7,
                                 child: Column(
                                   children: [
                                     Text(
