@@ -109,9 +109,13 @@ class ApiService {
       body: jsonEncode({"refreshToken": refreshToken}),
     );
 
-    if (response.statusCode == 401) {
+    if (response.statusCode == 401 || response.statusCode == 403) {
       token = await refreshAccessToken();
-      if (token == null) throw Exception("please reLogin");
+      if (token == null) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.remove('accessToken');
+        throw Exception("please reLogin");
+      }
       return self(refreshToken: refreshToken);
     } else if (response.statusCode == 200) {
       return jsonDecode(response.body);

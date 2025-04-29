@@ -18,7 +18,7 @@ class ApplicationInfo {
 
   static const baseUrl = "$mainUrl/service/api";
 
-  static const appVersion = '1.0.1 ${isProduction ? "" : "DEV"}';
+  static const appVersion = '1.0.2 ${isProduction ? "" : "DEV"}';
 
   static const secondColor = Color.fromARGB(255, 171, 203, 60);
   static const thirdColor = Colors.amber;
