@@ -213,12 +213,12 @@ class _RoomMobileState extends State<RoomMobile> with GetItStateMixin {
                                         ),
                                       ],
                                     ),
-                                    Row(
-                                      children: [
-                                        Text("Ukuran: "),
-                                        Text(item?['roomSize'] ?? " -"),
-                                      ],
-                                    ),
+                                    // Row(
+                                    //   children: [
+                                    //     Text("Ukuran: "),
+                                    //     Text(item?['roomSize'] ?? " -"),
+                                    //   ],
+                                    // ),
                                     Row(
                                       children: [
                                         Text("Status: "),
