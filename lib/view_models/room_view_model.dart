@@ -787,7 +787,7 @@ class RoomViewModel extends ChangeNotifier {
       isBusy = true;
       await apiService.createPrice(
         boardingHouseId: roomKostId,
-        name: "Harga Kamar $priceRoomSize",
+        name: priceName,
         amount: priceAmount,
         roomSize: priceRoomSize,
         description: priceDescription,
