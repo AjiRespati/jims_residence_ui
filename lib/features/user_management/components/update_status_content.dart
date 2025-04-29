@@ -25,7 +25,7 @@ class _UpdateLevelContentState extends State<UpdateStatusContent>
     with GetItStateMixin {
   final formKey = GlobalKey<FormState>();
   bool _isBusy = false;
-  String oldStatus = "Basic";
+  String oldStatus = "new";
 
   @override
   void initState() {
