@@ -26,7 +26,7 @@ class _UpdateLevelContentState extends State<UpdateLevelContent>
   bool _isBusy = false;
   final formKey = GlobalKey<FormState>();
   int levelChoosenInt = 0;
-  String levelChoosen = "Basic";
+  String levelChoosen = "Penjaga Kost";
 
   @override
   void initState() {
@@ -62,9 +62,9 @@ class _UpdateLevelContentState extends State<UpdateLevelContent>
                     );
                   }).toList(),
               onChanged: (value) {
-                levelChoosen = value ?? "Basic";
+                levelChoosen = value ?? "Penjaga Kost";
                 levelChoosenInt = get<SystemViewModel>().levelList.indexOf(
-                  value ?? "Basic",
+                  value ?? "Penjaga Kost",
                 );
               },
             ),

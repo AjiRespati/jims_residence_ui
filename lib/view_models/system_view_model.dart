@@ -22,7 +22,7 @@ class SystemViewModel extends ChangeNotifier {
 
   dynamic _user;
   List<dynamic> _users = [];
-  List<String> levelList = ["Basic", "Admin", "Owner"];
+  List<String> levelList = ["Penjaga Kost", "Admin", "Pemilik"];
   int _level = 0;
   String _username = " -";
   String _levelDesc = " -";

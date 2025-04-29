@@ -88,7 +88,7 @@ class UserTableCard extends StatelessWidget with GetItMixin {
                       children: [
                         Text("Level/Role: "),
                         Text(
-                          "${user['level'].toString()} - ${user['levelDesc'] ?? "Basic"}",
+                          "${user['level'].toString()} - ${user['levelDesc'] ?? "Penjaga Kost"}",
                           style: TextStyle(
                             fontWeight: FontWeight.w900,
                             color: Colors.green[800],
