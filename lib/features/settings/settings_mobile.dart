@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:residenza/routes/route_names.dart';
 import 'package:residenza/view_models/system_view_model.dart';
-import 'package:residenza/widgets/buttons/edit_button.dart';
 import 'package:residenza/widgets/mobile_navbar.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
@@ -13,6 +12,7 @@ class SettingsMobile extends StatelessWidget with GetItMixin {
   @override
   Widget build(BuildContext context) {
     dynamic user = watchOnly((SystemViewModel x) => x.isBusy);
+    SystemViewModel model = get<SystemViewModel>();
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
@@ -21,8 +21,7 @@ class SettingsMobile extends StatelessWidget with GetItMixin {
         actions: [
           Text("Logout"),
           SizedBox(width: 5),
-          EditButton(
-            message: "Logout",
+          IconButton(
             onPressed: () async {
               get<SystemViewModel>().isBusy = true;
               bool isLogout = await get<SystemViewModel>().logout();
@@ -33,7 +32,7 @@ class SettingsMobile extends StatelessWidget with GetItMixin {
                 get<SystemViewModel>().isBusy = false;
               }
             },
-            altIcon: Icons.logout_rounded,
+            icon: Icon(Icons.logout_rounded, color: Colors.blue.shade800),
           ),
           SizedBox(width: 25),
         ],
@@ -46,9 +45,27 @@ class SettingsMobile extends StatelessWidget with GetItMixin {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: 30),
-                    // Text("Username: ${model.username}"),
-                    // Text("Name: ${model.name}"),
-                    // Text("Level: ${model.level ?? 0}"),
+                    Text(
+                      "Username: ${model.username}",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      "Level: ${model.level}",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      model.levelDesc,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     SizedBox(height: 30),
                     // Divider(),
                     watchOnly((SystemViewModel x) => x.isBusy)
@@ -64,8 +81,7 @@ class SettingsMobile extends StatelessWidget with GetItMixin {
                             ),
                           ],
                         )
-                        // : ((model.level ?? 0) > 3)
-                        : true
+                        : (model.level > 0)
                         ? Column(
                           children: [
                             InkWell(

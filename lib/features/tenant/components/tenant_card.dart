@@ -17,7 +17,6 @@ class _TenantCardState extends State<TenantCard> with GetItStateMixin {
   @override
   void initState() {
     super.initState();
-    print(widget.item);
   }
 
   @override

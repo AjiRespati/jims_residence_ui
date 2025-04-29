@@ -64,7 +64,6 @@ class _InvoicdPaymentState extends State<InvoicePayment> with GetItStateMixin {
             .toDouble(); // diganti input dengan default disamping
     // method is one of: 'Cash', 'Bank Transfer', 'Online Payment', 'Other'
     model.transactionMethod = "Cash"; //TODO: diganti dropdown pilihan
-    print(widget.item);
   }
 
   @override
