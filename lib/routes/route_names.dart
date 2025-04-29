@@ -5,6 +5,7 @@ const String homeRoute = "/Home";
 const String roomRoute = "/Room";
 const String roomDetailRoute = "/Room/Detail";
 const String roomSettingsRoute = "/Room/Settings";
+const String roomAddTenantRoute = "/Room/AddTenant";
 const String tenantRoute = "/Tenant";
 const String tenantDetailRoute = "/Tenant/Detail";
 const String settingRoute = "/Setting";

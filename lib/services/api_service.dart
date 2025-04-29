@@ -182,7 +182,7 @@ class ApiService {
     required String roomNumber,
     required String roomSize,
     required String roomStatus,
-    required String priceId,
+    // required String priceId,
     required String description,
   }) async {
     String? token = await _getToken();
@@ -198,7 +198,7 @@ class ApiService {
         'roomSize': roomSize,
         'roomStatus': roomStatus,
         'description': description,
-        'priceId': priceId,
+        // 'priceId': priceId,
       }),
     );
 
@@ -211,7 +211,7 @@ class ApiService {
         roomSize: roomSize,
         roomStatus: roomStatus,
         description: description,
-        priceId: priceId,
+        // priceId: priceId,
       );
     } else if (response.statusCode == 200) {
       return true;
@@ -362,6 +362,27 @@ class ApiService {
 
   // TODO: TENANT ROUTES
 
+  // roomId,
+  // name,
+  // phone,
+  // NIKNumber,
+  // startDate, // Start of tenancy / First billing period start
+  // dueDate, // Due date for the first invoice
+  // banishDate, // Optional
+  // NIKImagePath, // Optional
+  // isNIKCopyDone, // Optional, defaults in model
+  // tenancyStatus, // Optional, defaults in model
+  // createBy,
+  // updateBy,
+  // // Fields for Price creation (mandatory here)
+  // priceAmount,
+  // priceName, // Optional
+  // priceDescription, // Optional
+  // priceRoomSize, // Optional, defaults to 'Standard' in Price model
+  // // New fields for optional AdditionalPrice and OtherCost creation
+  // additionalPrices, // Optional array of AdditionalPrice data
+  // otherCosts // Optional array of OtherCost data
+
   Future<bool> createTenant({
     required String roomId,
     required String name,
@@ -377,6 +398,12 @@ class ApiService {
     required DateTime? paymentDate,
     required DateTime? endDate,
     required String paymentStatus,
+    required double priceAmount,
+    required String? priceName,
+    required String? priceDescription,
+    required String? priceRoomSize,
+    required List<dynamic>? additionalPrices,
+    required List<dynamic>? otherCosts,
   }) async {
     String? token = await _getToken();
     final response = await http.post(
@@ -402,6 +429,12 @@ class ApiService {
         'paymentDate':
             paymentDate == null ? null : generateDateString(paymentDate),
         'paymentStatus': paymentStatus,
+        'priceAmount': priceAmount,
+        'priceName': priceName,
+        'priceDescription': priceDescription,
+        'priceRoomSize': priceRoomSize,
+        'additionalPrices': additionalPrices,
+        'otherCosts': otherCosts,
       }),
     );
 
@@ -423,6 +456,12 @@ class ApiService {
         startDate: startDate,
         isNIKCopyDone: isNIKCopyDone,
         paymentStatus: paymentStatus,
+        additionalPrices: additionalPrices,
+        otherCosts: otherCosts,
+        priceAmount: priceAmount,
+        priceDescription: priceDescription,
+        priceName: priceName,
+        priceRoomSize: priceRoomSize,
       );
     } else if (response.statusCode == 200) {
       return true;

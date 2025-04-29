@@ -43,6 +43,15 @@ class AddRoomPrice extends StatelessWidget with GetItMixin {
           TextFormField(
             decoration: InputDecoration(
               isDense: true,
+              label: Text("Nomor Kamar"),
+            ),
+            keyboardType: TextInputType.number,
+            onChanged: (value) => get<RoomViewModel>().priceName = value,
+          ),
+          SizedBox(height: 6),
+          TextFormField(
+            decoration: InputDecoration(
+              isDense: true,
               label: Text("Harga Kamar"),
             ),
             keyboardType: TextInputType.number,
