@@ -54,21 +54,21 @@ class AddRoom extends StatelessWidget with GetItMixin {
             keyboardType: TextInputType.number,
             onChanged: (value) => get<RoomViewModel>().roomNumber = value,
           ),
-          SizedBox(height: 6),
-          DropdownButtonFormField<dynamic>(
-            decoration: InputDecoration(labelText: "Ukuran Kamar"),
-            value: get<RoomViewModel>().selectedRoomSize,
-            items:
-                watchOnly((RoomViewModel x) => x.pricesByKost).map((item) {
-                  return DropdownMenuItem<dynamic>(
-                    value: item,
-                    child: Text(item['roomSize']),
-                  );
-                }).toList(),
-            onChanged: (value) {
-              get<RoomViewModel>().selectedRoomSize = value;
-            },
-          ),
+          // SizedBox(height: 6),
+          // DropdownButtonFormField<dynamic>(
+          //   decoration: InputDecoration(labelText: "Ukuran Kamar"),
+          //   value: get<RoomViewModel>().selectedRoomSize,
+          //   items:
+          //       watchOnly((RoomViewModel x) => x.pricesByKost).map((item) {
+          //         return DropdownMenuItem<dynamic>(
+          //           value: item,
+          //           child: Text(item['roomSize']),
+          //         );
+          //       }).toList(),
+          //   onChanged: (value) {
+          //     get<RoomViewModel>().selectedRoomSize = value;
+          //   },
+          // ),
           SizedBox(height: 6),
           DropdownButtonFormField<String>(
             decoration: InputDecoration(labelText: "Status Kamar"),

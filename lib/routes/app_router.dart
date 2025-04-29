@@ -5,6 +5,7 @@ import 'package:residenza/features/kost/kost.dart';
 import 'package:residenza/features/payments/payment_detail/payment_detail.dart';
 import 'package:residenza/features/payments/payments.dart';
 import 'package:residenza/features/price/price.dart';
+import 'package:residenza/features/room/room_add_tenant/room_add_tenant.dart';
 import 'package:residenza/features/room/room_settings/room_settings.dart';
 import 'package:residenza/features/room/room_view.dart';
 import 'package:residenza/features/room/room_detail/room_detail.dart';
@@ -41,6 +42,9 @@ class AppRouter {
           break;
         case roomSettingsRoute:
           screen = RoomSettings(datas: arguments);
+          break;
+        case roomAddTenantRoute:
+          screen = RoomAddTenant();
           break;
         case tenantRoute:
           screen = TenantView();

@@ -4,6 +4,7 @@ import 'package:residenza/features/room/room_mobile.dart';
 import 'package:residenza/utils/responsive_layout.dart';
 import 'package:residenza/view_models/room_view_model.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
+import 'package:residenza/view_models/system_view_model.dart';
 
 class RoomView extends StatefulWidget with GetItStatefulWidgetMixin {
   RoomView({required this.isSetting, super.key});
@@ -24,6 +25,8 @@ class _RoomViewState extends State<RoomView> with GetItStateMixin {
         dateTo: null,
       );
       get<RoomViewModel>().fetchKosts();
+
+      get<SystemViewModel>().currentPageIndex = widget.isSetting ? 4 : 1;
     });
   }
 

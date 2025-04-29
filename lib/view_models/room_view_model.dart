@@ -512,7 +512,7 @@ class RoomViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> addTenant({required BuildContext context}) async {
+  Future<void> addTenant() async {
     try {
       isBusy = true;
 
@@ -531,9 +531,15 @@ class RoomViewModel extends ChangeNotifier {
         paymentStatus: "unpaid",
         tenancyStatus: tenantStatus,
         roomStatus: tenantRoomStatus,
+        priceAmount: priceAmount,
+        priceName: priceName,
+        priceDescription: priceDescription,
+        priceRoomSize: priceRoomSize,
+        additionalPrices: updatedAdditionalPrices,
+        otherCosts: updatedOtherCost,
       );
 
-      await fetchRoom();
+      // await fetchRoom();
 
       roomId = "";
       tenantName = "";
@@ -546,6 +552,12 @@ class RoomViewModel extends ChangeNotifier {
       tenantDueDate = null;
       tenantStatus = "";
       tenantRoomStatus = "";
+      priceAmount = 0.0;
+      priceName = "";
+      priceDescription = null;
+      priceRoomSize = 'Standard';
+      updatedAdditionalPrices = [];
+      updatedOtherCost = [];
 
       isBusy = false;
       isSuccess = true;
@@ -673,10 +685,10 @@ class RoomViewModel extends ChangeNotifier {
       await apiService.createRoom(
         boardingHouseId: roomKostId,
         roomNumber: roomNumber,
-        roomSize: selectedRoomSize['roomSize'],
+        roomSize: 'Standard',
         roomStatus: roomStatus ?? "",
         description: description,
-        priceId: selectedRoomSize['id'],
+        // priceId: selectedRoomSize['id'],
       );
 
       await fetchRooms(
