@@ -73,13 +73,14 @@ class _UpdateLevelContentState extends State<UpdateStatusContent>
                     // inactiveDelay: Duration.zero,
                     onPressed: () async {
                       setState(() => _isBusy = true);
-                      // await get<SystemViewModel>().updateUser(
-                      //   context: context,
-                      //   id: widget.id,
-                      //   level: null,
-                      //   status: oldStatus,
-                      // );
+                      await get<SystemViewModel>().updateUser(
+                        id: widget.id,
+                        level: null,
+                        status: oldStatus,
+                      );
+                      await get<SystemViewModel>().self(context: context);
                       await get<SystemViewModel>().getAllUser();
+                      get<SystemViewModel>().isBusy = false;
                       setState(() => _isBusy = false);
                       Navigator.pop(context);
                     },

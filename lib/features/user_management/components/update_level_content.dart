@@ -31,7 +31,7 @@ class _UpdateLevelContentState extends State<UpdateLevelContent>
   @override
   void initState() {
     super.initState();
-    // levelChoosen = get<SystemViewModel>().levelList[widget.level];
+    levelChoosen = get<SystemViewModel>().levelList[widget.level];
     levelChoosenInt = widget.level;
   }
 
@@ -51,23 +51,23 @@ class _UpdateLevelContentState extends State<UpdateLevelContent>
             Text("Update Level", style: TextStyle(fontSize: 12)),
             SizedBox(height: 40),
 
-            // DropdownButtonFormField<String>(
-            //   decoration: InputDecoration(isDense: true),
-            //   value: levelChoosen,
-            //   items:
-            //       get<SystemViewModel>().levelList.map((item) {
-            //         return DropdownMenuItem<String>(
-            //           value: item,
-            //           child: Text(item),
-            //         );
-            //       }).toList(),
-            //   onChanged: (value) {
-            //     levelChoosen = value ?? "Basic";
-            //     levelChoosenInt = get<SystemViewModel>().levelList.indexOf(
-            //       value ?? "Basic",
-            //     );
-            //   },
-            // ),
+            DropdownButtonFormField<String>(
+              decoration: InputDecoration(isDense: true),
+              value: levelChoosen,
+              items:
+                  get<SystemViewModel>().levelList.map((item) {
+                    return DropdownMenuItem<String>(
+                      value: item,
+                      child: Text(item),
+                    );
+                  }).toList(),
+              onChanged: (value) {
+                levelChoosen = value ?? "Basic";
+                levelChoosenInt = get<SystemViewModel>().levelList.indexOf(
+                  value ?? "Basic",
+                );
+              },
+            ),
             SizedBox(height: 40),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -77,13 +77,14 @@ class _UpdateLevelContentState extends State<UpdateLevelContent>
                     // inactiveDelay: Duration.zero,
                     onPressed: () async {
                       setState(() => _isBusy = true);
-                      // await get<SystemViewModel>().updateUser(
-                      //   context: context,
-                      //   id: widget.id,
-                      //   level: levelChoosenInt,
-                      //   status: null,
-                      // );
+                      await get<SystemViewModel>().updateUser(
+                        id: widget.id,
+                        level: levelChoosenInt,
+                        status: null,
+                      );
+                      await get<SystemViewModel>().self(context: context);
                       await get<SystemViewModel>().getAllUser();
+                      get<SystemViewModel>().isBusy = false;
                       setState(() => _isBusy = false);
                       Navigator.pop(context);
                     },

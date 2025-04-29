@@ -22,6 +22,10 @@ class SystemViewModel extends ChangeNotifier {
 
   dynamic _user;
   List<dynamic> _users = [];
+  List<String> levelList = ["Basic", "Admin", "Owner"];
+  int _level = 0;
+  String _username = " -";
+  String _levelDesc = " -";
 
   //====================//
   //  GETTER n SETTER   //
@@ -60,6 +64,24 @@ class SystemViewModel extends ChangeNotifier {
   dynamic get user => _user;
   set user(dynamic val) {
     _user = val;
+    notifyListeners();
+  }
+
+  int get level => _level;
+  set level(int val) {
+    _level = val;
+    notifyListeners();
+  }
+
+  String get levelDesc => _levelDesc;
+  set levelDesc(String val) {
+    _levelDesc = val;
+    notifyListeners();
+  }
+
+  String get username => _username;
+  set username(String val) {
+    _username = val;
     notifyListeners();
   }
 
@@ -130,6 +152,9 @@ class SystemViewModel extends ChangeNotifier {
     try {
       isBusy = true;
       user = await apiService.self(refreshToken: refreshToken ?? "-");
+      level = user['level'];
+      username = user['username'];
+      levelDesc = user['levelDesc'];
       isBusy = false;
       return true;
     } catch (e) {
@@ -155,6 +180,31 @@ class SystemViewModel extends ChangeNotifier {
       } else {
         isBusy = false;
       }
+    }
+  }
+
+  Future<bool> updateUser({
+    required String id,
+    required int? level,
+    required String? status,
+  }) async {
+    try {
+      isBusy = true;
+      var resp = await apiService.updateUser(
+        id: id,
+        level: level,
+        status: status,
+      );
+      isBusy = false;
+      return resp;
+    } catch (e) {
+      if (e.toString().contains("please reLogin")) {
+        isBusy = false;
+      } else {
+        isBusy = false;
+      }
+      isBusy = false;
+      return false;
     }
   }
 }

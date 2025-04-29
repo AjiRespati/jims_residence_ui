@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:residenza/application_info.dart';
 
 class LoginTitle extends StatelessWidget {
   const LoginTitle({required this.title, super.key});
@@ -10,9 +11,17 @@ class LoginTitle extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
-          title,
-          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+        Column(
+          children: [
+            Text(
+              title,
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+            ),
+            Text(
+              ApplicationInfo.appVersion,
+              // style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+            ),
+          ],
         ),
       ],
     );

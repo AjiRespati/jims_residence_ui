@@ -121,13 +121,12 @@ class ApiService {
       );
     }
   }
-  // TODO: ROOMS ROUTES
 
   Future<List<dynamic>> getAllUsers() async {
     String? token = await _getToken();
 
     final response = await http.get(
-      Uri.parse('$baseUrl/user/users'),
+      Uri.parse('$baseUrl/auth/users'),
       headers: {
         'Content-Type': 'application/json',
         "Authorization": "Bearer $token",
@@ -137,7 +136,7 @@ class ApiService {
     if (response.statusCode == 401) {
       token = await refreshAccessToken();
       if (token == null) throw Exception("please reLogin");
-      return fetchKosts();
+      return getAllUsers();
     } else if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
@@ -146,6 +145,37 @@ class ApiService {
       );
     }
   }
+
+  Future<bool> updateUser({
+    required String id,
+    required int? level,
+    required String? status,
+  }) async {
+    String? token = await _getToken();
+
+    final response = await http.put(
+      Uri.parse('$baseUrl/auth/update/user/$id'),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
+      body: jsonEncode({'level': level, 'status': status}),
+    );
+
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) throw Exception("please reLogin");
+      return updateUser(id: id, level: level, status: status);
+    } else if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
+    }
+  }
+
+  // TODO: ROOMS ROUTES
 
   Future<bool> createRoom({
     required String? boardingHouseId,
