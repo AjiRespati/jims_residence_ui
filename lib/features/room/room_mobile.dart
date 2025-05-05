@@ -126,20 +126,21 @@ class _RoomMobileState extends State<RoomMobile> with GetItStateMixin {
                     SizedBox(width: 10),
                     Expanded(
                       flex: 5,
-                      child: MonthSelectorDropdown(
-                        onMonthSelected: (
-                          DateTime dateFrom,
-                          DateTime dateTo,
-                        ) async {
-                          _dateFrom = dateFrom;
-                          _dateTo = dateTo;
-                          await get<RoomViewModel>().fetchRooms(
-                            boardingHouseId: _boardingHouseId,
-                            dateFrom: _dateFrom,
-                            dateTo: _dateTo,
-                          );
-                        },
-                      ),
+                      child: SizedBox(),
+                      // child: MonthSelectorDropdown(
+                      //   onMonthSelected: (
+                      //     DateTime dateFrom,
+                      //     DateTime dateTo,
+                      //   ) async {
+                      //     _dateFrom = dateFrom;
+                      //     _dateTo = dateTo;
+                      //     await get<RoomViewModel>().fetchRooms(
+                      //       boardingHouseId: _boardingHouseId,
+                      //       dateFrom: _dateFrom,
+                      //       dateTo: _dateTo,
+                      //     );
+                      //   },
+                      // ),
                     ),
                     SizedBox(width: 20),
                   ],

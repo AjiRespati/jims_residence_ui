@@ -662,7 +662,8 @@ class RoomViewModel extends ChangeNotifier {
   Future<void> fetchKosts() async {
     try {
       isBusy = true;
-      kosts = await apiService.fetchKosts();
+      var resp = await apiService.fetchKosts();
+      kosts = resp['data'];
     } catch (e) {
       if (e.toString().contains("please reLogin")) {
         isNoSession = true;

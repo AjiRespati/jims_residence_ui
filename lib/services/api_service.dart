@@ -752,7 +752,7 @@ class ApiService {
     }
   }
 
-  Future<List<dynamic>> fetchKosts() async {
+  Future<dynamic> fetchKosts() async {
     String? token = await _getToken();
 
     final response = await http.get(
