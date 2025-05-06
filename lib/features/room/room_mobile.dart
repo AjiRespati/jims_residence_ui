@@ -9,7 +9,6 @@ import 'package:residenza/widgets/buttons/add_button.dart';
 
 import 'package:residenza/widgets/mobile_navbar.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
-import 'package:residenza/widgets/month_selector_dropdown.dart';
 
 class RoomMobile extends StatefulWidget with GetItStatefulWidgetMixin {
   RoomMobile({required this.isSetting, super.key});
@@ -20,7 +19,6 @@ class RoomMobile extends StatefulWidget with GetItStatefulWidgetMixin {
 }
 
 class _RoomMobileState extends State<RoomMobile> with GetItStateMixin {
-  String? _boardingHouseId;
   DateTime? _dateFrom;
   DateTime? _dateTo;
 
@@ -114,7 +112,6 @@ class _RoomMobileState extends State<RoomMobile> with GetItStateMixin {
                                   .toList()
                                   .first;
                           get<RoomViewModel>().roomKostId = item['id'];
-                          _boardingHouseId = item['id'];
                           await get<RoomViewModel>().fetchRooms(
                             boardingHouseId: item['id'],
                             dateFrom: _dateFrom,

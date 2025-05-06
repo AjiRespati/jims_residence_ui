@@ -7,6 +7,7 @@ import 'package:residenza/utils/helpers.dart';
 import 'package:residenza/view_models/room_view_model.dart';
 import 'package:residenza/widgets/buttons/gradient_elevated_button.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
+import 'package:residenza/widgets/currency_text_field.dart';
 
 class InvoicePayment extends StatefulWidget with GetItStatefulWidgetMixin {
   InvoicePayment({required this.item, super.key});
@@ -18,6 +19,7 @@ class InvoicePayment extends StatefulWidget with GetItStatefulWidgetMixin {
 
 class _InvoicdPaymentState extends State<InvoicePayment> with GetItStateMixin {
   final TextEditingController _amountController = TextEditingController();
+  final TextEditingController amountController = TextEditingController();
   String _rawValue = '';
   final NumberFormat _currencyFormatter = NumberFormat.currency(
     locale: 'id_ID',
@@ -70,6 +72,7 @@ class _InvoicdPaymentState extends State<InvoicePayment> with GetItStateMixin {
   void dispose() {
     super.dispose();
     _amountController.dispose();
+    amountController.dispose();
   }
 
   @override
@@ -131,14 +134,12 @@ class _InvoicdPaymentState extends State<InvoicePayment> with GetItStateMixin {
               children: [
                 SizedBox(width: 40),
                 Expanded(
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      isDense: true,
-                      label: Text("Jumlah Pembayaran"),
-                    ),
-                    controller: _amountController,
-                    keyboardType: TextInputType.number,
-                    onChanged: _onAmountChanged,
+                  child: CurrencyTextField(
+                    controller: amountController,
+                    label: "Jumlah Pembayaran",
+                    onChanged: (value) {
+                      _onAmountChanged(value);
+                    },
                   ),
                 ),
                 SizedBox(width: 40),
