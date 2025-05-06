@@ -301,6 +301,7 @@ class RoomViewModel extends ChangeNotifier {
   }
 
   List<dynamic> _kosts = [];
+  String _kostId = "";
   String _kostName = "";
   String _kostAddress = "";
   String _kostDescription = "";
@@ -308,6 +309,12 @@ class RoomViewModel extends ChangeNotifier {
   List<dynamic> get kosts => _kosts;
   set kosts(List<dynamic> val) {
     _kosts = val;
+    notifyListeners();
+  }
+
+  String get kostId => _kostId;
+  set kostId(String val) {
+    _kostId = val;
     notifyListeners();
   }
 

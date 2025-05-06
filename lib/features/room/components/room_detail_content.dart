@@ -10,6 +10,7 @@ import 'package:residenza/widgets/buttons/add_button.dart';
 import 'package:residenza/widgets/buttons/gradient_elevated_button.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:residenza/widgets/buttons/remove_button.dart';
+import 'package:residenza/widgets/currency_text_field.dart';
 
 class RoomDetailContent extends StatefulWidget with GetItStatefulWidgetMixin {
   RoomDetailContent({super.key});
@@ -20,6 +21,7 @@ class RoomDetailContent extends StatefulWidget with GetItStatefulWidgetMixin {
 
 class _RoomDetailContentState extends State<RoomDetailContent>
     with GetItStateMixin {
+  final TextEditingController _amountController = TextEditingController();
   dynamic _room;
   dynamic _kost;
   dynamic _tenant;
@@ -93,17 +95,14 @@ class _RoomDetailContentState extends State<RoomDetailContent>
                       SizedBox(height: 16),
                       Padding(
                         padding: const EdgeInsets.all(3.0),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            isDense: true,
-                            label: Text("Harga kamar"),
-                          ),
-                          keyboardType: TextInputType.number,
+                        child: CurrencyTextField(
+                          controller: _amountController,
+                          label: "Harga kamar",
                           onChanged:
                               (value) => _priceAmount = double.parse(value),
                         ),
                       ),
-                      SizedBox(height: 6),
+                      SizedBox(height: 16),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -111,14 +110,14 @@ class _RoomDetailContentState extends State<RoomDetailContent>
                           Text(
                             "Total biaya tambahan: ",
                             style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
+                              // fontSize: 18,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                           Text(
                             formatCurrency(_totalAdditionalPrice),
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 14,
                               color: Colors.green,
                               fontWeight: FontWeight.w700,
                             ),
