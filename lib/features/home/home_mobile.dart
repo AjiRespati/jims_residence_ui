@@ -51,6 +51,7 @@ class _HomeMobileState extends State<HomeMobile> with GetItStateMixin {
                       borderRadius: BorderRadius.circular(15),
                       onTap: () {
                         get<RoomViewModel>().roomKostId = item['id'];
+                        get<RoomViewModel>().roomKostName = item['name'];
                         Navigator.pushNamed(
                           context,
                           roomRoute,

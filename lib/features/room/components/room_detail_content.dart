@@ -91,8 +91,8 @@ class _RoomDetailContentState extends State<RoomDetailContent>
                   child: Column(
                     children: [
                       AddTenant(),
-                      Divider(),
-                      SizedBox(height: 16),
+                      // Divider(),
+                      SizedBox(height: 10),
                       Padding(
                         padding: const EdgeInsets.all(3.0),
                         child: CurrencyTextField(
@@ -255,11 +255,13 @@ class _RoomDetailContentState extends State<RoomDetailContent>
                                   get<RoomViewModel>().priceAmount =
                                       _priceAmount;
                                   await get<RoomViewModel>().addTenant();
-                                  Navigator.pushNamed(
-                                    context,
-                                    roomRoute,
-                                    arguments: false,
-                                  );
+                                  if (get<RoomViewModel>().isSuccess) {
+                                    Navigator.pushNamed(
+                                      context,
+                                      roomRoute,
+                                      arguments: false,
+                                    );
+                                  }
 
                                   // await showModalBottomSheet(
                                   //   isScrollControlled: true,

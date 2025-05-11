@@ -17,9 +17,11 @@ class _HomeState extends State<Home> with GetItStateMixin {
   @override
   void initState() {
     super.initState();
-    get<SystemViewModel>().self(context: context);
-    get<RoomViewModel>().fetchKosts();
-    // get<RoomViewModel>().fetchPrices();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      get<SystemViewModel>().self(context: context);
+      get<RoomViewModel>().fetchKosts();
+      // get<RoomViewModel>().fetchPrices();
+    });
   }
 
   @override

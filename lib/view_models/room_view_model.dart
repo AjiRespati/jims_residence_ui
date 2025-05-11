@@ -522,53 +522,67 @@ class RoomViewModel extends ChangeNotifier {
   Future<void> addTenant() async {
     try {
       isBusy = true;
+      if (tenantName.isEmpty) {
+        isError = true;
+        errorMessage = "Nama harus diisi";
+      } else if (tenantPhone.isEmpty) {
+        isError = true;
+        errorMessage = "Telepon harus diisi";
+      } else if (tenantIdNumber.isEmpty) {
+        isError = true;
+        errorMessage = "NIK harus diisi";
+      } else if (tenantStartDate == null) {
+        isError = true;
+        errorMessage = "Tanggal mulai harus diisi";
+      } else if (priceAmount < 1000) {
+        isError = true;
+        errorMessage = "Harga harus diisi";
+      } else {
+        await apiService.createTenant(
+          roomId: roomId,
+          name: tenantName,
+          phone: tenantPhone,
+          idNumber: tenantIdNumber,
+          idImagePath: idImagePath,
+          isNIKCopyDone: isIdCopied,
+          startDate: tenantStartDate,
+          paymentDate: tenantPaymentDate,
+          dueDate: tenantStartDate?.add(Duration(days: 7)),
+          banishDate: tenantStartDate?.add(Duration(days: 14)),
+          endDate: tenantStartDate?.add(Duration(days: 30)),
+          paymentStatus: "unpaid",
+          tenancyStatus: tenantStatus,
+          roomStatus: tenantRoomStatus,
+          priceAmount: priceAmount,
+          priceName: priceName,
+          priceDescription: priceDescription,
+          priceRoomSize: priceRoomSize,
+          additionalPrices: updatedAdditionalPrices,
+          otherCosts: updatedOtherCost,
+        );
 
-      await apiService.createTenant(
-        roomId: roomId,
-        name: tenantName,
-        phone: tenantPhone,
-        idNumber: tenantIdNumber,
-        idImagePath: idImagePath,
-        isNIKCopyDone: isIdCopied,
-        startDate: tenantStartDate,
-        paymentDate: tenantPaymentDate,
-        dueDate: tenantStartDate?.add(Duration(days: 7)),
-        banishDate: tenantStartDate?.add(Duration(days: 14)),
-        endDate: tenantStartDate?.add(Duration(days: 30)),
-        paymentStatus: "unpaid",
-        tenancyStatus: tenantStatus,
-        roomStatus: tenantRoomStatus,
-        priceAmount: priceAmount,
-        priceName: priceName,
-        priceDescription: priceDescription,
-        priceRoomSize: priceRoomSize,
-        additionalPrices: updatedAdditionalPrices,
-        otherCosts: updatedOtherCost,
-      );
+        roomId = "";
+        tenantName = "";
+        tenantPhone = "";
+        tenantIdNumber = "";
+        idImagePath = null;
+        isIdCopied = false;
+        tenantStartDate = null;
+        tenantPaymentDate = null;
+        tenantDueDate = null;
+        tenantStatus = "";
+        tenantRoomStatus = "";
+        priceAmount = 0.0;
+        priceName = "";
+        priceDescription = null;
+        priceRoomSize = 'Standard';
+        updatedAdditionalPrices = [];
+        updatedOtherCost = [];
 
-      // await fetchRoom();
-
-      roomId = "";
-      tenantName = "";
-      tenantPhone = "";
-      tenantIdNumber = "";
-      idImagePath = null;
-      isIdCopied = false;
-      tenantStartDate = null;
-      tenantPaymentDate = null;
-      tenantDueDate = null;
-      tenantStatus = "";
-      tenantRoomStatus = "";
-      priceAmount = 0.0;
-      priceName = "";
-      priceDescription = null;
-      priceRoomSize = 'Standard';
-      updatedAdditionalPrices = [];
-      updatedOtherCost = [];
-
-      isBusy = false;
-      isSuccess = true;
-      successMessage = "Berhasil menambah penghuni";
+        isBusy = false;
+        isSuccess = true;
+        successMessage = "Berhasil menambah penghuni";
+      }
     } catch (e) {
       if (e.toString().contains("please reLogin")) {
         isBusy = false;
@@ -712,6 +726,7 @@ class RoomViewModel extends ChangeNotifier {
       selectedRoomSize = null;
       roomStatus = "Tersedia";
       basicPrice = 0;
+      successMessage = "Tambah kamar berhasil.";
       isSuccess = true;
     } catch (e) {
       if (e.toString().contains("please reLogin")) {

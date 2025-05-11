@@ -14,16 +14,16 @@ class AddTenant extends StatefulWidget with GetItStatefulWidgetMixin {
 
 class _AddTenantState extends State<AddTenant> with GetItStateMixin {
   DateTime? _selectedDate;
-  final DateTime _selectedDateNow = DateTime.now();
-  String _selectedShowDate = 'Sekarang';
-  final List<String> _pilihDate = ['Sekarang', 'Nanti'];
+  // final DateTime _selectedDateNow = DateTime.now();
+  // final String _selectedShowDate = 'Sekarang';
+  // final List<String> _pilihDate = ['Sekarang', 'Nanti'];
 
-  @override
-  void initState() {
-    super.initState();
+  // @override
+  // void initState() {
+  //   super.initState();
 
-    get<RoomViewModel>().tenantStartDate = _selectedDateNow;
-  }
+  //   get<RoomViewModel>().tenantStartDate = _selectedDateNow;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -69,71 +69,86 @@ class _AddTenantState extends State<AddTenant> with GetItStateMixin {
           //   },
           // ),
           SizedBox(height: 16),
-          Row(children: [Text("Pilih tanggal mulai:")]),
-          Row(
-            children:
-                _pilihDate.map((when) {
-                  return Expanded(
-                    child: RadioListTile<String>(
-                      dense: true,
-                      title: Text(when),
-                      value: when,
-                      groupValue: _selectedShowDate,
-                      onChanged: (String? value) {
-                        get<RoomViewModel>().tenantRoomStatus =
-                            value == 'Nanti' ? "Dipesan" : "Terisi";
-                        get<RoomViewModel>().tenantStartDate =
-                            value == 'Nanti' ? _selectedDate : _selectedDateNow;
-                        setState(() {
-                          _selectedShowDate = value!;
-                          if (value == 'Nanti') {
-                            _selectedDate = null;
-                            get<RoomViewModel>().tenantStartDate = null;
-                          }
-                        });
-                      },
-                    ),
-                  );
-                }).toList(),
+          // Row(children: [Text("Pilih tanggal mulai:")]),
+          _buildDatePicker(
+            context,
+            "Pilih tanggal mulai",
+            "Tanggal mulai:  ",
+            _selectedDate,
+            (date) {
+              get<RoomViewModel>().tenantStartDate = date;
+              setState(() {
+                _selectedDate = date;
+              });
+            },
+            dateTextStyle: TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
+            labelTextStyle: TextStyle(fontWeight: FontWeight.w600),
           ),
-          Row(
-            children: [
-              if (_selectedShowDate == 'Sekarang')
-                SizedBox(
-                  height: 34,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: Row(
-                      children: [
-                        Text("Tanggal mulai: "),
-                        Text(
-                          (_selectedDateNow.toLocal()).toString().split(' ')[0],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              // if (_selectedShowDate == 'Sekarang')
-              //   Expanded(child: SizedBox()),
-              if (_selectedShowDate != 'Sekarang') Expanded(child: SizedBox()),
-              if (_selectedShowDate != 'Sekarang')
-                _buildDatePicker(
-                  context,
-                  "Tanggal mulai: ",
-                  _selectedDate,
-                  (date) {
-                    get<RoomViewModel>().tenantStartDate = date;
-                    setState(() {
-                      _selectedDate = date;
-                    });
-                  },
-                  dateTextStyle: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                  ),
-                ),
-            ],
-          ),
+
+          // Row(
+          //   children:
+          //       _pilihDate.map((when) {
+          //         return Expanded(
+          //           child: RadioListTile<String>(
+          //             dense: true,
+          //             title: Text(when),
+          //             value: when,
+          //             groupValue: _selectedShowDate,
+          //             onChanged: (String? value) {
+          //               get<RoomViewModel>().tenantRoomStatus =
+          //                   value == 'Nanti' ? "Dipesan" : "Terisi";
+          //               get<RoomViewModel>().tenantStartDate =
+          //                   value == 'Nanti' ? _selectedDate : _selectedDateNow;
+          //               setState(() {
+          //                 _selectedShowDate = value!;
+          //                 if (value == 'Nanti') {
+          //                   _selectedDate = null;
+          //                   get<RoomViewModel>().tenantStartDate = null;
+          //                 }
+          //               });
+          //             },
+          //           ),
+          //         );
+          //       }).toList(),
+          // ),
+          // Row(
+          //   children: [
+          //     if (_selectedShowDate == 'Sekarang')
+          //       SizedBox(
+          //         height: 34,
+          //         child: ElevatedButton(
+          //           onPressed: () {},
+          //           child: Row(
+          //             children: [
+          //               Text("Tanggal mulai: "),
+          //               Text(
+          //                 (_selectedDateNow.toLocal()).toString().split(' ')[0],
+          //               ),
+          //             ],
+          //           ),
+          //         ),
+          //       ),
+          //     // if (_selectedShowDate == 'Sekarang')
+          //     //   Expanded(child: SizedBox()),
+          //     if (_selectedShowDate != 'Sekarang') Expanded(child: SizedBox()),
+          //     if (_selectedShowDate != 'Sekarang')
+          //       _buildDatePicker(
+          //         context,
+          //         "Tanggal mulai: ",
+          //         _selectedDate,
+          //         (date) {
+          //           get<RoomViewModel>().tenantStartDate = date;
+          //           setState(() {
+          //             _selectedDate = date;
+          //           });
+          //         },
+          //         dateTextStyle: TextStyle(
+          //           fontWeight: FontWeight.w600,
+          //           fontSize: 14,
+          //         ),
+          //       ),
+          //   ],
+          // ),
 
           // SizedBox(height: 30),
           // GradientElevatedButton(
@@ -157,6 +172,7 @@ class _AddTenantState extends State<AddTenant> with GetItStateMixin {
 
   Widget _buildDatePicker(
     BuildContext context,
+    String placeholder,
     String label,
     DateTime? selectedDate,
     Function(DateTime) onDateSelected, {
@@ -166,6 +182,9 @@ class _AddTenantState extends State<AddTenant> with GetItStateMixin {
     return SizedBox(
       height: 34,
       child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          shape: ContinuousRectangleBorder(borderRadius: BorderRadius.zero),
+        ),
         onPressed: () async {
           DateTime? pickedDate = await showCustomDatePicker(
             context: context,
@@ -177,7 +196,10 @@ class _AddTenantState extends State<AddTenant> with GetItStateMixin {
         },
         child: Row(
           children: [
-            Text(label, style: labelTextStyle),
+            Text(
+              selectedDate == null ? placeholder : label,
+              style: labelTextStyle,
+            ),
             Text(
               (selectedDate?.toLocal() ?? "").toString().split(' ')[0],
               style: dateTextStyle,

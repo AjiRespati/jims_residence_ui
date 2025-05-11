@@ -130,7 +130,7 @@ class _PaymentListMobileState extends State<PaymentListMobile>
                         child: Row(
                           children: [
                             Expanded(
-                              flex: 9,
+                              flex: 15,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -183,6 +183,7 @@ class _PaymentListMobileState extends State<PaymentListMobile>
                             Expanded(
                               flex: 7,
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     formatCurrency(
