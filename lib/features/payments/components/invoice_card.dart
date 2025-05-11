@@ -61,9 +61,10 @@ class InvoiceCard extends StatelessWidget {
                 ),
 
                 Expanded(
-                  flex: 2,
+                  flex: 3,
                   child: Column(
                     children: [
+                      SizedBox(height: 25),
                       Text(
                         invoiceStatusText(item["status"]),
                         style: TextStyle(
@@ -98,7 +99,7 @@ class InvoiceCard extends StatelessWidget {
                             );
                           },
                           icon: Icon(
-                            Icons.payment_sharp,
+                            Icons.currency_exchange,
                             color: Colors.amber.shade700,
                           ),
                         ),

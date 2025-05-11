@@ -33,11 +33,10 @@ class _TenantCardState extends State<TenantCard> with GetItStateMixin {
             },
             child: Padding(
               padding: const EdgeInsets.all(12),
-              child: Stack(
-                alignment: Alignment.centerRight,
+              child: Column(
                 children: [
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Expanded(
                         flex: 1,
@@ -48,18 +47,21 @@ class _TenantCardState extends State<TenantCard> with GetItStateMixin {
                               '${widget.item['boardingHouseName']} ${widget.item['roomNumber']}',
                             ),
                             SizedBox(height: 4),
-                            Text(
-                              widget.item['name'] ?? 'N/A',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
+                            Row(
+                              children: [
+                                Flexible(
+                                  child: Text(
+                                    widget.item['name'] ?? 'N/A',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
                             ),
                             Text(widget.item['phone'] ?? 'N/A'),
-                            SizedBox(height: 4),
-                            Text(
-                              "Fotocopy KTP: ${(widget.item['isNIKCopyDone'] == true) ? "Sudah" : "Belum"}",
-                            ),
                           ],
                         ),
                       ),
@@ -68,72 +70,58 @@ class _TenantCardState extends State<TenantCard> with GetItStateMixin {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(''),
-                            Text("Mulai:"),
-                            Row(
-                              children: [
-                                SizedBox(width: 20),
-                                Text(
-                                  formatDateString(widget.item['startDate']),
+                            if ((widget.item['isNIKCopyDone'] == false))
+                              Text(
+                                "Fotocopy KTP belum ada!",
+                                style: TextStyle(
+                                  color: Colors.amber.shade800,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                              ],
-                            ),
-                            Text("Sampai:"),
-                            Row(
-                              children: [
-                                SizedBox(width: 20),
-                                Text(formatDateString(widget.item['endDate'])),
-                              ],
-                            ),
-                            // Text("Batas Pembayaran:"),
-                            // Row(
-                            //   children: [
-                            //     SizedBox(width: 20),
-                            //     Text(formatDateString(widget.item['dueDate'])),
-                            //   ],
-                            // ),
-                            // Text("Batas tinggal:"),
-                            // Row(
-                            //   children: [
-                            //     SizedBox(width: 20),
-                            //     Text(formatDateString(widget.item['banishDate'])),
-                            //   ],
-                            // ),
+                              ),
+                            if (widget.item['Invoices'].length != 0)
+                              Text(
+                                "Ada tagihan belum lunas!",
+                                style: TextStyle(
+                                  color: Colors.amber.shade800,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                           ],
-                          // (widget.item['Payments'] as List?)
-                          //     ?.map((p) => Text(p['description'] ?? ''))
-                          //     .toList() ??
-                          // [],
                         ),
                       ),
                     ],
                   ),
-                  if (widget.item['Invoices'].length == 0)
-                    Column(
-                      children: [
-                        Icon(
-                          Icons.check,
-                          size: 30,
-                          color: Colors.greenAccent.shade700,
-                        ),
-                        Text("Lunas"),
-                      ],
-                    ),
-                  if (widget.item['Invoices'].length != 0)
-                    Column(
-                      children: [
-                        Text(
-                          "!",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w900,
-                            fontSize: 26,
-                            color: Colors.amber.shade900,
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Row(
+                        children: [
+                          Text("Mulai:"),
+                          SizedBox(width: 5),
+                          Text(
+                            formatDateString(widget.item['startDate']),
+                            style: TextStyle(
+                              color: Colors.blue.shade800,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        Text("Ada"),
-                        Text("Tagihan"),
-                      ],
-                    ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Text("  s/d "),
+                          SizedBox(width: 5),
+                          Text(
+                            formatDateString(widget.item['endDate']),
+                            style: TextStyle(
+                              color: Colors.blue.shade800,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),

@@ -190,6 +190,7 @@ class _PaymentDetailMobileState extends State<PaymentDetailMobile>
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 18,
+                                color: _generateColor(invoice['status']),
                               ),
                             ),
                           ],
@@ -199,33 +200,46 @@ class _PaymentDetailMobileState extends State<PaymentDetailMobile>
                   ),
                 ),
               ),
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: GradientElevatedButton(
-                onPressed: () async {
-                  await showModalBottomSheet(
-                    isScrollControlled: true,
-                    constraints: BoxConstraints(),
-                    context: context,
-                    builder: (context) {
-                      return Padding(
-                        padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).viewInsets.bottom,
-                        ),
-                        child: SingleChildScrollView(
-                          child: InvoicePayment(item: invoice),
-                        ),
-                      );
-                    },
-                  );
-                },
-                child: Text("Pembayaran"),
+            if (invoice['status'] != 'Paid')
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: GradientElevatedButton(
+                  onPressed: () async {
+                    await showModalBottomSheet(
+                      isScrollControlled: true,
+                      constraints: BoxConstraints(),
+                      context: context,
+                      builder: (context) {
+                        return Padding(
+                          padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom,
+                          ),
+                          child: SingleChildScrollView(
+                            child: InvoicePayment(item: invoice),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  child: Text("Pembayaran"),
+                ),
               ),
-            ),
           ],
         ),
       ),
       bottomNavigationBar: MobileNavbar(selectedindex: 3),
     );
+  }
+}
+
+Color _generateColor(String status) {
+  print(status);
+  switch (status) {
+    case "PartiallyPaid":
+      return Colors.amber.shade800;
+    case "Paid":
+      return Colors.green.shade700;
+    default:
+      return Colors.red.shade600;
   }
 }

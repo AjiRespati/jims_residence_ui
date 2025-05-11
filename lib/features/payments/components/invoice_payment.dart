@@ -103,7 +103,7 @@ class _InvoicdPaymentState extends State<InvoicePayment> with GetItStateMixin {
             SizedBox(height: 6),
             Row(
               children: [
-                Text("Total pembayaran: "),
+                Text("Total belum dibayar: "),
                 Text(
                   formatCurrency(
                     _invoice['totalAmountDue'] - _invoice['totalAmountPaid'],
