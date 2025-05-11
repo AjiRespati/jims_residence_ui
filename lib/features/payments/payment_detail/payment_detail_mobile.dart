@@ -233,7 +233,6 @@ class _PaymentDetailMobileState extends State<PaymentDetailMobile>
 }
 
 Color _generateColor(String status) {
-  print(status);
   switch (status) {
     case "PartiallyPaid":
       return Colors.amber.shade800;

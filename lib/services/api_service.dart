@@ -1105,4 +1105,153 @@ class ApiService {
       );
     }
   }
+
+  Future<bool> createExpense({
+    required String? boardingHouseId,
+    required String? category, // Optional
+    required String name,
+    required double amount,
+    required DateTime expenseDate,
+    required String? paymentMethod,
+    required String? description, // Optional
+  }) async {
+    String? token = await _getToken();
+
+    final response = await http.post(
+      Uri.parse('$baseUrl/expense'),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
+      body: jsonEncode({
+        'boardingHouseId': boardingHouseId,
+        'category': category,
+        'name': name,
+        'amount': amount,
+        'expenseDate': expenseDate,
+        'paymentMethod': paymentMethod,
+        'description': description,
+      }),
+    );
+
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) throw Exception("please reLogin");
+      return await createExpense(
+        boardingHouseId: boardingHouseId,
+        category: category,
+        expenseDate: expenseDate,
+        name: name,
+        paymentMethod: paymentMethod,
+        amount: amount,
+        description: description,
+      );
+    } else if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
+    }
+  }
+
+  Future<dynamic> getAllExpenses({
+    required String? boardingHouseId,
+    required String? category,
+    required DateTime? dateFrom,
+    required DateTime? dateTo,
+  }) async {
+    String? token = await _getToken();
+
+    String url = "$baseUrl/expense";
+    if (boardingHouseId != null && boardingHouseId.isNotEmpty) {
+      url =
+          url.contains("?")
+              ? "$url&boardingHouseId=$boardingHouseId"
+              : "$url?boardingHouseId=$boardingHouseId";
+    }
+    if (category != null) {
+      url =
+          url.contains("?")
+              ? "$url&category=$category"
+              : "$url?category=$category";
+    }
+    if (dateFrom != null) {
+      url =
+          url.contains("?")
+              ? "$url&dateFrom=$dateFrom"
+              : "$url?dateFrom=$dateFrom";
+    }
+    if (dateTo != null) {
+      url = url.contains("?") ? "$url&dateTo=$dateTo" : "$url?dateTo=$dateTo";
+    }
+
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
+    );
+
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) throw Exception("please reLogin");
+      return getAllExpenses(
+        boardingHouseId: boardingHouseId,
+        category: category,
+        dateFrom: dateFrom,
+        dateTo: dateTo,
+      );
+    } else if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
+    }
+  }
+
+  Future<dynamic> getMonthlyReport({
+    required String? boardingHouseId,
+    required int month,
+    required int year,
+  }) async {
+    String? token = await _getToken();
+
+    String url = "$baseUrl/report";
+    if (boardingHouseId != null && boardingHouseId.isNotEmpty) {
+      url =
+          url.contains("?")
+              ? "$url&boardingHouseId=$boardingHouseId"
+              : "$url?boardingHouseId=$boardingHouseId";
+    }
+    url = url.contains("?") ? "$url&month=$month" : "$url?month=$month";
+
+    url = url.contains("?") ? "$url&year=$year" : "$url?year=$year";
+
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
+    );
+
+    if (response.statusCode == 401) {
+      token = await refreshAccessToken();
+      if (token == null) throw Exception("please reLogin");
+      return getMonthlyReport(
+        boardingHouseId: boardingHouseId,
+        month: month,
+        year: year,
+      );
+    } else if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
+    }
+  }
 }

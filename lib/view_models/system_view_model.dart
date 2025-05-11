@@ -2,12 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:residenza/routes/route_names.dart';
-import 'package:residenza/services/api_service.dart';
+// import 'package:residenza/services/api_service.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:residenza/services/auth_api_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SystemViewModel extends ChangeNotifier {
-  final ApiService apiService = ApiService();
+  // final ApiService apiService = ApiService();
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   bool _isBusy = false;
   bool _isLoginView = true;
@@ -119,7 +120,7 @@ class SystemViewModel extends ChangeNotifier {
   }
 
   void onLogin({required BuildContext context}) async {
-    bool isLogin = await apiService.login(
+    bool isLogin = await AuthApiService().login(
       usernameController.text,
       passwordController.text,
     );
@@ -135,7 +136,7 @@ class SystemViewModel extends ChangeNotifier {
   }
 
   Future<bool> register() async {
-    return await apiService.register(
+    return await AuthApiService().register(
       emailController.text,
       passwordController.text,
     );
@@ -143,7 +144,7 @@ class SystemViewModel extends ChangeNotifier {
 
   Future<bool> logout() async {
     isBusy = true;
-    return await apiService.logout();
+    return await AuthApiService().logout();
   }
 
   Future<bool> self({required BuildContext context}) async {
@@ -151,7 +152,7 @@ class SystemViewModel extends ChangeNotifier {
     String? refreshToken = prefs.getString('refreshToken');
     try {
       isBusy = true;
-      user = await apiService.self(refreshToken: refreshToken ?? "-");
+      user = await AuthApiService().self(refreshToken: refreshToken ?? "-");
       level = user['level'];
       username = user['username'];
       levelDesc = user['levelDesc'];
@@ -172,7 +173,7 @@ class SystemViewModel extends ChangeNotifier {
   Future<void> getAllUser() async {
     isBusy = true;
     try {
-      dynamic resp = await apiService.getAllUsers();
+      dynamic resp = await AuthApiService().getAllUsers();
       users = resp;
     } catch (e) {
       if (e.toString().contains("please reLogin")) {
@@ -190,7 +191,7 @@ class SystemViewModel extends ChangeNotifier {
   }) async {
     try {
       isBusy = true;
-      var resp = await apiService.updateUser(
+      var resp = await AuthApiService().updateUser(
         id: id,
         level: level,
         status: status,
@@ -209,6 +210,6 @@ class SystemViewModel extends ChangeNotifier {
   }
 
   Future<bool> genericTable({required String table}) async {
-    return apiService.generic(table);
+    return AuthApiService().generic(table);
   }
 }

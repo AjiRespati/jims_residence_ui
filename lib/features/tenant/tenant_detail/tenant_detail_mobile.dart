@@ -6,7 +6,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:residenza/application_info.dart';
 import 'package:residenza/features/payments/components/invoice_card.dart';
-import 'package:residenza/services/api_service.dart';
+import 'package:residenza/services/tenant_api_service.dart';
+// import 'package:residenza/services/api_service.dart';
 import 'package:residenza/view_models/room_view_model.dart';
 import 'package:residenza/widgets/buttons/gradient_elevated_button.dart';
 import 'package:residenza/widgets/mobile_navbar.dart';
@@ -144,7 +145,7 @@ class _TenantDetailMobileState extends State<TenantDetailMobile>
                               icon: Icon(Icons.camera),
                               label: Text("Camera"),
                               onPressed: () async {
-                                _imageDevice = await ApiService()
+                                _imageDevice = await TenantApiService()
                                     .pickImageMobile(ImageSource.camera);
                                 setState(() {});
                                 await _submit();
@@ -156,7 +157,7 @@ class _TenantDetailMobileState extends State<TenantDetailMobile>
                               icon: Icon(Icons.photo),
                               label: Text("Gallery"),
                               onPressed: () async {
-                                _imageDevice = await ApiService()
+                                _imageDevice = await TenantApiService()
                                     .pickImageMobile(ImageSource.gallery);
                                 setState(() {});
                                 await _submit();
@@ -166,7 +167,8 @@ class _TenantDetailMobileState extends State<TenantDetailMobile>
                           if (kIsWeb) // ✅ Web: File Picker
                             GradientElevatedButton(
                               onPressed: () async {
-                                _imageWeb = await ApiService().pickImageWeb();
+                                _imageWeb =
+                                    await TenantApiService().pickImageWeb();
                                 setState(() {});
                                 await _submit();
                               },

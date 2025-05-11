@@ -12,14 +12,14 @@ class ApplicationInfo {
   static const mainUrlProd = 'https://residenza.id';
 
   //TODO: buat gonta ganti
-  // static const mainUrl = mainUrlDev;
-  static const mainUrl = mainUrlProd;
+  static const mainUrl = mainUrlDev;
+  // static const mainUrl = mainUrlProd;
 
   static const isProduction = mainUrl == mainUrlProd;
 
   static const baseUrl = "$mainUrl/service/api";
 
-  static const appVersion = '1.0.4 ${isProduction ? "" : "DEV"}';
+  static const appVersion = '1.0.5 ${isProduction ? "" : "DEV"}';
 
   static const secondColor = Color.fromARGB(255, 171, 203, 60);
   static const thirdColor = Colors.amber;
@@ -35,5 +35,5 @@ class ApplicationInfo {
   ];
 
   //TODO: DEVELOPER SWITCH
-  static const isDevelOn = true;
+  static const isDevelOn = false;
 }

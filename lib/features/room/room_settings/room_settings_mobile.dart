@@ -22,6 +22,7 @@ class RoomSettingsMobile extends StatefulWidget with GetItStatefulWidgetMixin {
 
 class _RoomSettingsMobileState extends State<RoomSettingsMobile>
     with GetItStateMixin {
+  String _initialStatus = "";
   dynamic _room;
   dynamic _kost;
   // dynamic _tenant;
@@ -35,6 +36,7 @@ class _RoomSettingsMobileState extends State<RoomSettingsMobile>
     // _tenant = _room['latestTenant'];
     // _payment = _tenant?['Payments'][0];
     get<RoomViewModel>().updatedAdditionalPrices = _room['AdditionalPrices'];
+    _initialStatus = _room['roomStatus'] ?? "";
     get<RoomViewModel>().roomStatus = _room['roomStatus'];
     _totalAdditionalPrice = 0;
     for (var el in get<RoomViewModel>().updatedAdditionalPrices) {
@@ -257,14 +259,16 @@ class _RoomSettingsMobileState extends State<RoomSettingsMobile>
                                 ),
                               ),
                               Text(
-                                watchOnly((RoomViewModel x) => x.roomStatus) ??
-                                    "",
+                                _initialStatus,
+                                // watchOnly((RoomViewModel x) => x.roomStatus) ??
+                                //     "",
                                 style: TextStyle(
                                   fontSize: 18,
                                   color: generateRoomStatusColor(
-                                    roomSatus: watchOnly(
-                                      (RoomViewModel x) => x.roomStatus,
-                                    ),
+                                    roomSatus: _initialStatus,
+                                    // roomSatus: watchOnly(
+                                    //   (RoomViewModel x) => x.roomStatus,
+                                    // ),
                                   ),
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -299,7 +303,16 @@ class _RoomSettingsMobileState extends State<RoomSettingsMobile>
                                       );
                                     },
                                   );
-                                  setState(() {});
+                                  setState(() {
+                                    _initialStatus =
+                                        get<RoomViewModel>().roomStatus ?? "";
+                                  });
+                                  get<RoomViewModel>().fetchRooms(
+                                    boardingHouseId:
+                                        get<RoomViewModel>().roomKostId,
+                                    dateFrom: null,
+                                    dateTo: null,
+                                  );
                                 },
                               ),
                               SizedBox(width: 20),
@@ -356,7 +369,7 @@ class _RoomSettingsMobileState extends State<RoomSettingsMobile>
                   ),
                 ],
               ),
-      bottomNavigationBar: MobileNavbar(selectedindex: 1),
+      bottomNavigationBar: MobileNavbar(selectedindex: 4),
     );
   }
 }

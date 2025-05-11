@@ -265,7 +265,9 @@ class _RoomMobileState extends State<RoomMobile> with GetItStateMixin {
           ),
         ],
       ),
-      bottomNavigationBar: MobileNavbar(selectedindex: 1),
+      bottomNavigationBar: MobileNavbar(
+        selectedindex: widget.isSetting ? 4 : 1,
+      ),
     );
   }
 }
