@@ -179,6 +179,29 @@ class ApiService {
     }
   }
 
+  Future<bool> generic(String table) async {
+    String? token = await _getToken();
+    final response = await http.post(
+      Uri.parse('$baseUrl/auth/generic'),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
+      body: jsonEncode({"table": table}),
+    );
+    if (response.statusCode == 401 || response.statusCode == 403) {
+      token = await refreshAccessToken();
+      if (token == null) throw Exception("please reLogin");
+      return generic(table);
+    } else if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
+    }
+  }
+
   // TODO: ROOMS ROUTES
 
   Future<bool> createRoom({

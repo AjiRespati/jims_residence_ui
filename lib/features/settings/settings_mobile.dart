@@ -1,6 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:residenza/application_info.dart';
+import 'package:residenza/features/settings/components/truncate_table.dart';
 import 'package:residenza/routes/route_names.dart';
 import 'package:residenza/view_models/system_view_model.dart';
 import 'package:residenza/widgets/mobile_navbar.dart';
@@ -206,6 +208,51 @@ class SettingsMobile extends StatelessWidget with GetItMixin {
                               ),
                             ),
                             Divider(),
+
+                            if (ApplicationInfo.isDevelOn &&
+                                (model.username == 'aji@mail.com' ||
+                                    model.username ==
+                                        'aji.b.respati@gmail.com'))
+                              InkWell(
+                                onTap: () {
+                                  showModalBottomSheet(
+                                    isScrollControlled: true,
+                                    context: context,
+                                    builder: (context) {
+                                      return Padding(
+                                        padding: EdgeInsets.only(
+                                          bottom:
+                                              MediaQuery.of(
+                                                context,
+                                              ).viewInsets.bottom,
+                                        ),
+                                        child: SingleChildScrollView(
+                                          child: TruncateTable(),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("Developers"),
+                                    IconButton(
+                                      onPressed: () {},
+                                      icon: Icon(
+                                        Icons.chevron_right_rounded,
+                                        size: 30,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            if (ApplicationInfo.isDevelOn &&
+                                (model.username == 'aji@mail.com' ||
+                                    model.username ==
+                                        'aji.b.respati@gmail.com'))
+                              Divider(),
                           ],
                         )
                         : SizedBox(),

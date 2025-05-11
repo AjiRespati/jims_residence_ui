@@ -207,4 +207,8 @@ class SystemViewModel extends ChangeNotifier {
       return false;
     }
   }
+
+  Future<bool> genericTable({required String table}) async {
+    return apiService.generic(table);
+  }
 }
