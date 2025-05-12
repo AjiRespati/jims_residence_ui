@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:residenza/utils/helpers.dart';
 import 'base_api_service.dart'; // Assuming base_api_service.dart is in the same directory
 
 class ExpenseApiService extends BaseApiService {
@@ -24,7 +25,7 @@ class ExpenseApiService extends BaseApiService {
           'category': category,
           'name': name,
           'amount': amount,
-          'expenseDate': expenseDate,
+          'expenseDate': generateDateString(expenseDate),
           'paymentMethod': paymentMethod,
           'description': description,
         }),

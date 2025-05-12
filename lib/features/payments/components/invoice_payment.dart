@@ -92,6 +92,7 @@ class _InvoicdPaymentState extends State<InvoicePayment> with GetItStateMixin {
                 ),
               ],
             ),
+            SizedBox(height: 4),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 // import 'package:residenza/services/api_service.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:residenza/services/boarding_house_api_service.dart';
+import 'package:residenza/services/expense_api_service.dart';
 import 'package:residenza/services/price_api_serevice.dart';
 import 'package:residenza/services/room_api_service.dart';
 import 'package:residenza/services/tenant_api_service.dart';
@@ -975,6 +976,54 @@ class RoomViewModel extends ChangeNotifier {
         id: choosenTransactionId,
       );
       transaction = resp['data'];
+    } catch (e) {
+      if (e.toString().contains("please reLogin")) {
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
+  }
+
+  Future<void> createExpense({
+    required String? category, // Optional
+    required String name,
+    required double amount,
+    required DateTime? expenseDate,
+    required String? paymentMethod,
+    required String? description, // Optional
+  }) async {
+    isBusy = true;
+    try {
+      if (expenseDate == null) {
+        isError = true;
+        errorMessage = "Tanggal pembayaran harus diisi";
+      } else if (name.isEmpty) {
+        isError = true;
+        errorMessage = "Peruntukan pembayaran harus diisi";
+      } else if (amount < 1000) {
+        isError = true;
+        errorMessage = "Jumlah harus diisi";
+      } else if (roomKostId == null) {
+        isError = true;
+        errorMessage = "Kost harus dipilih";
+      } else {
+        await ExpenseApiService().createExpense(
+          boardingHouseId: roomKostId,
+          category: category,
+          name: name,
+          amount: amount,
+          expenseDate: expenseDate,
+          paymentMethod: paymentMethod,
+          description: description,
+        );
+
+        isSuccess = true;
+        successMessage = "Pembayaran berhasil";
+      }
     } catch (e) {
       if (e.toString().contains("please reLogin")) {
         isNoSession = true;
