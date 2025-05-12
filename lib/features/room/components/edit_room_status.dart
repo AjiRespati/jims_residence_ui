@@ -6,7 +6,9 @@ import 'package:residenza/widgets/buttons/gradient_elevated_button.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
 class EditRoomStatus extends StatefulWidget with GetItStatefulWidgetMixin {
-  EditRoomStatus({super.key});
+  EditRoomStatus({required this.oldStatus, super.key});
+
+  final String? oldStatus;
 
   @override
   State<EditRoomStatus> createState() => _EditRoomStatusState();
@@ -19,7 +21,7 @@ class _EditRoomStatusState extends State<EditRoomStatus> with GetItStateMixin {
   @override
   void initState() {
     super.initState();
-    _oldStatus = get<RoomViewModel>().roomStatus;
+    _oldStatus = widget.oldStatus;
     _selectedStatus = get<RoomViewModel>().roomStatus;
   }
 
@@ -48,7 +50,7 @@ class _EditRoomStatusState extends State<EditRoomStatus> with GetItStateMixin {
                 }).toList(),
             onChanged: (value) {
               _selectedStatus = value;
-              get<RoomViewModel>().roomStatus = value;
+              // get<RoomViewModel>().roomStatus = value;
               setState(() {});
             },
           ),
@@ -88,13 +90,24 @@ class _EditRoomStatusState extends State<EditRoomStatus> with GetItStateMixin {
                               },
                               child: Text("Batal"),
                             ),
+                            SizedBox(width: 5),
                             GradientElevatedButton(
+                              gradient: LinearGradient(
+                                colors: [
+                                  Colors.greenAccent.shade400,
+                                  Colors.greenAccent.shade700,
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
                               onPressed: () async {
                                 get<RoomViewModel>().isBusy = true;
+                                get<RoomViewModel>().roomStatus =
+                                    _selectedStatus;
                                 await get<RoomViewModel>().updateRoomStatus();
                                 await Future.delayed(Durations.medium4);
-                                Navigator.pop(context);
-                                Navigator.pop(context);
+                                Navigator.pop(context, true);
+                                Navigator.pop(context, true);
                               },
                               child: Text("Ya"),
                             ),
@@ -104,9 +117,10 @@ class _EditRoomStatusState extends State<EditRoomStatus> with GetItStateMixin {
                     );
                   } else {
                     get<RoomViewModel>().isBusy = true;
+                    get<RoomViewModel>().roomStatus = _selectedStatus;
                     await get<RoomViewModel>().updateRoomStatus();
                     await Future.delayed(Durations.medium4);
-                    Navigator.pop(context);
+                    Navigator.pop(context, true);
                   }
                 },
                 child: Text(
