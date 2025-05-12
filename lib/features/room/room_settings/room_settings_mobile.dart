@@ -279,7 +279,7 @@ class _RoomSettingsMobileState extends State<RoomSettingsMobile>
                                 size: 34,
                                 message: "",
                                 onPressed: () async {
-                                  await showModalBottomSheet(
+                                  final result = await showModalBottomSheet(
                                     isScrollControlled: true,
                                     constraints: BoxConstraints(
                                       minHeight: 440,
@@ -297,22 +297,26 @@ class _RoomSettingsMobileState extends State<RoomSettingsMobile>
                                         child: SingleChildScrollView(
                                           child: SizedBox(
                                             width: 600,
-                                            child: EditRoomStatus(),
+                                            child: EditRoomStatus(
+                                              oldStatus: _initialStatus,
+                                            ),
                                           ),
                                         ),
                                       );
                                     },
                                   );
-                                  setState(() {
-                                    _initialStatus =
-                                        get<RoomViewModel>().roomStatus ?? "";
-                                  });
-                                  get<RoomViewModel>().fetchRooms(
-                                    boardingHouseId:
-                                        get<RoomViewModel>().roomKostId,
-                                    dateFrom: null,
-                                    dateTo: null,
-                                  );
+                                  if (result == true) {
+                                    setState(() {
+                                      _initialStatus =
+                                          get<RoomViewModel>().roomStatus ?? "";
+                                    });
+                                    get<RoomViewModel>().fetchRooms(
+                                      boardingHouseId:
+                                          get<RoomViewModel>().roomKostId,
+                                      dateFrom: null,
+                                      dateTo: null,
+                                    );
+                                  }
                                 },
                               ),
                               SizedBox(width: 20),
