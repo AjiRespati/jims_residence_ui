@@ -59,6 +59,15 @@ String formatHariDateString(String? dateTimeString) {
   return result;
 }
 
+String formatBulanTahun(DateTime? dateTime) {
+  String result = " -";
+  if (dateTime != null) {
+    final formatter = DateFormat('MMMM yyyy', 'id_ID');
+    result = formatter.format(dateTime);
+  }
+  return result;
+}
+
 String formatCurrency(num number) {
   // Floor rounding the number
   int roundedNumber = number.floor();
@@ -180,7 +189,7 @@ String invoiceStatusText(String status) {
     case 'Unpaid':
       return 'Belum dibayar';
     case 'PartiallyPaid':
-      return 'Sudah bayar sebagian';
+      return 'Bayar sebagian';
     default:
       return status;
   }

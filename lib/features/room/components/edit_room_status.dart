@@ -13,11 +13,13 @@ class EditRoomStatus extends StatefulWidget with GetItStatefulWidgetMixin {
 }
 
 class _EditRoomStatusState extends State<EditRoomStatus> with GetItStateMixin {
+  String? _oldStatus;
   String? _selectedStatus;
 
   @override
   void initState() {
     super.initState();
+    _oldStatus = get<RoomViewModel>().roomStatus;
     _selectedStatus = get<RoomViewModel>().roomStatus;
   }
 
@@ -56,10 +58,56 @@ class _EditRoomStatusState extends State<EditRoomStatus> with GetItStateMixin {
             children: [
               GradientElevatedButton(
                 onPressed: () async {
-                  get<RoomViewModel>().isBusy = true;
-                  await get<RoomViewModel>().updateRoomStatus();
-                  await Future.delayed(Durations.medium4);
-                  Navigator.pop(context);
+                  if (_oldStatus == "Terisi") {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text("Kamar ini terisi"),
+                          icon: Icon(Icons.meeting_room),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                "Kamari ini sedang terisi. Apakah anda akan mengubah status kamar ini menjadi",
+                                maxLines: 3,
+                              ),
+                              Text(
+                                _selectedStatus ?? "",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          actions: [
+                            GradientElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text("Batal"),
+                            ),
+                            GradientElevatedButton(
+                              onPressed: () async {
+                                get<RoomViewModel>().isBusy = true;
+                                await get<RoomViewModel>().updateRoomStatus();
+                                await Future.delayed(Durations.medium4);
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              },
+                              child: Text("Ya"),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  } else {
+                    get<RoomViewModel>().isBusy = true;
+                    await get<RoomViewModel>().updateRoomStatus();
+                    await Future.delayed(Durations.medium4);
+                    Navigator.pop(context);
+                  }
                 },
                 child: Text(
                   "Ubah Status",

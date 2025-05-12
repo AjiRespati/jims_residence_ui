@@ -25,7 +25,6 @@ class _RoomViewState extends State<RoomView> with GetItStateMixin {
         dateTo: null,
       );
       get<RoomViewModel>().fetchKosts();
-
       get<SystemViewModel>().currentPageIndex = widget.isSetting ? 4 : 1;
     });
   }

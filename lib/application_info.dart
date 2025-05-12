@@ -12,8 +12,8 @@ class ApplicationInfo {
   static const mainUrlProd = 'https://residenza.id';
 
   //TODO: buat gonta ganti
-  // static const mainUrl = mainUrlDev;
-  static const mainUrl = mainUrlProd;
+  static const mainUrl = mainUrlDev;
+  // static const mainUrl = mainUrlProd;
 
   static const isProduction = mainUrl == mainUrlProd;
 
@@ -35,5 +35,5 @@ class ApplicationInfo {
   ];
 
   //TODO: DEVELOPER SWITCH
-  static const isDevelOn = true;
+  static const isDevelOn = false;
 }

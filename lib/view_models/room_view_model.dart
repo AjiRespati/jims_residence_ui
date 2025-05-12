@@ -3,13 +3,16 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:residenza/services/api_service.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:residenza/services/boarding_house_api_service.dart';
+import 'package:residenza/services/expense_api_service.dart';
+import 'package:residenza/services/price_api_serevice.dart';
+import 'package:residenza/services/report_api_service.dart';
+import 'package:residenza/services/room_api_service.dart';
+import 'package:residenza/services/tenant_api_service.dart';
+import 'package:residenza/services/transaction_invoice_api_service.dart';
 
 class RoomViewModel extends ChangeNotifier {
-  final ApiService apiService = ApiService();
-  // final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-
   bool _isUpdating = false;
   bool _isBusy = false;
   bool _isNoSession = false;
@@ -425,6 +428,10 @@ class RoomViewModel extends ChangeNotifier {
   DateTime _transactionDate = DateTime.now();
   String _transactionDescription = "";
 
+  List<dynamic> _expenses = [];
+
+  List<dynamic> _kostMonthlyReport = [];
+
   List<dynamic> get invoices => _invoices;
   set invoices(List<dynamic> val) {
     _invoices = val;
@@ -491,13 +498,25 @@ class RoomViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  List<dynamic> get expenses => _expenses;
+  set expenses(List<dynamic> val) {
+    _expenses = val;
+    notifyListeners();
+  }
+
+  List<dynamic> get kostMonthlyReport => _kostMonthlyReport;
+  set kostMonthlyReport(List<dynamic> val) {
+    _kostMonthlyReport = val;
+    notifyListeners();
+  }
+
   /// ################## ///
   ///       METHOD       ///
   /// ################## ///
 
   Future<void> updateRoomStatus() async {
     try {
-      dynamic resp = await apiService.updateRoomStatus(
+      dynamic resp = await RoomApiService().updateRoomStatus(
         roomId: roomId,
         roomStatus: roomStatus ?? "",
       );
@@ -538,7 +557,7 @@ class RoomViewModel extends ChangeNotifier {
         isError = true;
         errorMessage = "Harga harus diisi";
       } else {
-        await apiService.createTenant(
+        await TenantApiService().createTenant(
           roomId: roomId,
           name: tenantName,
           phone: tenantPhone,
@@ -603,7 +622,7 @@ class RoomViewModel extends ChangeNotifier {
     required DateTime? dateTo,
   }) async {
     isBusy = true;
-    dynamic resp = await apiService.fetchTenants(
+    dynamic resp = await TenantApiService().fetchTenants(
       boardingHouseId: boardingHouseId,
       dateFrom: dateFrom,
       dateTo: dateTo,
@@ -615,7 +634,7 @@ class RoomViewModel extends ChangeNotifier {
 
   Future<bool> fetchTenant() async {
     isBusy = true;
-    dynamic resp = await apiService.fetchTenant(id: tenantId);
+    dynamic resp = await TenantApiService().fetchTenant(id: tenantId);
     tenant = resp['data'];
     isBusy = false;
     return tenant != null;
@@ -628,13 +647,12 @@ class RoomViewModel extends ChangeNotifier {
   }) async {
     try {
       isBusy = true;
-      dynamic resp = await apiService.updateTenant(
+      dynamic resp = await TenantApiService().updateTenant(
         tenantId: tenantId,
         imageWeb: imageWeb,
         imageDevice: imageDevice,
       );
       tenant = resp['data'];
-      // await apiService.fetchTenants();
       isBusy = false;
       isSuccess = true;
       successMessage = "Berhasil update data tenant";
@@ -658,7 +676,7 @@ class RoomViewModel extends ChangeNotifier {
   Future<void> createKost() async {
     try {
       isBusy = true;
-      await apiService.createKost(
+      await BoardingHouseApiService().createKost(
         name: kostName,
         address: kostAddress,
         description: kostDescription,
@@ -683,7 +701,7 @@ class RoomViewModel extends ChangeNotifier {
   Future<void> fetchKosts() async {
     try {
       isBusy = true;
-      var resp = await apiService.fetchKosts();
+      var resp = await BoardingHouseApiService().fetchKosts();
       kosts = resp['data'];
     } catch (e) {
       if (e.toString().contains("please reLogin")) {
@@ -704,13 +722,12 @@ class RoomViewModel extends ChangeNotifier {
     try {
       isBusy = true;
 
-      await apiService.createRoom(
+      await RoomApiService().createRoom(
         boardingHouseId: roomKostId,
         roomNumber: roomNumber,
         roomSize: 'Standard',
         roomStatus: roomStatus ?? "",
         description: description,
-        // priceId: selectedRoomSize['id'],
       );
 
       await fetchRooms(
@@ -749,7 +766,7 @@ class RoomViewModel extends ChangeNotifier {
   }) async {
     try {
       isBusy = true;
-      var resp = await apiService.fetchRooms(
+      var resp = await RoomApiService().fetchRooms(
         boardingHouseId: boardingHouseId,
         dateFrom: dateFrom,
         dateTo: dateTo,
@@ -771,7 +788,7 @@ class RoomViewModel extends ChangeNotifier {
     try {
       if (roomId.isNotEmpty) {
         isBusy = true;
-        var resp = await apiService.fetchRoom(roomId: roomId);
+        var resp = await RoomApiService().fetchRoom(roomId: roomId);
         room = resp['data'];
       }
     } catch (e) {
@@ -790,7 +807,7 @@ class RoomViewModel extends ChangeNotifier {
     try {
       if (roomId.isNotEmpty) {
         isBusy = true;
-        var resp = await apiService.updateRoom(
+        var resp = await RoomApiService().updateRoom(
           roomId: roomId,
           roomUpdateData: {},
           additionalPrices: updatedAdditionalPrices,
@@ -820,7 +837,7 @@ class RoomViewModel extends ChangeNotifier {
   Future<void> createPrice() async {
     try {
       isBusy = true;
-      await apiService.createPrice(
+      await PriceApiService().createPrice(
         boardingHouseId: roomKostId,
         name: priceName,
         amount: priceAmount,
@@ -853,7 +870,7 @@ class RoomViewModel extends ChangeNotifier {
   Future<void> fetchPrices() async {
     isBusy = true;
     try {
-      var resp = await apiService.fetchPrices();
+      var resp = await PriceApiService().fetchPrices();
       prices = resp['data'];
     } catch (e) {
       if (e.toString().contains("please reLogin")) {
@@ -869,14 +886,14 @@ class RoomViewModel extends ChangeNotifier {
 
   // TODO:  TRANSACTION AND INVOICE
 
-  Future<void> fetchInvoices({
+  Future<void> fetchInvoicesx({
     required String? boardingHouseId,
     required DateTime? dateFrom,
     required DateTime? dateTo,
   }) async {
     isBusy = true;
     try {
-      var resp = await apiService.getAllInvoices(
+      var resp = await TransactionInvoiceApiService().getAllInvoices(
         boardingHouseId: boardingHouseId,
         dateFrom: dateFrom,
         dateTo: dateTo,
@@ -897,7 +914,9 @@ class RoomViewModel extends ChangeNotifier {
   Future<void> fetchInvoice() async {
     isBusy = true;
     try {
-      var resp = await apiService.getInvoice(id: choosenInvoiceId);
+      var resp = await TransactionInvoiceApiService().getInvoice(
+        id: choosenInvoiceId,
+      );
       invoice = resp['data'];
     } catch (e) {
       if (e.toString().contains("please reLogin")) {
@@ -914,7 +933,7 @@ class RoomViewModel extends ChangeNotifier {
   Future<void> recordTransaction() async {
     try {
       isBusy = true;
-      await apiService.recordTransaction(
+      await TransactionInvoiceApiService().recordTransaction(
         invoiceId: invoiceId,
         transactionDate: transactionDate,
         method: transactionMethod,
@@ -944,11 +963,42 @@ class RoomViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchTransactions() async {
+  Future<void> createExpense({
+    required String? category, // Optional
+    required String name,
+    required double amount,
+    required DateTime? expenseDate,
+    required String? paymentMethod,
+    required String? description, // Optional
+  }) async {
     isBusy = true;
     try {
-      var resp = await apiService.getAllTransacations();
-      transactions = resp['data'];
+      if (expenseDate == null) {
+        isError = true;
+        errorMessage = "Tanggal pembayaran harus diisi";
+      } else if (name.isEmpty) {
+        isError = true;
+        errorMessage = "Peruntukan pembayaran harus diisi";
+      } else if (amount < 1000) {
+        isError = true;
+        errorMessage = "Jumlah harus diisi";
+      } else if (roomKostId == null) {
+        isError = true;
+        errorMessage = "Kost harus dipilih";
+      } else {
+        await ExpenseApiService().createExpense(
+          boardingHouseId: roomKostId,
+          category: category,
+          name: name,
+          amount: amount,
+          expenseDate: expenseDate,
+          paymentMethod: paymentMethod,
+          description: description,
+        );
+
+        isSuccess = true;
+        successMessage = "Pembayaran berhasil";
+      }
     } catch (e) {
       if (e.toString().contains("please reLogin")) {
         isNoSession = true;
@@ -961,11 +1011,51 @@ class RoomViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchTransaction() async {
+  Future<void> getMonthlyReport({
+    required String? boardingHouseId,
+    required int month,
+    required int year,
+  }) async {
     isBusy = true;
     try {
-      var resp = await apiService.getTransaction(id: choosenTransactionId);
-      transaction = resp['data'];
+      var resp = await ReportApiService().getMonthlyReport(
+        boardingHouseId: boardingHouseId,
+        month: month,
+        year: year,
+      );
+
+      kostMonthlyReport = resp['data'];
+    } catch (e) {
+      if (e.toString().contains("please reLogin")) {
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
+  }
+
+  Future<void> getFinancialOverview({
+    required String? boardingHouseId,
+    required DateTime? dateFrom,
+    required DateTime? dateTo,
+  }) async {
+    isBusy = true;
+    final now = DateTime.now();
+
+    try {
+      var resp = await ReportApiService().getFinancialOverview(
+        boardingHouseId: boardingHouseId,
+        dateFrom: dateFrom ?? DateTime(now.year, now.month),
+        dateTo:
+            dateTo ??
+            DateTime(now.year, now.month + 1).subtract(Duration(seconds: 1)),
+      );
+
+      invoices = resp['data']['invoices'];
+      expenses = resp['data']['expenses'];
     } catch (e) {
       if (e.toString().contains("please reLogin")) {
         isNoSession = true;

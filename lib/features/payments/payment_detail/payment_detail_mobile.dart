@@ -200,14 +200,13 @@ class _PaymentDetailMobileState extends State<PaymentDetailMobile>
                   ),
                 ),
               ),
-            if (invoice['status'] != 'Paid')
+            if (invoice != null && (invoice['status'] != 'Paid'))
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: GradientElevatedButton(
                   onPressed: () async {
                     await showModalBottomSheet(
                       isScrollControlled: true,
-                      constraints: BoxConstraints(),
                       context: context,
                       builder: (context) {
                         return Padding(
@@ -233,7 +232,6 @@ class _PaymentDetailMobileState extends State<PaymentDetailMobile>
 }
 
 Color _generateColor(String status) {
-  print(status);
   switch (status) {
     case "PartiallyPaid":
       return Colors.amber.shade800;
