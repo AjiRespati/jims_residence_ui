@@ -89,7 +89,6 @@ class _CreateExpenseContentState extends State<CreateExpenseContent>
             "Tanggal:  ",
             expenseDate,
             (date) {
-              // get<RoomViewModel>().tenantStartDate = date;
               setState(() {
                 expenseDate = date;
               });
@@ -111,7 +110,6 @@ class _CreateExpenseContentState extends State<CreateExpenseContent>
             ),
             keyboardType: TextInputType.name,
             controller: nameController,
-            // onChanged: (value) => get<RoomViewModel>().tenantName = value,
           ),
           SizedBox(height: 12),
           DropdownButtonFormField<String>(
@@ -142,7 +140,6 @@ class _CreateExpenseContentState extends State<CreateExpenseContent>
             ),
             keyboardType: TextInputType.number,
             controller: descriptionController,
-            // onChanged: (value) => get<RoomViewModel>().tenantIdNumber = value,
           ),
           SizedBox(height: 12),
           SizedBox(height: 30),
@@ -174,22 +171,15 @@ class _CreateExpenseContentState extends State<CreateExpenseContent>
                         paymentMethod: paymentMethod,
                         description: descriptionController.text,
                       );
+
+                      if (get<RoomViewModel>().isSuccess) {
+                        await get<RoomViewModel>().getFinancialOverview(
+                          boardingHouseId: get<RoomViewModel>().roomKostId,
+                          dateFrom: null,
+                          dateTo: null,
+                        );
+                      }
                       Navigator.pop(context);
-
-                      if (get<RoomViewModel>().isSuccess) {}
-
-                      // get<RoomViewModel>().transactionAmount =
-                      //     double.parse(_rawValue);
-                      // get<RoomViewModel>().tenantId =
-                      //     widget.item['Tenant']['id'];
-                      // await get<RoomViewModel>()
-                      //     .recordTransaction();
-                      // _amountController.text = "";
-                      // _rawValue = "";
-                      // Navigator.pushNamed(
-                      //   context,
-                      //   tenantDetailRoute,
-                      // );
                     },
                     child: Text("Bayar"),
                   ),

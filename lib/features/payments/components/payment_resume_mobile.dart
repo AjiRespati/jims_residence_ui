@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
-import 'package:residenza/utils/helpers.dart';
+import 'package:residenza/features/payments/components/resume_item.dart';
 import 'package:residenza/view_models/room_view_model.dart';
 import 'package:residenza/widgets/month_selector_dropdown.dart';
 
@@ -68,8 +68,9 @@ class _PaymentResumeMobileState extends State<PaymentResumeMobile>
                                 .first;
                         get<RoomViewModel>().roomKostId = item['id'];
                         _boardingHouseId = item['id'];
-                        await get<RoomViewModel>().fetchInvoices(
-                          boardingHouseId: item['id'],
+
+                        get<RoomViewModel>().getFinancialOverview(
+                          boardingHouseId: _boardingHouseId,
                           dateFrom: _dateFrom,
                           dateTo: _dateTo,
                         );
@@ -86,7 +87,7 @@ class _PaymentResumeMobileState extends State<PaymentResumeMobile>
                       ) async {
                         _dateFrom = dateFrom;
                         _dateTo = dateTo;
-                        await get<RoomViewModel>().fetchInvoices(
+                        get<RoomViewModel>().getFinancialOverview(
                           boardingHouseId: _boardingHouseId,
                           dateFrom: _dateFrom,
                           dateTo: _dateTo,
@@ -103,73 +104,12 @@ class _PaymentResumeMobileState extends State<PaymentResumeMobile>
         SizedBox(height: 6),
         Divider(),
         Expanded(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  elevation: 2,
-                  child: ClipRRect(
-                    child: InkWell(
-                      onTap: () {},
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              flex: 9,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Pemasukan",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text("Rp"),
-                                      SizedBox(width: 5),
-                                      Text("10.000.000,00"),
-                                    ],
-                                  ),
-
-                                  SizedBox(height: 10),
-
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "Belum ditransfer",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-
-                                      Text("Rp5.000.000,00"),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              flex: 7,
-                              child: Column(
-                                children: [Text(formatCurrency(10000000.0))],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
+          child: ListView.builder(
+            itemCount: get<RoomViewModel>().kostMonthlyReport.length,
+            itemBuilder: (context, index) {
+              final item = get<RoomViewModel>().kostMonthlyReport[index];
+              return ResumeItem(item: item);
+            },
           ),
         ),
       ],

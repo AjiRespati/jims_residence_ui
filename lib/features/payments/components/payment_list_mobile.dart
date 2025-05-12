@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
-import 'package:residenza/routes/route_names.dart';
+import 'package:residenza/features/payments/components/invoice_item.dart';
 import 'package:residenza/utils/helpers.dart';
 import 'package:residenza/view_models/room_view_model.dart';
 import 'package:residenza/widgets/month_selector_dropdown.dart';
@@ -69,7 +69,8 @@ class _PaymentListMobileState extends State<PaymentListMobile>
                                 .first;
                         get<RoomViewModel>().roomKostId = item['id'];
                         _boardingHouseId = item['id'];
-                        await get<RoomViewModel>().fetchInvoices(
+
+                        get<RoomViewModel>().getFinancialOverview(
                           boardingHouseId: item['id'],
                           dateFrom: _dateFrom,
                           dateTo: _dateTo,
@@ -87,7 +88,8 @@ class _PaymentListMobileState extends State<PaymentListMobile>
                       ) async {
                         _dateFrom = dateFrom;
                         _dateTo = dateTo;
-                        await get<RoomViewModel>().fetchInvoices(
+
+                        get<RoomViewModel>().getFinancialOverview(
                           boardingHouseId: _boardingHouseId,
                           dateFrom: _dateFrom,
                           dateTo: _dateTo,
@@ -102,100 +104,143 @@ class _PaymentListMobileState extends State<PaymentListMobile>
           ),
         ),
         SizedBox(height: 6),
-        Divider(),
+        Divider(thickness: 0.5),
+        Row(
+          children: [
+            SizedBox(width: 20),
+            Text(
+              "Invoices (${get<RoomViewModel>().invoices.length})",
+              style: TextStyle(
+                color: Colors.blue.shade700,
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 4),
         Expanded(
+          flex: 11,
           child: ListView.builder(
             itemCount: get<RoomViewModel>().invoices.length,
             itemBuilder: (context, idx) {
               dynamic invoice = get<RoomViewModel>().invoices[idx];
-              // dynamic invoice = invoice['Invoice'];
               dynamic tenant = invoice['Tenant'];
               dynamic room = invoice['Room'];
               dynamic transactions = invoice['Transactions'];
+              return InvoiceItem(
+                invoice: invoice,
+                tenant: tenant,
+                room: room,
+                transactions: transactions,
+              );
+            },
+          ),
+        ),
+        Divider(thickness: 0.5),
+        Row(
+          children: [
+            SizedBox(width: 20),
+            Text(
+              "Expenses (${get<RoomViewModel>().expenses.length})",
+              style: TextStyle(
+                color: Colors.red.shade700,
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 4),
+        Expanded(
+          flex: 7,
+          child: ListView.builder(
+            itemCount: get<RoomViewModel>().expenses.length,
+            itemBuilder: (context, idx) {
+              dynamic expense = get<RoomViewModel>().expenses[idx];
               return Padding(
                 padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
                 child: Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  elevation: 2,
-                  child: ClipRRect(
-                    child: InkWell(
-                      onTap: () {
-                        get<RoomViewModel>().choosenInvoiceId = invoice['id'];
-                        Navigator.pushNamed(context, paymentDetailRoute);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              flex: 15,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                  elevation: 1,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          flex: 15,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
                                 children: [
-                                  if (tenant == null && room == null)
-                                    Flexible(
-                                      child: Text(
-                                        invoice['description'],
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                  if (tenant != null)
-                                    Text(
-                                      tenant['name'],
+                                  Flexible(
+                                    child: Text(
+                                      expense['name'],
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,
                                       ),
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                  if (room != null)
-                                    Row(
-                                      children: [
-                                        Text(
-                                          room['BoardingHouse']['name'] + ",",
-                                        ),
-                                        SizedBox(width: 5),
-                                        Text(room['roomNumber']),
-                                      ],
-                                    ),
-
-                                  SizedBox(height: 10),
-
-                                  Row(
-                                    children: [
-                                      Text(
-                                        invoiceStatusText(invoice['status']),
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      if (transactions.length > 0)
-                                        Text(
-                                          ": ${formatDateString(transactions[0]['transactionDate'])}",
-                                        ),
-                                    ],
                                   ),
                                 ],
                               ),
-                            ),
-                            Expanded(
-                              flex: 7,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                              Text(expense['BoardingHouse']['name']),
+                              SizedBox(height: 4),
+                              Text(
+                                expense['createBy'],
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              Row(
                                 children: [
-                                  Text(
-                                    formatCurrency(
-                                      invoice['totalAmountDue'].toDouble(),
+                                  Flexible(
+                                    child: Text(
+                                      expense['description'],
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                 ],
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
+                        Expanded(
+                          flex: 8,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                formatCurrency(expense['amount'].toDouble()),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              Text(
+                                expense['paymentMethod'],
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              Row(
+                                children: [
+                                  SizedBox(width: 20),
+                                  Text(
+                                    formatDateString(expense['expenseDate']),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),

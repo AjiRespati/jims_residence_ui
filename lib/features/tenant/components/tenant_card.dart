@@ -72,7 +72,7 @@ class _TenantCardState extends State<TenantCard> with GetItStateMixin {
                           children: [
                             if ((widget.item['isNIKCopyDone'] == false))
                               Text(
-                                "Fotocopy KTP belum ada!",
+                                "Fotocopy KTP belum ada !",
                                 style: TextStyle(
                                   color: Colors.amber.shade800,
                                   fontWeight: FontWeight.bold,
@@ -80,7 +80,7 @@ class _TenantCardState extends State<TenantCard> with GetItStateMixin {
                               ),
                             if (widget.item['Invoices'].length != 0)
                               Text(
-                                "Ada tagihan belum lunas!",
+                                "Ada tagihan belum lunas !",
                                 style: TextStyle(
                                   color: Colors.amber.shade800,
                                   fontWeight: FontWeight.bold,

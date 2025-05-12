@@ -55,8 +55,8 @@ class _PaymentsMobileState extends State<PaymentsMobile>
           controller: _tabController,
           indicatorColor: Colors.blue.shade700,
           indicatorSize: TabBarIndicatorSize.label,
-          indicatorWeight: 5,
-          labelStyle: TextStyle(fontWeight: FontWeight.w500),
+          indicatorWeight: 6,
+          labelStyle: TextStyle(fontWeight: FontWeight.w600),
           tabs: [
             Tab(icon: Icon(Icons.list_alt), text: "List"),
             Tab(icon: Icon(Icons.note_add_outlined), text: "Resume"),

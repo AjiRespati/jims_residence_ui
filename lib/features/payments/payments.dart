@@ -17,10 +17,21 @@ class _PaymentsState extends State<Payments> with GetItStateMixin {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      get<RoomViewModel>().fetchInvoices(
+      final now = DateTime.now();
+
+      get<RoomViewModel>().getMonthlyReport(
         boardingHouseId: get<RoomViewModel>().roomKostId,
-        dateFrom: null,
-        dateTo: null,
+        month: DateTime.now().month,
+        year: DateTime.now().year,
+      );
+
+      get<RoomViewModel>().getFinancialOverview(
+        boardingHouseId: get<RoomViewModel>().roomKostId,
+        dateFrom: DateTime(now.year, now.month),
+        dateTo: DateTime(
+          now.year,
+          now.month + 1,
+        ).subtract(Duration(seconds: 1)),
       );
     });
   }

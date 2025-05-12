@@ -3,19 +3,16 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-// import 'package:residenza/services/api_service.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:residenza/services/boarding_house_api_service.dart';
 import 'package:residenza/services/expense_api_service.dart';
 import 'package:residenza/services/price_api_serevice.dart';
+import 'package:residenza/services/report_api_service.dart';
 import 'package:residenza/services/room_api_service.dart';
 import 'package:residenza/services/tenant_api_service.dart';
 import 'package:residenza/services/transaction_invoice_api_service.dart';
 
 class RoomViewModel extends ChangeNotifier {
-  // final ApiService apiService = ApiService();
-  // final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-
   bool _isUpdating = false;
   bool _isBusy = false;
   bool _isNoSession = false;
@@ -431,6 +428,10 @@ class RoomViewModel extends ChangeNotifier {
   DateTime _transactionDate = DateTime.now();
   String _transactionDescription = "";
 
+  List<dynamic> _expenses = [];
+
+  List<dynamic> _kostMonthlyReport = [];
+
   List<dynamic> get invoices => _invoices;
   set invoices(List<dynamic> val) {
     _invoices = val;
@@ -494,6 +495,18 @@ class RoomViewModel extends ChangeNotifier {
   String get transactionDescription => _transactionDescription;
   set transactionDescription(String val) {
     _transactionDescription = val;
+    notifyListeners();
+  }
+
+  List<dynamic> get expenses => _expenses;
+  set expenses(List<dynamic> val) {
+    _expenses = val;
+    notifyListeners();
+  }
+
+  List<dynamic> get kostMonthlyReport => _kostMonthlyReport;
+  set kostMonthlyReport(List<dynamic> val) {
+    _kostMonthlyReport = val;
     notifyListeners();
   }
 
@@ -640,7 +653,6 @@ class RoomViewModel extends ChangeNotifier {
         imageDevice: imageDevice,
       );
       tenant = resp['data'];
-      // await apiService.fetchTenants();
       isBusy = false;
       isSuccess = true;
       successMessage = "Berhasil update data tenant";
@@ -716,7 +728,6 @@ class RoomViewModel extends ChangeNotifier {
         roomSize: 'Standard',
         roomStatus: roomStatus ?? "",
         description: description,
-        // priceId: selectedRoomSize['id'],
       );
 
       await fetchRooms(
@@ -875,7 +886,7 @@ class RoomViewModel extends ChangeNotifier {
 
   // TODO:  TRANSACTION AND INVOICE
 
-  Future<void> fetchInvoices({
+  Future<void> fetchInvoicesx({
     required String? boardingHouseId,
     required DateTime? dateFrom,
     required DateTime? dateTo,
@@ -952,42 +963,6 @@ class RoomViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchTransactions() async {
-    isBusy = true;
-    try {
-      var resp = await TransactionInvoiceApiService().getAllTransacations();
-      transactions = resp['data'];
-    } catch (e) {
-      if (e.toString().contains("please reLogin")) {
-        isNoSession = true;
-      } else {
-        errorMessage = e.toString().replaceAll('Exception: ', '');
-        isError = true;
-      }
-    } finally {
-      isBusy = false;
-    }
-  }
-
-  Future<void> fetchTransaction() async {
-    isBusy = true;
-    try {
-      var resp = await TransactionInvoiceApiService().getTransaction(
-        id: choosenTransactionId,
-      );
-      transaction = resp['data'];
-    } catch (e) {
-      if (e.toString().contains("please reLogin")) {
-        isNoSession = true;
-      } else {
-        errorMessage = e.toString().replaceAll('Exception: ', '');
-        isError = true;
-      }
-    } finally {
-      isBusy = false;
-    }
-  }
-
   Future<void> createExpense({
     required String? category, // Optional
     required String name,
@@ -1024,6 +999,63 @@ class RoomViewModel extends ChangeNotifier {
         isSuccess = true;
         successMessage = "Pembayaran berhasil";
       }
+    } catch (e) {
+      if (e.toString().contains("please reLogin")) {
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
+  }
+
+  Future<void> getMonthlyReport({
+    required String? boardingHouseId,
+    required int month,
+    required int year,
+  }) async {
+    isBusy = true;
+    try {
+      var resp = await ReportApiService().getMonthlyReport(
+        boardingHouseId: boardingHouseId,
+        month: month,
+        year: year,
+      );
+
+      kostMonthlyReport = resp['data'];
+    } catch (e) {
+      if (e.toString().contains("please reLogin")) {
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
+  }
+
+  Future<void> getFinancialOverview({
+    required String? boardingHouseId,
+    required DateTime? dateFrom,
+    required DateTime? dateTo,
+  }) async {
+    isBusy = true;
+    final now = DateTime.now();
+
+    try {
+      var resp = await ReportApiService().getFinancialOverview(
+        boardingHouseId: boardingHouseId,
+        dateFrom: dateFrom ?? DateTime(now.year, now.month),
+        dateTo:
+            dateTo ??
+            DateTime(now.year, now.month + 1).subtract(Duration(seconds: 1)),
+      );
+
+      invoices = resp['data']['invoices'];
+      expenses = resp['data']['expenses'];
     } catch (e) {
       if (e.toString().contains("please reLogin")) {
         isNoSession = true;
