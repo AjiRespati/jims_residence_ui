@@ -120,7 +120,6 @@ class _PaymentListMobileState extends State<PaymentListMobile>
         ),
         SizedBox(height: 4),
         Expanded(
-          flex: 11,
           child: ListView.builder(
             itemCount: get<RoomViewModel>().invoices.length,
             itemBuilder: (context, idx) {
@@ -153,13 +152,19 @@ class _PaymentListMobileState extends State<PaymentListMobile>
         ),
         SizedBox(height: 4),
         Expanded(
-          flex: 7,
           child: ListView.builder(
             itemCount: get<RoomViewModel>().expenses.length,
             itemBuilder: (context, idx) {
               dynamic expense = get<RoomViewModel>().expenses[idx];
               return Padding(
-                padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
+                padding: EdgeInsets.only(
+                  left: 8,
+                  right: 8,
+                  bottom:
+                      idx == (get<RoomViewModel>().expenses.length - 1)
+                          ? 40
+                          : 4,
+                ),
                 child: Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),

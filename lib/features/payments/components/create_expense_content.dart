@@ -138,7 +138,6 @@ class _CreateExpenseContentState extends State<CreateExpenseContent>
               isDense: true,
               label: Text("Keterangan"),
             ),
-            keyboardType: TextInputType.number,
             controller: descriptionController,
           ),
           SizedBox(height: 12),

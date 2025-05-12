@@ -104,14 +104,14 @@ class _HomeMobileState extends State<HomeMobile> with GetItStateMixin {
                                         Text(
                                           "Jumlah kamar: ",
                                           style: TextStyle(
-                                            fontWeight: FontWeight.w500,
+                                            fontWeight: FontWeight.w700,
                                             fontSize: 14,
                                           ),
                                         ),
                                         Text(
                                           item['totalRoomsCount'],
                                           style: TextStyle(
-                                            fontWeight: FontWeight.w700,
+                                            fontWeight: FontWeight.w900,
                                             fontSize: 14,
                                           ),
                                         ),
@@ -130,7 +130,7 @@ class _HomeMobileState extends State<HomeMobile> with GetItStateMixin {
                                         Text(
                                           "Terisi: ",
                                           style: TextStyle(
-                                            fontWeight: FontWeight.w500,
+                                            fontWeight: FontWeight.w700,
                                             fontSize: 14,
                                             color: Colors.white,
                                           ),
@@ -138,7 +138,7 @@ class _HomeMobileState extends State<HomeMobile> with GetItStateMixin {
                                         Text(
                                           item['occupiedRoomsCount'],
                                           style: TextStyle(
-                                            fontWeight: FontWeight.w700,
+                                            fontWeight: FontWeight.w900,
                                             fontSize: 14,
                                             color: Colors.white,
                                           ),
@@ -158,7 +158,7 @@ class _HomeMobileState extends State<HomeMobile> with GetItStateMixin {
                                         Text(
                                           "Tersedia: ",
                                           style: TextStyle(
-                                            fontWeight: FontWeight.w500,
+                                            fontWeight: FontWeight.w700,
                                             fontSize: 14,
                                             color: Colors.white,
                                           ),
@@ -166,7 +166,7 @@ class _HomeMobileState extends State<HomeMobile> with GetItStateMixin {
                                         Text(
                                           item['availableRoomsCount'],
                                           style: TextStyle(
-                                            fontWeight: FontWeight.w500,
+                                            fontWeight: FontWeight.w900,
                                             fontSize: 14,
                                             color: Colors.white,
                                           ),
