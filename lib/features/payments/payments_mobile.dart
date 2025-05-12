@@ -69,23 +69,32 @@ class _PaymentsMobileState extends State<PaymentsMobile>
       ),
 
       bottomNavigationBar: MobileNavbar(selectedindex: 3),
-      floatingActionButton: FloatingActionButton.small(
-        backgroundColor: Colors.blue.shade700,
-        onPressed: () async {
-          await showModalBottomSheet(
-            isScrollControlled: true,
-            context: context,
-            builder: (context) {
-              return Padding(
-                padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom,
-                ),
-                child: SingleChildScrollView(child: CreateExpenseContent()),
-              );
-            },
-          );
-        },
-        child: Icon(Icons.add, color: Colors.white),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
+      floatingActionButton: SizedBox(
+        height: 40,
+        child: FloatingActionButton.extended(
+          extendedPadding: EdgeInsets.symmetric(horizontal: 10),
+          label: Text(
+            "Pengeluaran",
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+          ),
+          backgroundColor: Colors.blue.shade700,
+          onPressed: () async {
+            await showModalBottomSheet(
+              isScrollControlled: true,
+              context: context,
+              builder: (context) {
+                return Padding(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: SingleChildScrollView(child: CreateExpenseContent()),
+                );
+              },
+            );
+          },
+          icon: Icon(Icons.add, color: Colors.white),
+        ),
       ),
     );
   }

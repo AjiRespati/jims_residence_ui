@@ -1,7 +1,7 @@
 name: residenza
 description: "Residenza"
 publish_to: 'none'
-version: 1.0.6
+version: 1.0.5
 
 environment:
   sdk: ^3.7.0
