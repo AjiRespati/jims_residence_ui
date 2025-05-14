@@ -20,6 +20,7 @@ class _PaymentListMobileState extends State<PaymentListMobile>
 
   @override
   Widget build(BuildContext context) {
+    watchOnly((RoomViewModel x) => x.invoices);
     return Column(
       children: [
         SizedBox(
@@ -71,9 +72,15 @@ class _PaymentListMobileState extends State<PaymentListMobile>
                         _boardingHouseId = item['id'];
 
                         get<RoomViewModel>().getFinancialOverview(
-                          boardingHouseId: item['id'],
+                          boardingHouseId: _boardingHouseId,
                           dateFrom: _dateFrom,
                           dateTo: _dateTo,
+                        );
+
+                        get<RoomViewModel>().getMonthlyReport(
+                          boardingHouseId: _boardingHouseId,
+                          month: _dateFrom?.month ?? DateTime.now().month,
+                          year: _dateFrom?.year ?? DateTime.now().year,
                         );
                       },
                     ),
@@ -94,6 +101,12 @@ class _PaymentListMobileState extends State<PaymentListMobile>
                           dateFrom: _dateFrom,
                           dateTo: _dateTo,
                         );
+
+                        get<RoomViewModel>().getMonthlyReport(
+                          boardingHouseId: _boardingHouseId,
+                          month: _dateFrom?.month ?? DateTime.now().month,
+                          year: _dateFrom?.year ?? DateTime.now().year,
+                        );
                       },
                     ),
                   ),
@@ -109,13 +122,23 @@ class _PaymentListMobileState extends State<PaymentListMobile>
           children: [
             SizedBox(width: 20),
             Text(
-              "Invoices (${get<RoomViewModel>().invoices.length})",
+              "Tagihan (${get<RoomViewModel>().invoices.length})",
               style: TextStyle(
                 color: Colors.blue.shade700,
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
               ),
             ),
+            Spacer(),
+            Text(
+              formatCurrency(get<RoomViewModel>().totalInvoicesPaid),
+              style: TextStyle(
+                color: Colors.blue.shade700,
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            SizedBox(width: 20),
           ],
         ),
         SizedBox(height: 4),
@@ -141,13 +164,23 @@ class _PaymentListMobileState extends State<PaymentListMobile>
           children: [
             SizedBox(width: 20),
             Text(
-              "Expenses (${get<RoomViewModel>().expenses.length})",
+              "Pengeluaran (${get<RoomViewModel>().expenses.length})",
               style: TextStyle(
                 color: Colors.red.shade700,
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
               ),
             ),
+            Spacer(),
+            Text(
+              formatCurrency(get<RoomViewModel>().totalExpensesAmount),
+              style: TextStyle(
+                color: Colors.red.shade700,
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            SizedBox(width: 20),
           ],
         ),
         SizedBox(height: 4),

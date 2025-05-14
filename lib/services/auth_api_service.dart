@@ -49,6 +49,7 @@ class AuthApiService extends BaseApiService {
         "username": username,
         "email": username,
         "password": password,
+        "level": 0,
       }),
     );
     return response.statusCode < 400;

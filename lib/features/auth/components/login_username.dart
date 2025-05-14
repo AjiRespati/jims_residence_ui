@@ -26,7 +26,8 @@ class LoginUsername extends StatelessWidget with GetItMixin {
 
         return null;
       },
-      autofocus: true,
+      // autofocus: true,
+      keyboardType: TextInputType.emailAddress,
     );
   }
 }
