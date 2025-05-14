@@ -19,6 +19,7 @@ class _PaymentResumeMobileState extends State<PaymentResumeMobile>
 
   @override
   Widget build(BuildContext context) {
+    watchOnly((RoomViewModel x) => x.kostMonthlyReport);
     return Column(
       children: [
         SizedBox(
@@ -74,6 +75,12 @@ class _PaymentResumeMobileState extends State<PaymentResumeMobile>
                           dateFrom: _dateFrom,
                           dateTo: _dateTo,
                         );
+
+                        get<RoomViewModel>().getMonthlyReport(
+                          boardingHouseId: _boardingHouseId,
+                          month: _dateFrom?.month ?? DateTime.now().month,
+                          year: _dateFrom?.year ?? DateTime.now().year,
+                        );
                       },
                     ),
                   ),
@@ -87,10 +94,17 @@ class _PaymentResumeMobileState extends State<PaymentResumeMobile>
                       ) async {
                         _dateFrom = dateFrom;
                         _dateTo = dateTo;
+
                         get<RoomViewModel>().getFinancialOverview(
                           boardingHouseId: _boardingHouseId,
                           dateFrom: _dateFrom,
                           dateTo: _dateTo,
+                        );
+
+                        get<RoomViewModel>().getMonthlyReport(
+                          boardingHouseId: _boardingHouseId,
+                          month: _dateFrom?.month ?? DateTime.now().month,
+                          year: _dateFrom?.year ?? DateTime.now().year,
                         );
                       },
                     ),

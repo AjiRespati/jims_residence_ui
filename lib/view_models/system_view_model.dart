@@ -27,6 +27,7 @@ class SystemViewModel extends ChangeNotifier {
   int _level = 0;
   String _username = " -";
   String _levelDesc = " -";
+  String _status = " -";
 
   //====================//
   //  GETTER n SETTER   //
@@ -77,6 +78,12 @@ class SystemViewModel extends ChangeNotifier {
   String get levelDesc => _levelDesc;
   set levelDesc(String val) {
     _levelDesc = val;
+    notifyListeners();
+  }
+
+  String get status => _status;
+  set status(String val) {
+    _status = val;
     notifyListeners();
   }
 
@@ -154,6 +161,7 @@ class SystemViewModel extends ChangeNotifier {
       isBusy = true;
       user = await AuthApiService().self(refreshToken: refreshToken ?? "-");
       level = user['level'];
+      status = user['status'];
       username = user['username'];
       levelDesc = user['levelDesc'];
       isBusy = false;

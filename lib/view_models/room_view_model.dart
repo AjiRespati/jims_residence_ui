@@ -421,6 +421,7 @@ class RoomViewModel extends ChangeNotifier {
   List<dynamic> _transactions = [];
   dynamic _transaction;
   String _choosenTransactionId = "";
+  double _totalInvoicesPaid = 0;
 
   String _invoiceId = "";
   String _transactionMethod = "";
@@ -429,6 +430,7 @@ class RoomViewModel extends ChangeNotifier {
   String _transactionDescription = "";
 
   List<dynamic> _expenses = [];
+  double _totalExpensesAmount = 0;
 
   List<dynamic> _kostMonthlyReport = [];
 
@@ -501,6 +503,18 @@ class RoomViewModel extends ChangeNotifier {
   List<dynamic> get expenses => _expenses;
   set expenses(List<dynamic> val) {
     _expenses = val;
+    notifyListeners();
+  }
+
+  double get totalInvoicesPaid => _totalInvoicesPaid;
+  set totalInvoicesPaid(double val) {
+    _totalInvoicesPaid = val;
+    notifyListeners();
+  }
+
+  double get totalExpensesAmount => _totalExpensesAmount;
+  set totalExpensesAmount(double val) {
+    _totalExpensesAmount = val;
     notifyListeners();
   }
 
@@ -1056,6 +1070,8 @@ class RoomViewModel extends ChangeNotifier {
 
       invoices = resp['data']['invoices'];
       expenses = resp['data']['expenses'];
+      totalInvoicesPaid = resp['data']['totalInvoicesPaid'].toDouble();
+      totalExpensesAmount = resp['data']['totalExpensesAmount'].toDouble();
     } catch (e) {
       if (e.toString().contains("please reLogin")) {
         isNoSession = true;

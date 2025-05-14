@@ -5,6 +5,7 @@ import 'package:residenza/features/room/components/add_room.dart';
 import 'package:residenza/routes/route_names.dart';
 import 'package:residenza/utils/helpers.dart';
 import 'package:residenza/view_models/room_view_model.dart';
+import 'package:residenza/view_models/system_view_model.dart';
 import 'package:residenza/widgets/buttons/add_button.dart';
 
 import 'package:residenza/widgets/mobile_navbar.dart';
@@ -121,24 +122,7 @@ class _RoomMobileState extends State<RoomMobile> with GetItStateMixin {
                       ),
                     ),
                     SizedBox(width: 10),
-                    Expanded(
-                      flex: 5,
-                      child: SizedBox(),
-                      // child: MonthSelectorDropdown(
-                      //   onMonthSelected: (
-                      //     DateTime dateFrom,
-                      //     DateTime dateTo,
-                      //   ) async {
-                      //     _dateFrom = dateFrom;
-                      //     _dateTo = dateTo;
-                      //     await get<RoomViewModel>().fetchRooms(
-                      //       boardingHouseId: _boardingHouseId,
-                      //       dateFrom: _dateFrom,
-                      //       dateTo: _dateTo,
-                      //     );
-                      //   },
-                      // ),
-                    ),
+                    Expanded(flex: 5, child: SizedBox()),
                     SizedBox(width: 20),
                   ],
                 ),
@@ -162,7 +146,9 @@ class _RoomMobileState extends State<RoomMobile> with GetItStateMixin {
                     child: ClipRRect(
                       child: InkWell(
                         onTap:
-                            widget.isSetting
+                            widget.isSetting ||
+                                    (get<SystemViewModel>().user['status'] ==
+                                        'new')
                                 ? null
                                 : () {
                                   get<RoomViewModel>().roomId =

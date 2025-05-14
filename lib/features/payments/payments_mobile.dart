@@ -78,7 +78,7 @@ class _PaymentsMobileState extends State<PaymentsMobile>
             "Pengeluaran",
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
           ),
-          backgroundColor: Colors.blue.shade700,
+          backgroundColor: const Color.fromARGB(200, 211, 47, 47),
           onPressed: () async {
             await showModalBottomSheet(
               isScrollControlled: true,

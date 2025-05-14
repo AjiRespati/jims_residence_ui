@@ -19,20 +19,10 @@ class ApplicationInfo {
 
   static const baseUrl = "$mainUrl/service/api";
 
-  static const appVersion = '1.0.5 ${isProduction ? "" : "DEV"}';
+  static const appVersion = '1.0.6 ${isProduction ? "" : "DEV"}';
 
   static const secondColor = Color.fromARGB(255, 171, 203, 60);
   static const thirdColor = Colors.amber;
-
-  static const measurements = [
-    "kg",
-    "g",
-    "liter",
-    "bucket",
-    "carton",
-    "box",
-    "pcs",
-  ];
 
   //TODO: DEVELOPER SWITCH
   static const isDevelOn = false;

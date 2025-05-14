@@ -34,8 +34,9 @@ class _SettingsState extends State<Settings> with GetItStateMixin {
   @override
   void initState() {
     super.initState();
-    get<SystemViewModel>().currentPageIndex = 4;
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      get<SystemViewModel>().currentPageIndex =
+          get<SystemViewModel>().user['level'] < 1 ? 2 : 4;
       _setup();
     });
   }

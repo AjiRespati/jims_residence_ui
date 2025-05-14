@@ -68,8 +68,16 @@ class SettingsMobile extends StatelessWidget with GetItMixin {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+                    Text(
+                      "Status: ${model.status}",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     SizedBox(height: 30),
-                    // Divider(),
+                    Divider(),
+
                     watchOnly((SystemViewModel x) => x.isBusy)
                         ? Column(
                           children: [
@@ -280,7 +288,9 @@ class SettingsMobile extends StatelessWidget with GetItMixin {
                 ),
               )
               : SizedBox(),
-      bottomNavigationBar: MobileNavbar(selectedindex: 4),
+      bottomNavigationBar: MobileNavbar(
+        selectedindex: get<SystemViewModel>().user['level'] < 1 ? 2 : 4,
+      ),
     );
   }
 }

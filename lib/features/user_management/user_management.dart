@@ -18,6 +18,15 @@ class _UserManagementState extends State<UserManagement> with GetItStateMixin {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       get<SystemViewModel>().getAllUser().then((value) {
+        List<dynamic> users = get<SystemViewModel>().users;
+        List<dynamic> newusers =
+            users
+                .where(
+                  (el) =>
+                      el['username'] != get<SystemViewModel>().user['username'],
+                )
+                .toList();
+        get<SystemViewModel>().users = newusers;
         get<SystemViewModel>().isBusy = false;
       });
     });
