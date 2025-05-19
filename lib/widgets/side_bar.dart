@@ -53,39 +53,46 @@ class SideBar extends StatelessWidget with GetItMixin {
               child: Column(
                 children: [
                   ListTile(
-                    leading: const Icon(Icons.shopping_cart, size: 22),
-                    // leading: const Icon(Icons.bar_chart_rounded, size: 22),
-                    title: const Text("Dashboard"),
+                    leading: const Icon(Icons.home, size: 22),
+                    title: const Text("Beranda"),
                     dense: true,
                     onTap: () {
-                      onTapMenu(menuTitle: "Dashboard");
+                      onTapMenu(menuTitle: "Beranda");
                     },
                   ),
                   ListTile(
-                    leading: const Icon(Icons.shopping_cart, size: 22),
-                    // leading: const Icon(Icons.bar_chart_rounded, size: 22),
-                    title: const Text("Products"),
+                    leading: const Icon(Icons.door_sliding, size: 22),
+                    title: const Text("Kamar"),
                     dense: true,
                     onTap: () {
-                      onTapMenu(menuTitle: "Products");
+                      onTapMenu(menuTitle: "Kamar");
                     },
                   ),
                   ListTile(
-                    leading: const Icon(Icons.table_view_sharp, size: 22),
-                    title: const Text("Suppliers"),
+                    leading: const Icon(Icons.people, size: 22),
+                    title: const Text("Penghuni"),
                     dense: true,
                     onTap: () {
-                      onTapMenu(menuTitle: "Suppliers");
+                      onTapMenu(menuTitle: "Penghuni");
                     },
                     // trailing: const Icon(Icons.keyboard_arrow_down, size: 24),
                   ),
                   ListTile(
-                    leading: const Icon(Icons.icecream_rounded, size: 22),
+                    leading: const Icon(Icons.payments, size: 22),
                     // leading: const Icon(Icons.bar_chart_rounded, size: 22),
-                    title: const Text("Merchants"),
+                    title: const Text("Transaksi"),
                     dense: true,
                     onTap: () {
-                      onTapMenu(menuTitle: "Warehouses");
+                      onTapMenu(menuTitle: "Transaksi");
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.settings, size: 22),
+                    // leading: const Icon(Icons.bar_chart_rounded, size: 22),
+                    title: const Text("Pengaturan"),
+                    dense: true,
+                    onTap: () {
+                      onTapMenu(menuTitle: "Pengaturan");
                     },
                   ),
                   const Column(children: []),

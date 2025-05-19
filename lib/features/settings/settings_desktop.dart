@@ -6,10 +6,12 @@ class SettingsDesktop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PageContainer(
-      setSidebarExpanding: true,
-      showMenubutton: true,
-      mainSection: Container(color: Colors.blueAccent),
+    return Scaffold(
+      body: PageContainer(
+        setSidebarExpanding: true,
+        showMenubutton: true,
+        mainSection: Container(color: Colors.blueAccent),
+      ),
     );
   }
 }

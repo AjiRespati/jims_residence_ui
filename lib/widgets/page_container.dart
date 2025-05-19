@@ -31,11 +31,20 @@ class _PageContainerState extends State<PageContainer> {
     });
 
     switch (menuTitle) {
-      case "Dashboard":
+      case "Beranda":
         Navigator.pushNamed(context, homeRoute);
         break;
-      case "Products":
-        Navigator.pushNamed(context, homeRoute);
+      case "Kamar":
+        Navigator.pushNamed(context, roomRoute, arguments: false);
+        break;
+      case "Penghuni":
+        Navigator.pushNamed(context, tenantRoute);
+        break;
+      case "Transaksi":
+        Navigator.pushNamed(context, paymentsRoute);
+        break;
+      case "Pengaturan":
+        Navigator.pushNamed(context, settingRoute);
         break;
       default:
     }
