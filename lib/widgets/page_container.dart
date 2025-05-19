@@ -43,6 +43,12 @@ class _PageContainerState extends State<PageContainer> {
       case "Transaksi":
         Navigator.pushNamed(context, paymentsRoute);
         break;
+      case "Daftar Transaksi":
+        Navigator.pushNamed(context, paymentsListRoute);
+        break;
+      case "Resume Transaksi":
+        Navigator.pushNamed(context, paymentResumeRoute);
+        break;
       case "Pengaturan":
         Navigator.pushNamed(context, settingRoute);
         break;
