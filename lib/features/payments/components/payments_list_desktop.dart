@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
-import 'package:residenza/features/payments/components/invoice_item.dart';
+import 'package:residenza/features/payments/components/table_item.dart';
 import 'package:residenza/utils/helpers.dart';
 import 'package:residenza/view_models/room_view_model.dart';
 import 'package:residenza/widgets/month_selector_dropdown.dart';
@@ -25,7 +25,7 @@ class _PaymentsListDesktopState extends State<PaymentsListDesktop>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final now = DateTime.now();
 
-      get<RoomViewModel>().getFinancialOverview(
+      get<RoomViewModel>().getFinancialTransactions(
         boardingHouseId: get<RoomViewModel>().roomKostId,
         dateFrom: DateTime(now.year, now.month),
         dateTo: DateTime(
@@ -38,7 +38,7 @@ class _PaymentsListDesktopState extends State<PaymentsListDesktop>
 
   @override
   Widget build(BuildContext context) {
-    watchOnly((RoomViewModel x) => x.invoices);
+    watchOnly((RoomViewModel x) => x.transactionsTable);
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: PageContainer(
@@ -141,184 +141,138 @@ class _PaymentsListDesktopState extends State<PaymentsListDesktop>
                   ],
                 ),
               ),
-              SizedBox(height: 6),
-              Divider(thickness: 0.5),
-              Row(
-                children: [
-                  SizedBox(width: 20),
-                  Text(
-                    "Tagihan (${get<RoomViewModel>().invoices.length})",
-                    style: TextStyle(
-                      color: Colors.blue.shade700,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                  Spacer(),
-                  Text(
-                    formatCurrency(get<RoomViewModel>().totalInvoicesPaid),
-                    style: TextStyle(
-                      color: Colors.blue.shade700,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                  SizedBox(width: 20),
-                ],
-              ),
-              SizedBox(height: 4),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: get<RoomViewModel>().invoices.length,
-                  itemBuilder: (context, idx) {
-                    dynamic invoice = get<RoomViewModel>().invoices[idx];
-                    dynamic tenant = invoice['Tenant'];
-                    dynamic room = invoice['Room'];
-                    dynamic transactions = invoice['Transactions'];
-                    return InvoiceItem(
-                      invoice: invoice,
-                      tenant: tenant,
-                      room: room,
-                      transactions: transactions,
-                    );
-                  },
-                ),
-              ),
-              Divider(thickness: 0.5),
-              Row(
-                children: [
-                  SizedBox(width: 20),
-                  Text(
-                    "Pengeluaran (${get<RoomViewModel>().expenses.length})",
-                    style: TextStyle(
-                      color: Colors.red.shade700,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                  Spacer(),
-                  Text(
-                    formatCurrency(get<RoomViewModel>().totalExpensesAmount),
-                    style: TextStyle(
-                      color: Colors.red.shade700,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                  SizedBox(width: 20),
-                ],
-              ),
-              SizedBox(height: 4),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: get<RoomViewModel>().expenses.length,
-                  itemBuilder: (context, idx) {
-                    dynamic expense = get<RoomViewModel>().expenses[idx];
-                    return Padding(
-                      padding: EdgeInsets.only(
-                        left: 8,
-                        right: 8,
-                        bottom:
-                            idx == (get<RoomViewModel>().expenses.length - 1)
-                                ? 40
-                                : 4,
-                      ),
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        elevation: 1,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                flex: 15,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Flexible(
-                                          child: Text(
-                                            expense['name'],
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
-                                            ),
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Text(expense['BoardingHouse']['name']),
-                                    SizedBox(height: 4),
-                                    Text(
-                                      expense['createBy'],
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    Row(
-                                      children: [
-                                        Flexible(
-                                          child: Text(
-                                            expense['description'],
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                flex: 8,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      formatCurrency(
-                                        expense['amount'].toDouble(),
-                                      ),
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    SizedBox(height: 10),
-                                    Text(
-                                      expense['paymentMethod'],
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    Row(
-                                      children: [
-                                        SizedBox(width: 20),
-                                        Text(
-                                          formatDateString(
-                                            expense['expenseDate'],
-                                          ),
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+              SizedBox(height: 10),
+
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(width: 30),
+                    Expanded(
+                      flex: 15,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Keterangan",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    );
+                    ),
+                    Expanded(
+                      flex: 6,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Debit",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: 20),
+                    Expanded(
+                      flex: 6,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Kredit",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: 20),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: get<RoomViewModel>().transactionsTable.length,
+                  itemBuilder: (context, idx) {
+                    dynamic item = get<RoomViewModel>().transactionsTable[idx];
+                    return TableItem(item: item);
                   },
                 ),
               ),
+              SizedBox(height: 4),
+              Divider(),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(width: 30),
+                    Expanded(
+                      flex: 15,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            "Jumlah: ",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      flex: 6,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            formatCurrency(
+                              get<RoomViewModel>().totalInvoicesPaid,
+                            ),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Colors.green.shade600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: 20),
+                    Expanded(
+                      flex: 6,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            formatCurrency(
+                              get<RoomViewModel>().totalExpensesAmount,
+                            ),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Colors.red.shade600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: 30),
+                  ],
+                ),
+              ),
+              SizedBox(height: 10),
             ],
           ),
         ),

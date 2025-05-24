@@ -434,6 +434,8 @@ class RoomViewModel extends ChangeNotifier {
 
   List<dynamic> _kostMonthlyReport = [];
 
+  List<dynamic> _transactionsTable = [];
+
   List<dynamic> get invoices => _invoices;
   set invoices(List<dynamic> val) {
     _invoices = val;
@@ -521,6 +523,12 @@ class RoomViewModel extends ChangeNotifier {
   List<dynamic> get kostMonthlyReport => _kostMonthlyReport;
   set kostMonthlyReport(List<dynamic> val) {
     _kostMonthlyReport = val;
+    notifyListeners();
+  }
+
+  List<dynamic> get transactionsTable => _transactionsTable;
+  set transactionsTable(List<dynamic> val) {
+    _transactionsTable = val;
     notifyListeners();
   }
 
@@ -1072,6 +1080,38 @@ class RoomViewModel extends ChangeNotifier {
       expenses = resp['data']['expenses'];
       totalInvoicesPaid = resp['data']['totalInvoicesPaid'].toDouble();
       totalExpensesAmount = resp['data']['totalExpensesAmount'].toDouble();
+    } catch (e) {
+      if (e.toString().contains("please reLogin")) {
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
+  }
+
+  Future<void> getFinancialTransactions({
+    required String? boardingHouseId,
+    required DateTime? dateFrom,
+    required DateTime? dateTo,
+  }) async {
+    isBusy = true;
+    final now = DateTime.now();
+
+    try {
+      var resp = await ReportApiService().getFinancialTransactions(
+        boardingHouseId: boardingHouseId,
+        dateFrom: dateFrom ?? DateTime(now.year, now.month),
+        dateTo:
+            dateTo ??
+            DateTime(now.year, now.month + 1).subtract(Duration(seconds: 1)),
+      );
+
+      transactionsTable = resp['data'];
+      totalInvoicesPaid = resp['summary']['totalInvoicesPaid'].toDouble();
+      totalExpensesAmount = resp['summary']['totalExpensesAmount'].toDouble();
     } catch (e) {
       if (e.toString().contains("please reLogin")) {
         isNoSession = true;
