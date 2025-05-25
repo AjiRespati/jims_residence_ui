@@ -53,41 +53,144 @@ class SideBar extends StatelessWidget with GetItMixin {
               child: Column(
                 children: [
                   ListTile(
-                    leading: const Icon(Icons.shopping_cart, size: 22),
-                    // leading: const Icon(Icons.bar_chart_rounded, size: 22),
-                    title: const Text("Dashboard"),
+                    leading: const Icon(Icons.home, size: 22),
+                    title: const Text("Beranda"),
                     dense: true,
                     onTap: () {
-                      onTapMenu(menuTitle: "Dashboard");
+                      onTapMenu(menuTitle: "Beranda");
                     },
                   ),
                   ListTile(
-                    leading: const Icon(Icons.shopping_cart, size: 22),
-                    // leading: const Icon(Icons.bar_chart_rounded, size: 22),
-                    title: const Text("Products"),
+                    leading: const Icon(Icons.door_sliding, size: 22),
+                    title: const Text("Kamar"),
                     dense: true,
                     onTap: () {
-                      onTapMenu(menuTitle: "Products");
+                      onTapMenu(menuTitle: "Kamar");
                     },
                   ),
                   ListTile(
-                    leading: const Icon(Icons.table_view_sharp, size: 22),
-                    title: const Text("Suppliers"),
+                    leading: const Icon(Icons.people, size: 22),
+                    title: const Text("Penghuni"),
                     dense: true,
                     onTap: () {
-                      onTapMenu(menuTitle: "Suppliers");
+                      onTapMenu(menuTitle: "Penghuni");
                     },
                     // trailing: const Icon(Icons.keyboard_arrow_down, size: 24),
                   ),
-                  ListTile(
-                    leading: const Icon(Icons.icecream_rounded, size: 22),
-                    // leading: const Icon(Icons.bar_chart_rounded, size: 22),
-                    title: const Text("Merchants"),
+                  ExpansionTile(
+                    initiallyExpanded: true,
+                    showTrailingIcon: false,
+                    shape: Border.all(color: Colors.transparent),
+                    collapsedShape: Border.all(color: Colors.transparent),
                     dense: true,
-                    onTap: () {
-                      onTapMenu(menuTitle: "Warehouses");
-                    },
+                    title: Row(
+                      children: [
+                        const Icon(Icons.payments, size: 22),
+                        SizedBox(width: 14),
+                        const Text("Transaksi"),
+                      ],
+                    ),
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 14),
+                        child: ListTile(
+                          leading: const Icon(
+                            Icons.table_rows_rounded,
+                            size: 22,
+                          ),
+                          // leading: const Icon(Icons.bar_chart_rounded, size: 22),
+                          title: const Text("Daftar Transaksi"),
+                          dense: true,
+                          onTap: () {
+                            onTapMenu(menuTitle: "Daftar Transaksi");
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 14),
+                        child: ListTile(
+                          leading: const Icon(
+                            Icons.fact_check_outlined,
+                            size: 22,
+                          ),
+                          // leading: const Icon(Icons.bar_chart_rounded, size: 22),
+                          title: const Text("Resume Transaksi"),
+                          dense: true,
+                          onTap: () {
+                            onTapMenu(menuTitle: "Resume Transaksi");
+                          },
+                        ),
+                      ),
+                    ],
                   ),
+                  ExpansionTile(
+                    shape: Border.all(color: Colors.transparent),
+                    collapsedShape: Border.all(color: Colors.transparent),
+                    initiallyExpanded: true,
+                    showTrailingIcon: false,
+                    dense: true,
+                    title: Row(
+                      children: [
+                        const Icon(Icons.settings, size: 22),
+                        SizedBox(width: 14),
+                        const Text("Pengaturan"),
+                      ],
+                    ),
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 14),
+                        child: ListTile(
+                          leading: const Icon(
+                            Icons.apartment_rounded,
+                            // Icons.table_rows_rounded,
+                            size: 22,
+                          ),
+                          // leading: const Icon(Icons.bar_chart_rounded, size: 22),
+                          title: const Text("Kost Management"),
+                          dense: true,
+                          onTap: () {
+                            onTapMenu(menuTitle: "Kost Management");
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 14),
+                        child: ListTile(
+                          leading: const Icon(Icons.room_preferences, size: 22),
+                          // leading: const Icon(Icons.bar_chart_rounded, size: 22),
+                          title: const Text("Room Management"),
+                          dense: true,
+                          onTap: () {
+                            onTapMenu(menuTitle: "Room Management");
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 14),
+                        child: ListTile(
+                          leading: const Icon(
+                            Icons.person_pin_outlined,
+                            size: 22,
+                          ),
+                          // leading: const Icon(Icons.bar_chart_rounded, size: 22),
+                          title: const Text("User Management"),
+                          dense: true,
+                          onTap: () {
+                            onTapMenu(menuTitle: "User Management");
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  // ListTile(
+                  //   leading: const Icon(Icons.settings, size: 22),
+                  //   // leading: const Icon(Icons.bar_chart_rounded, size: 22),
+                  //   title: const Text("Pengaturan"),
+                  //   dense: true,
+                  //   onTap: () {
+                  //     onTapMenu(menuTitle: "Pengaturan");
+                  //   },
+                  // ),
                   const Column(children: []),
                 ],
               ),

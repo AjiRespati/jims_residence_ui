@@ -32,7 +32,7 @@ class _RoomViewState extends State<RoomView> with GetItStateMixin {
   @override
   Widget build(BuildContext context) {
     return ResponsiveLayout(
-      desktopLayout: RoomDesktop(),
+      desktopLayout: RoomDesktop(isSetting: widget.isSetting),
       mobileLayout: RoomMobile(isSetting: widget.isSetting),
     );
   }

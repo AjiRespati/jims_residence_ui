@@ -31,11 +31,35 @@ class _PageContainerState extends State<PageContainer> {
     });
 
     switch (menuTitle) {
-      case "Dashboard":
+      case "Beranda":
         Navigator.pushNamed(context, homeRoute);
         break;
-      case "Products":
-        Navigator.pushNamed(context, homeRoute);
+      case "Kamar":
+        Navigator.pushNamed(context, roomRoute, arguments: false);
+        break;
+      case "Penghuni":
+        Navigator.pushNamed(context, tenantRoute);
+        break;
+      case "Transaksi":
+        Navigator.pushNamed(context, paymentsRoute);
+        break;
+      case "Daftar Transaksi":
+        Navigator.pushNamed(context, paymentsListRoute);
+        break;
+      case "Resume Transaksi":
+        Navigator.pushNamed(context, paymentResumeRoute);
+        break;
+      case "Pengaturan":
+        Navigator.pushNamed(context, settingRoute);
+        break;
+      case "Kost Management":
+        Navigator.pushNamed(context, kostRoute);
+        break;
+      case "Room Management":
+        Navigator.pushNamed(context, roomRoute, arguments: true);
+        break;
+      case "User Management":
+        Navigator.pushNamed(context, userRoute);
         break;
       default:
     }

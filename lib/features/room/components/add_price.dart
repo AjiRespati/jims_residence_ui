@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:residenza/view_models/room_view_model.dart';
 import 'package:residenza/widgets/buttons/gradient_elevated_button.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
+import 'package:residenza/widgets/currency_text_field.dart';
 
 class AddPrice extends StatefulWidget with GetItStatefulWidgetMixin {
   AddPrice({super.key});
@@ -13,6 +14,7 @@ class AddPrice extends StatefulWidget with GetItStatefulWidgetMixin {
 }
 
 class _AddPriceState extends State<AddPrice> with GetItStateMixin {
+  TextEditingController priceController = TextEditingController();
   String _priceName = "";
   String _priceDesc = "";
   double _priceAmount = 0;
@@ -38,11 +40,16 @@ class _AddPriceState extends State<AddPrice> with GetItStateMixin {
             onChanged: (value) => _priceName = value,
           ),
           SizedBox(height: 6),
-          TextFormField(
-            decoration: InputDecoration(isDense: true, label: Text("Harga")),
-            keyboardType: TextInputType.number,
+          CurrencyTextField(
+            controller: priceController,
+            label: "Harga",
             onChanged: (value) => _priceAmount = double.parse(value),
           ),
+          // TextFormField(
+          //   decoration: InputDecoration(isDense: true, label: Text("Harga")),
+          //   keyboardType: TextInputType.number,
+          //   onChanged: (value) => _priceAmount = double.parse(value),
+          // ),
           SizedBox(height: 6),
           TextFormField(
             decoration: InputDecoration(
@@ -70,7 +77,7 @@ class _AddPriceState extends State<AddPrice> with GetItStateMixin {
               Navigator.pop(context);
             },
             child: Text(
-              "Daftarkan",
+              "Tambahkan",
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w600,

@@ -104,16 +104,34 @@ class UserTableCard extends StatelessWidget with GetItMixin {
                             onTap: () {
                               showModalBottomSheet(
                                 isScrollControlled: true,
-                                constraints: BoxConstraints(
-                                  minHeight: 400,
-                                  maxHeight: 420,
-                                ),
+                                // constraints: BoxConstraints(
+                                //   minHeight: 400,
+                                //   maxHeight: 420,
+                                // ),
                                 context: context,
                                 builder: (context) {
-                                  return UpdateLevelContent(
-                                    id: user['id'],
-                                    username: user['username'],
-                                    level: user['level'],
+                                  return Padding(
+                                    padding: EdgeInsets.only(
+                                      bottom:
+                                          MediaQuery.of(
+                                            context,
+                                          ).viewInsets.bottom,
+                                      left: 24,
+                                      right: 24,
+                                      top: 24,
+                                    ),
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        children: [
+                                          UpdateLevelContent(
+                                            id: user['id'],
+                                            username: user['username'],
+                                            level: user['level'],
+                                          ),
+                                          SizedBox(height: 50),
+                                        ],
+                                      ),
+                                    ),
                                   );
                                 },
                               );
@@ -144,16 +162,34 @@ class UserTableCard extends StatelessWidget with GetItMixin {
                             onTap: () {
                               showModalBottomSheet(
                                 isScrollControlled: true,
-                                constraints: BoxConstraints(
-                                  minHeight: 400,
-                                  maxHeight: 420,
-                                ),
+                                // constraints: BoxConstraints(
+                                //   minHeight: 400,
+                                //   maxHeight: 420,
+                                // ),
                                 context: context,
                                 builder: (context) {
-                                  return UpdateStatusContent(
-                                    id: user['id'],
-                                    username: user['username'],
-                                    oldStatus: user['status'],
+                                  return Padding(
+                                    padding: EdgeInsets.only(
+                                      bottom:
+                                          MediaQuery.of(
+                                            context,
+                                          ).viewInsets.bottom,
+                                      left: 24,
+                                      right: 24,
+                                      top: 24,
+                                    ),
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        children: [
+                                          UpdateStatusContent(
+                                            id: user['id'],
+                                            username: user['username'],
+                                            oldStatus: user['status'],
+                                          ),
+                                          SizedBox(height: 50),
+                                        ],
+                                      ),
+                                    ),
                                   );
                                 },
                               );

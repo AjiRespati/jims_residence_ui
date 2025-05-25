@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:residenza/features/auth/login_screen.dart';
 import 'package:residenza/features/home/home.dart';
 import 'package:residenza/features/kost/kost.dart';
+import 'package:residenza/features/payments/payment_resume_desktop.dart';
+import 'package:residenza/features/payments/payment_list_desktop.dart';
 import 'package:residenza/features/payments/payment_detail/payment_detail.dart';
 import 'package:residenza/features/payments/payments.dart';
 import 'package:residenza/features/price/price.dart';
@@ -68,6 +70,12 @@ class AppRouter {
           break;
         case paymentDetailRoute:
           screen = PaymentDetail();
+          break;
+        case paymentsListRoute:
+          screen = PaymentListDesktop();
+          break;
+        case paymentResumeRoute:
+          screen = PaymentResumeDesktop();
           break;
         default:
           screen = const NotFoundPage();

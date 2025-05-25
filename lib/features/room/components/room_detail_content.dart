@@ -30,7 +30,7 @@ class _RoomDetailContentState extends State<RoomDetailContent>
   double _totalAdditionalPrice = 0;
   double _priceAmount = 0;
 
-  _setup() async {
+  Future<void> _setup() async {
     await get<RoomViewModel>().fetchRoom();
     _room = get<RoomViewModel>().room;
     _kost = _room['BoardingHouse'];
@@ -256,6 +256,7 @@ class _RoomDetailContentState extends State<RoomDetailContent>
                                       _priceAmount;
                                   await get<RoomViewModel>().addTenant();
                                   if (get<RoomViewModel>().isSuccess) {
+                                    await _setup();
                                     Navigator.pushNamed(
                                       context,
                                       roomRoute,
@@ -282,7 +283,6 @@ class _RoomDetailContentState extends State<RoomDetailContent>
                                   //     );
                                   //   },
                                   // );
-                                  _setup();
                                 },
                                 child: Text(
                                   "Daftarkan Penghuni Baru",
