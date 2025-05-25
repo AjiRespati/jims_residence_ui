@@ -84,7 +84,12 @@ class _PageContainerState extends State<PageContainer> {
               duration: Durations.short1,
               width: sideBarExpanding ? 300 : 0,
             ),
-            Expanded(child: SingleChildScrollView(child: widget.mainSection)),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: SingleChildScrollView(child: widget.mainSection),
+              ),
+            ),
             SingleChildScrollView(child: widget.infoSection),
           ],
         ),
