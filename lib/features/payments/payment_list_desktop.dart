@@ -6,15 +6,16 @@ import 'package:residenza/view_models/room_view_model.dart';
 import 'package:residenza/widgets/month_selector_dropdown.dart';
 import 'package:residenza/widgets/page_container.dart';
 
-class PaymentsListDesktop extends StatefulWidget with GetItStatefulWidgetMixin {
-  PaymentsListDesktop({super.key});
+class PaymentListDesktop extends StatefulWidget with GetItStatefulWidgetMixin {
+  PaymentListDesktop({super.key});
 
   @override
-  State<PaymentsListDesktop> createState() => _PaymentsListDesktopState();
+  State<PaymentListDesktop> createState() => _PaymentListDesktopState();
 }
 
-class _PaymentsListDesktopState extends State<PaymentsListDesktop>
+class _PaymentListDesktopState extends State<PaymentListDesktop>
     with GetItStateMixin, SingleTickerProviderStateMixin {
+  final now = DateTime.now();
   String? _boardingHouseId;
   DateTime? _dateFrom;
   DateTime? _dateTo;
@@ -23,7 +24,7 @@ class _PaymentsListDesktopState extends State<PaymentsListDesktop>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final now = DateTime.now();
+      // final now = DateTime.now();
 
       get<RoomViewModel>().getFinancialTransactions(
         boardingHouseId: get<RoomViewModel>().roomKostId,
@@ -96,16 +97,37 @@ class _PaymentsListDesktopState extends State<PaymentsListDesktop>
                               get<RoomViewModel>().roomKostId = item['id'];
                               _boardingHouseId = item['id'];
 
-                              get<RoomViewModel>().getFinancialOverview(
-                                boardingHouseId: _boardingHouseId,
-                                dateFrom: _dateFrom,
-                                dateTo: _dateTo,
-                              );
+                              // get<RoomViewModel>().getFinancialOverview(
+                              //   boardingHouseId: _boardingHouseId,
+                              //   dateFrom: _dateFrom,
+                              //   dateTo: _dateTo,
+                              // );
 
-                              get<RoomViewModel>().getMonthlyReport(
+                              // get<RoomViewModel>().getMonthlyReport(
+                              //   boardingHouseId: _boardingHouseId,
+                              //   month: _dateFrom?.month ?? DateTime.now().month,
+                              //   year: _dateFrom?.year ?? DateTime.now().year,
+                              // );
+
+                              get<RoomViewModel>().getFinancialTransactions(
                                 boardingHouseId: _boardingHouseId,
-                                month: _dateFrom?.month ?? DateTime.now().month,
-                                year: _dateFrom?.year ?? DateTime.now().year,
+                                dateFrom:
+                                    _dateFrom != null
+                                        ? DateTime(
+                                          _dateFrom!.year,
+                                          _dateFrom!.month,
+                                        )
+                                        : DateTime(now.year, now.month),
+                                dateTo:
+                                    _dateTo != null
+                                        ? DateTime(
+                                          _dateTo!.year,
+                                          _dateTo!.month,
+                                        )
+                                        : DateTime(
+                                          now.year,
+                                          now.month + 1,
+                                        ).subtract(Duration(seconds: 1)),
                               );
                             },
                           ),
@@ -121,16 +143,37 @@ class _PaymentsListDesktopState extends State<PaymentsListDesktop>
                               _dateFrom = dateFrom;
                               _dateTo = dateTo;
 
-                              get<RoomViewModel>().getFinancialOverview(
-                                boardingHouseId: _boardingHouseId,
-                                dateFrom: _dateFrom,
-                                dateTo: _dateTo,
-                              );
+                              // get<RoomViewModel>().getFinancialOverview(
+                              //   boardingHouseId: _boardingHouseId,
+                              //   dateFrom: _dateFrom,
+                              //   dateTo: _dateTo,
+                              // );
 
-                              get<RoomViewModel>().getMonthlyReport(
+                              // get<RoomViewModel>().getMonthlyReport(
+                              //   boardingHouseId: _boardingHouseId,
+                              //   month: _dateFrom?.month ?? DateTime.now().month,
+                              //   year: _dateFrom?.year ?? DateTime.now().year,
+                              // );
+
+                              get<RoomViewModel>().getFinancialTransactions(
                                 boardingHouseId: _boardingHouseId,
-                                month: _dateFrom?.month ?? DateTime.now().month,
-                                year: _dateFrom?.year ?? DateTime.now().year,
+                                dateFrom:
+                                    _dateFrom != null
+                                        ? DateTime(
+                                          _dateFrom!.year,
+                                          _dateFrom!.month,
+                                        )
+                                        : DateTime(now.year, now.month),
+                                dateTo:
+                                    _dateTo != null
+                                        ? DateTime(
+                                          _dateTo!.year,
+                                          _dateTo!.month,
+                                        )
+                                        : DateTime(
+                                          now.year,
+                                          now.month + 1,
+                                        ).subtract(Duration(seconds: 1)),
                               );
                             },
                           ),

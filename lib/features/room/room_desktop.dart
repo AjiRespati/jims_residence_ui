@@ -94,6 +94,7 @@ class _RoomDesktopState extends State<RoomDesktop> with GetItStateMixin {
                         Expanded(
                           flex: 5,
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
                             children:
                                 !widget.isSetting
                                     ? []

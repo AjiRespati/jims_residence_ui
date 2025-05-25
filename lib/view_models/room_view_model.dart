@@ -1098,6 +1098,10 @@ class RoomViewModel extends ChangeNotifier {
     required DateTime? dateTo,
   }) async {
     isBusy = true;
+    transactionsTable = [];
+    totalInvoicesPaid = 0;
+    totalExpensesAmount = 0;
+
     final now = DateTime.now();
 
     try {

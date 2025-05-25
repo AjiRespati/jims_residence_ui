@@ -18,11 +18,11 @@ String capitalize(String text) {
 }
 
 String formatDateFromYearToSecond(DateTime date) {
-  return DateFormat('dd MMMM yyyy HH:mm:ss', "id").format(date);
+  return DateFormat('dd MMMM yyyy HH:mm:ss', "id").format(date.toLocal());
 }
 
 String formatDateFromYearToDay(DateTime date) {
-  return DateFormat('dd MMMM yyyy', "id").format(date);
+  return DateFormat('dd MMMM yyyy', "id").format(date.toLocal());
 }
 
 String getYesOrNo(bool condition) {
@@ -32,7 +32,7 @@ String getYesOrNo(bool condition) {
 String formatDateString(String? dateTimeString) {
   String result = " -";
   if (dateTimeString != null) {
-    final dateTime = DateTime.parse(dateTimeString);
+    final dateTime = DateTime.parse(dateTimeString).toLocal();
     final formatter = DateFormat('dd-MM-yyyy');
     result = formatter.format(dateTime);
   }
@@ -42,7 +42,7 @@ String formatDateString(String? dateTimeString) {
 String formatDateMinuteString(String? dateTimeString) {
   String result = " -";
   if (dateTimeString != null) {
-    final dateTime = DateTime.parse(dateTimeString);
+    final dateTime = DateTime.parse(dateTimeString).toLocal();
     final formatter = DateFormat('dd-MM-yyyy, HH:mm', 'id_ID');
     result = formatter.format(dateTime);
   }
@@ -63,7 +63,7 @@ String formatBulanTahun(DateTime? dateTime) {
   String result = " -";
   if (dateTime != null) {
     final formatter = DateFormat('MMMM yyyy', 'id_ID');
-    result = formatter.format(dateTime);
+    result = formatter.format(dateTime.toLocal());
   }
   return result;
 }

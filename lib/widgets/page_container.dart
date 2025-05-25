@@ -52,6 +52,15 @@ class _PageContainerState extends State<PageContainer> {
       case "Pengaturan":
         Navigator.pushNamed(context, settingRoute);
         break;
+      case "Kost Management":
+        Navigator.pushNamed(context, kostRoute);
+        break;
+      case "Room Management":
+        Navigator.pushNamed(context, roomRoute, arguments: true);
+        break;
+      case "User Management":
+        Navigator.pushNamed(context, userRoute);
+        break;
       default:
     }
   }

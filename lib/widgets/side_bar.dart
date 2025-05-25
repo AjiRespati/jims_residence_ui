@@ -141,14 +141,27 @@ class SideBar extends StatelessWidget with GetItMixin {
                         padding: const EdgeInsets.only(left: 14),
                         child: ListTile(
                           leading: const Icon(
-                            Icons.table_rows_rounded,
+                            Icons.apartment_rounded,
+                            // Icons.table_rows_rounded,
                             size: 22,
                           ),
                           // leading: const Icon(Icons.bar_chart_rounded, size: 22),
                           title: const Text("Kost Management"),
                           dense: true,
                           onTap: () {
-                            onTapMenu(menuTitle: "Transaksi");
+                            onTapMenu(menuTitle: "Kost Management");
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 14),
+                        child: ListTile(
+                          leading: const Icon(Icons.room_preferences, size: 22),
+                          // leading: const Icon(Icons.bar_chart_rounded, size: 22),
+                          title: const Text("Room Management"),
+                          dense: true,
+                          onTap: () {
+                            onTapMenu(menuTitle: "Room Management");
                           },
                         ),
                       ),
@@ -156,29 +169,14 @@ class SideBar extends StatelessWidget with GetItMixin {
                         padding: const EdgeInsets.only(left: 14),
                         child: ListTile(
                           leading: const Icon(
-                            Icons.fact_check_outlined,
+                            Icons.person_pin_outlined,
                             size: 22,
                           ),
                           // leading: const Icon(Icons.bar_chart_rounded, size: 22),
                           title: const Text("User Management"),
                           dense: true,
                           onTap: () {
-                            onTapMenu(menuTitle: "Transaksi");
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 14),
-                        child: ListTile(
-                          leading: const Icon(
-                            Icons.fact_check_outlined,
-                            size: 22,
-                          ),
-                          // leading: const Icon(Icons.bar_chart_rounded, size: 22),
-                          title: const Text("Room Management"),
-                          dense: true,
-                          onTap: () {
-                            onTapMenu(menuTitle: "Transaksi");
+                            onTapMenu(menuTitle: "User Management");
                           },
                         ),
                       ),
