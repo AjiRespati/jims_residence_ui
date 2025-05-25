@@ -81,7 +81,6 @@ class InvoiceCard extends StatelessWidget {
                           onPressed: () async {
                             await showModalBottomSheet(
                               isScrollControlled: true,
-                              constraints: BoxConstraints(),
                               context: context,
                               builder: (context) {
                                 return Padding(

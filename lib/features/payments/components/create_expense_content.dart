@@ -177,6 +177,11 @@ class _CreateExpenseContentState extends State<CreateExpenseContent>
                           dateFrom: null,
                           dateTo: null,
                         );
+                        await get<RoomViewModel>().getFinancialTransactions(
+                          boardingHouseId: get<RoomViewModel>().roomKostId,
+                          dateFrom: null,
+                          dateTo: null,
+                        );
                       }
                       Navigator.pop(context);
                     },
