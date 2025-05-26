@@ -117,22 +117,14 @@ class _PaymentListDesktopState extends State<PaymentListDesktop>
                                   get<RoomViewModel>().getFinancialTransactions(
                                     boardingHouseId: _boardingHouseId,
                                     dateFrom:
-                                        _dateFrom != null
-                                            ? DateTime(
-                                              _dateFrom!.year,
-                                              _dateFrom!.month,
-                                            )
-                                            : DateTime(now.year, now.month),
+                                        _dateFrom ??
+                                        DateTime(now.year, now.month),
                                     dateTo:
-                                        _dateTo != null
-                                            ? DateTime(
-                                              _dateTo!.year,
-                                              _dateTo!.month,
-                                            )
-                                            : DateTime(
-                                              now.year,
-                                              now.month + 1,
-                                            ).subtract(Duration(seconds: 1)),
+                                        _dateTo ??
+                                        DateTime(
+                                          now.year,
+                                          now.month + 1,
+                                        ).subtract(Duration(seconds: 1)),
                                   );
                                 },
                               ),
@@ -163,22 +155,14 @@ class _PaymentListDesktopState extends State<PaymentListDesktop>
                                   get<RoomViewModel>().getFinancialTransactions(
                                     boardingHouseId: _boardingHouseId,
                                     dateFrom:
-                                        _dateFrom != null
-                                            ? DateTime(
-                                              _dateFrom!.year,
-                                              _dateFrom!.month,
-                                            )
-                                            : DateTime(now.year, now.month),
+                                        _dateFrom ??
+                                        DateTime(now.year, now.month),
                                     dateTo:
-                                        _dateTo != null
-                                            ? DateTime(
-                                              _dateTo!.year,
-                                              _dateTo!.month,
-                                            )
-                                            : DateTime(
-                                              now.year,
-                                              now.month + 1,
-                                            ).subtract(Duration(seconds: 1)),
+                                        _dateTo ??
+                                        DateTime(
+                                          now.year,
+                                          now.month + 1,
+                                        ).subtract(Duration(seconds: 1)),
                                   );
                                 },
                               ),
