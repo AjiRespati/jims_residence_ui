@@ -66,7 +66,7 @@ class InvoiceItem extends StatelessWidget with GetItMixin {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          formatCurrency(invoice['totalAmountDue'].toDouble()),
+                          formatCurrency(invoice['totalAmountPaid'].toDouble()),
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,

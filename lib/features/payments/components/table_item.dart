@@ -18,10 +18,13 @@ class TableItem extends StatelessWidget with GetItMixin {
         elevation: 1,
         child: ClipRRect(
           child: InkWell(
-            onTap: () {
-              get<RoomViewModel>().choosenInvoiceId = item['id'];
-              Navigator.pushNamed(context, paymentDetailRoute);
-            },
+            onTap:
+                item['transactionType'] == 'credit'
+                    ? null
+                    : () {
+                      get<RoomViewModel>().choosenInvoiceId = item['id'];
+                      Navigator.pushNamed(context, paymentDetailRoute);
+                    },
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
