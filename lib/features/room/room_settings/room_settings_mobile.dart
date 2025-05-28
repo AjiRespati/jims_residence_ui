@@ -281,10 +281,10 @@ class _RoomSettingsMobileState extends State<RoomSettingsMobile>
                                 onPressed: () async {
                                   final result = await showModalBottomSheet(
                                     isScrollControlled: true,
-                                    constraints: BoxConstraints(
-                                      minHeight: 440,
-                                      maxHeight: 450,
-                                    ),
+                                    // constraints: BoxConstraints(
+                                    //   minHeight: 440,
+                                    //   maxHeight: 450,
+                                    // ),
                                     context: context,
                                     builder: (context) {
                                       return Padding(

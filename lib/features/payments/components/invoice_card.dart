@@ -123,7 +123,10 @@ class InvoiceCard extends StatelessWidget {
                 ),
                 Spacer(),
                 Text(
-                  formatHariDateString(item['issueDate']),
+                  formatHariDateString(
+                    item['Transactions'].last['transactionDate'],
+                  ),
+                  // formatHariDateString(item['issueDate']),
                   style: TextStyle(fontWeight: FontWeight.w600),
                 ),
               ],

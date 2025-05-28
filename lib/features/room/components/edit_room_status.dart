@@ -148,6 +148,7 @@ class _EditRoomStatusState extends State<EditRoomStatus> with GetItStateMixin {
                 ),
             ],
           ),
+          SizedBox(height: 100),
         ],
       ),
     );

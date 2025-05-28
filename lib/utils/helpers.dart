@@ -52,7 +52,7 @@ String formatDateMinuteString(String? dateTimeString) {
 String formatHariDateString(String? dateTimeString) {
   String result = " -";
   if (dateTimeString != null) {
-    final dateTime = DateTime.parse(dateTimeString);
+    final dateTime = DateTime.parse(dateTimeString).toLocal();
     final formatter = DateFormat('EEEE, d MMMM yyyy', 'id_ID');
     result = formatter.format(dateTime);
   }
