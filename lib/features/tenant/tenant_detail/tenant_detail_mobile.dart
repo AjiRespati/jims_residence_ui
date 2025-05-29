@@ -6,8 +6,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:residenza/application_info.dart';
 import 'package:residenza/features/payments/components/invoice_card.dart';
+import 'package:residenza/features/tenant/tenant_detail/tenant_info.dart';
 import 'package:residenza/services/tenant_api_service.dart';
-import 'package:residenza/utils/helpers.dart';
 import 'package:residenza/view_models/room_view_model.dart';
 import 'package:residenza/widgets/mobile_navbar.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
@@ -26,9 +26,22 @@ class _TenantDetailMobileState extends State<TenantDetailMobile>
   XFile? _imageDevice;
   Uint8List? _imageWeb;
 
+  String _name = "";
+  String _phone = "";
+  String _nik = "";
+  String _status = "";
+  DateTime? _startDate;
+  DateTime? _endDate;
+
   Future<void> _submit() async {
     await get<RoomViewModel>().updateTenant(
       tenantId: _tenant['id'],
+      name: null,
+      phone: null,
+      nik: null,
+      status: null,
+      startDate: null,
+      endDate: null,
       imageWeb: _imageWeb,
       imageDevice: _imageDevice,
     );
@@ -37,7 +50,22 @@ class _TenantDetailMobileState extends State<TenantDetailMobile>
 
   Future _setup() async {
     await get<RoomViewModel>().fetchTenant();
-    _tenant = get<RoomViewModel>().tenant;
+    setState(() {
+      _tenant = get<RoomViewModel>().tenant;
+    });
+
+    _name = _tenant['name'];
+    _phone = _tenant['phone'];
+    _nik = _tenant['NIKNumber'];
+    _status = _tenant['tenancyStatus'];
+
+    _startDate =
+        _tenant['startDate'] == null
+            ? null
+            : DateTime.parse(_tenant['startDate']);
+
+    _endDate =
+        _tenant['endDate'] == null ? null : DateTime.parse(_tenant['endDate']);
 
     setState(() {});
   }
@@ -53,7 +81,7 @@ class _TenantDetailMobileState extends State<TenantDetailMobile>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Tenant Detail")),
+      appBar: AppBar(title: Text("Detail Penghuni")),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -147,12 +175,11 @@ class _TenantDetailMobileState extends State<TenantDetailMobile>
                             ),
                           if (!kIsWeb) // ✅ Mobile: Camera & Gallery
                             Expanded(
-                              child: Row(
+                              child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  ElevatedButton.icon(
+                                  IconButton(
                                     icon: Icon(Icons.camera),
-                                    label: Text("Camera"),
                                     onPressed: () async {
                                       _imageDevice = await TenantApiService()
                                           .pickImageMobile(ImageSource.camera);
@@ -161,16 +188,14 @@ class _TenantDetailMobileState extends State<TenantDetailMobile>
                                     },
                                   ),
                                   SizedBox(width: 10),
-                                  ElevatedButton.icon(
+                                  IconButton(
                                     icon: Icon(Icons.photo),
-                                    label: Text("Gallery"),
                                     onPressed: () async {
                                       _imageDevice = await TenantApiService()
                                           .pickImageMobile(ImageSource.gallery);
                                       setState(() {});
                                       await _submit();
                                     },
-                                    // () => _pickImageMobile(ImageSource.gallery),
                                   ),
                                 ],
                               ),
@@ -181,86 +206,15 @@ class _TenantDetailMobileState extends State<TenantDetailMobile>
                       SizedBox(height: 10),
                       Divider(),
                       SizedBox(height: 10),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Text("Nama: ", style: TextStyle(fontSize: 14)),
-                              Text(
-                                _tenant?['name'] ?? "-",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text("Telepon: ", style: TextStyle(fontSize: 14)),
-                              Text(
-                                _tenant['phone'],
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text("NIK: ", style: TextStyle(fontSize: 14)),
-                              Text(
-                                _tenant['NIKNumber'],
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text("Masuk: ", style: TextStyle(fontSize: 14)),
-                              Text(
-                                formatDateString(_tenant['startDate']),
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ],
-                          ),
-                          if (_tenant['tenancyStatus'] == "Inactive")
-                            Row(
-                              children: [
-                                Text(
-                                  "Keluar: ",
-                                  style: TextStyle(fontSize: 14),
-                                ),
-                                Text(
-                                  formatDateString(_tenant['endDate']),
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          Row(
-                            children: [
-                              Text("Status: ", style: TextStyle(fontSize: 14)),
-                              Text(
-                                _tenant['tenancyStatus'],
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
+
+                      TenantInfo(
+                        id: _tenant['id'],
+                        name: _name,
+                        phone: _phone,
+                        nik: _nik,
+                        status: _status,
+                        startDate: _startDate,
+                        endDate: _endDate,
                       ),
 
                       SizedBox(height: 10),

@@ -140,6 +140,12 @@ class TenantApiService extends BaseApiService {
 
   Future<dynamic> updateTenant({
     required String tenantId,
+    required String? name,
+    required String? phone,
+    required String? nik,
+    required String? status,
+    required DateTime? startDate,
+    required DateTime? endDate,
     required Uint8List? imageWeb,
     required XFile? imageDevice,
   }) async {
@@ -178,6 +184,25 @@ class TenantApiService extends BaseApiService {
       } catch (e) {
         rethrow;
       }
+    }
+
+    if (name != null) {
+      request.fields['name'] = name;
+    }
+    if (phone != null) {
+      request.fields['phone'] = phone;
+    }
+    if (nik != null) {
+      request.fields['NIKNumber'] = nik;
+    }
+    if (status != null) {
+      request.fields['tenancyStatus'] = status;
+    }
+    if (startDate != null) {
+      request.fields['startDate'] = generateDateString(startDate);
+    }
+    if (endDate != null) {
+      request.fields['endDate'] = generateDateString(endDate);
     }
 
     try {
