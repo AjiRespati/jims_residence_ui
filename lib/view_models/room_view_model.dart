@@ -664,6 +664,12 @@ class RoomViewModel extends ChangeNotifier {
 
   Future<void> updateTenant({
     required String tenantId,
+    required String? name,
+    required String? phone,
+    required String? nik,
+    required String? status,
+    required DateTime? startDate,
+    required DateTime? endDate,
     required Uint8List? imageWeb,
     required XFile? imageDevice,
   }) async {
@@ -671,6 +677,12 @@ class RoomViewModel extends ChangeNotifier {
       isBusy = true;
       dynamic resp = await TenantApiService().updateTenant(
         tenantId: tenantId,
+        name: name,
+        phone: phone,
+        nik: nik,
+        status: status,
+        startDate: startDate,
+        endDate: endDate,
         imageWeb: imageWeb,
         imageDevice: imageDevice,
       );
