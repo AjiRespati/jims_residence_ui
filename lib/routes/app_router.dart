@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:residenza/features/all_tables/all_tables.dart';
 import 'package:residenza/features/auth/login_screen.dart';
 import 'package:residenza/features/home/home.dart';
 import 'package:residenza/features/kost/kost.dart';
@@ -76,6 +77,9 @@ class AppRouter {
           break;
         case paymentResumeRoute:
           screen = PaymentResumeDesktop();
+          break;
+        case allTablesRoute:
+          screen = AllTables();
           break;
         default:
           screen = const NotFoundPage();

@@ -435,6 +435,7 @@ class RoomViewModel extends ChangeNotifier {
   List<dynamic> _kostMonthlyReport = [];
 
   List<dynamic> _transactionsTable = [];
+  List<dynamic> _charges = [];
 
   List<dynamic> get invoices => _invoices;
   set invoices(List<dynamic> val) {
@@ -529,6 +530,12 @@ class RoomViewModel extends ChangeNotifier {
   List<dynamic> get transactionsTable => _transactionsTable;
   set transactionsTable(List<dynamic> val) {
     _transactionsTable = val;
+    notifyListeners();
+  }
+
+  List<dynamic> get charges => _charges;
+  set charges(List<dynamic> val) {
+    _charges = val;
     notifyListeners();
   }
 
@@ -690,6 +697,28 @@ class RoomViewModel extends ChangeNotifier {
       isBusy = false;
       isSuccess = true;
       successMessage = "Berhasil update data tenant";
+    } catch (e) {
+      if (e.toString().contains("please reLogin")) {
+        isBusy = false;
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isBusy = false;
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
+  }
+
+  Future<void> deleteTenant({required String id}) async {
+    isBusy = true;
+    try {
+      await TenantApiService().deleteTenant(id: id);
+
+      isBusy = false;
+      isSuccess = true;
+      successMessage = "Berhasil delete Tenant";
     } catch (e) {
       if (e.toString().contains("please reLogin")) {
         isBusy = false;
@@ -920,7 +949,7 @@ class RoomViewModel extends ChangeNotifier {
 
   // TODO:  TRANSACTION AND INVOICE
 
-  Future<void> fetchInvoicesx({
+  Future<void> fetchInvoices({
     required String? boardingHouseId,
     required DateTime? dateFrom,
     required DateTime? dateTo,
@@ -957,6 +986,28 @@ class RoomViewModel extends ChangeNotifier {
         isNoSession = true;
       } else {
         errorMessage = e.toString().replaceAll('Exception: ', '');
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
+  }
+
+  Future<void> deleteInvoice({required String id}) async {
+    isBusy = true;
+    try {
+      await TransactionInvoiceApiService().deleteInvoice(id: id);
+
+      isBusy = false;
+      isSuccess = true;
+      successMessage = "Berhasil delete Invoice";
+    } catch (e) {
+      if (e.toString().contains("please reLogin")) {
+        isBusy = false;
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isBusy = false;
         isError = true;
       }
     } finally {
@@ -1133,6 +1184,90 @@ class RoomViewModel extends ChangeNotifier {
         isNoSession = true;
       } else {
         errorMessage = e.toString().replaceAll('Exception: ', '');
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
+  }
+
+  Future<void> getAllTransactions() async {
+    isBusy = true;
+    transactionsTable = [];
+
+    try {
+      var resp = await TransactionInvoiceApiService().getAllTransactions();
+
+      transactionsTable = resp['data'];
+    } catch (e) {
+      if (e.toString().contains("please reLogin")) {
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
+  }
+
+  Future<void> getAllCharges() async {
+    isBusy = true;
+    charges = [];
+
+    try {
+      var resp = await TransactionInvoiceApiService().getAllCharges();
+
+      charges = resp['data'];
+    } catch (e) {
+      if (e.toString().contains("please reLogin")) {
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
+  }
+
+  Future<void> deleteCharge({required String id}) async {
+    isBusy = true;
+    try {
+      await TransactionInvoiceApiService().deleteCharge(id: id);
+
+      isBusy = false;
+      isSuccess = true;
+      successMessage = "Berhasil delete Charge";
+    } catch (e) {
+      if (e.toString().contains("please reLogin")) {
+        isBusy = false;
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isBusy = false;
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
+  }
+
+  Future<void> deleteTransaction({required String id}) async {
+    isBusy = true;
+    try {
+      await TransactionInvoiceApiService().deleteTransaction(id: id);
+
+      isBusy = false;
+      isSuccess = true;
+      successMessage = "Berhasil delete Transaction";
+    } catch (e) {
+      if (e.toString().contains("please reLogin")) {
+        isBusy = false;
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isBusy = false;
         isError = true;
       }
     } finally {

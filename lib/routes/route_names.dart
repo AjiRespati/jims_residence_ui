@@ -16,3 +16,4 @@ const String paymentsRoute = "/Payments";
 const String paymentDetailRoute = "/Payments/Detail";
 const String paymentsListRoute = "/Payments/List";
 const String paymentResumeRoute = "/Payments/resume";
+const String allTablesRoute = "/AllTables";

@@ -103,7 +103,7 @@ class TransactionInvoiceApiService extends BaseApiService {
     }
   }
 
-  Future<dynamic> getAllTransacations() async {
+  Future<dynamic> getAllTransactions() async {
     final response = await performAuthenticatedRequest(
       (token) => http.get(
         Uri.parse('$baseUrl/transaction'),
@@ -136,6 +136,87 @@ class TransactionInvoiceApiService extends BaseApiService {
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
+    } else {
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
+    }
+  }
+
+  Future<dynamic> getAllCharges() async {
+    final response = await performAuthenticatedRequest(
+      (token) => http.post(
+        Uri.parse('$baseUrl/transaction/charges'),
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": "Bearer $token",
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
+    }
+  }
+
+  Future<bool> deleteTransaction({required String id}) async {
+    final response = await performAuthenticatedRequest(
+      (token) => http.delete(
+        Uri.parse('$baseUrl/transaction/$id'),
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": "Bearer $token",
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
+    }
+  }
+
+  Future<bool> deleteInvoice({required String id}) async {
+    final response = await performAuthenticatedRequest(
+      (token) => http.delete(
+        Uri.parse('$baseUrl/invoice/$id'),
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": "Bearer $token",
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
+    }
+  }
+
+  Future<bool> deleteCharge({required String id}) async {
+    final response = await performAuthenticatedRequest(
+      (token) => http.post(
+        Uri.parse('$baseUrl/transaction/remCharge'),
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": "Bearer $token",
+        },
+        body: jsonEncode({'id': id}),
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      return true;
     } else {
       throw Exception(
         jsonDecode(response.body)['message'] ?? 'Internal service error',

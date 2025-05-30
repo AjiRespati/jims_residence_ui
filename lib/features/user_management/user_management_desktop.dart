@@ -32,10 +32,10 @@ class _UserManagementDesktopState extends State<UserManagementDesktop>
                   child: Row(
                     children: [
                       SizedBox(width: 20),
-                      IconButton(
-                        onPressed: () => Navigator.pop(context),
-                        icon: Icon(Icons.arrow_back_ios_new, size: 25),
-                      ),
+                      // IconButton(
+                      //   onPressed: () => Navigator.pop(context),
+                      //   icon: Icon(Icons.arrow_back_ios_new, size: 25),
+                      // ),
                       Text(
                         "Pengaturan Pengguna",
                         style: TextStyle(

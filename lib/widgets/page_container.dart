@@ -61,6 +61,9 @@ class _PageContainerState extends State<PageContainer> {
       case "User Management":
         Navigator.pushNamed(context, userRoute);
         break;
+      case "All Tables":
+        Navigator.pushNamed(context, allTablesRoute);
+        break;
       default:
     }
   }
