@@ -180,6 +180,22 @@ class SideBar extends StatelessWidget with GetItMixin {
                           },
                         ),
                       ),
+                      if (ApplicationInfo.isDevelOn)
+                        Padding(
+                          padding: const EdgeInsets.only(left: 14),
+                          child: ListTile(
+                            leading: const Icon(
+                              Icons.person_pin_outlined,
+                              size: 22,
+                            ),
+                            // leading: const Icon(Icons.bar_chart_rounded, size: 22),
+                            title: const Text("All Tables"),
+                            dense: true,
+                            onTap: () {
+                              onTapMenu(menuTitle: "All Tables");
+                            },
+                          ),
+                        ),
                     ],
                   ),
                   // ListTile(

@@ -2,7 +2,7 @@
 {{flutter_build_config}}
 
 //TODO: APP VERSION
-const appVersion = "1.0.7+4";
+const appVersion = "1.0.8";
 
 console.log("Version: ", appVersion);
 
