@@ -426,7 +426,7 @@ class RoomViewModel extends ChangeNotifier {
   String _invoiceId = "";
   String _transactionMethod = "";
   double _transactionAmount = 0;
-  DateTime _transactionDate = DateTime.now();
+  DateTime? _transactionDate;
   String _transactionDescription = "";
 
   List<dynamic> _expenses = [];
@@ -491,8 +491,8 @@ class RoomViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  DateTime get transactionDate => _transactionDate;
-  set transactionDate(DateTime val) {
+  DateTime? get transactionDate => _transactionDate;
+  set transactionDate(DateTime? val) {
     _transactionDate = val;
     notifyListeners();
   }
@@ -1020,7 +1020,7 @@ class RoomViewModel extends ChangeNotifier {
       isBusy = true;
       await TransactionInvoiceApiService().recordTransaction(
         invoiceId: invoiceId,
-        transactionDate: transactionDate,
+        transactionDate: transactionDate ?? DateTime.now(),
         method: transactionMethod,
         amount: transactionAmount,
         description: transactionDescription,
@@ -1031,7 +1031,7 @@ class RoomViewModel extends ChangeNotifier {
       transactionAmount = 0;
       transactionMethod = "";
       transactionDescription = "";
-      transactionDate = DateTime.now();
+      transactionDate = null;
       isSuccess = true;
       successMessage = "Pembayaran berhasil";
     } catch (e) {
