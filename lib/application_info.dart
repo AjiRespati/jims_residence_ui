@@ -25,5 +25,5 @@ class ApplicationInfo {
   static const thirdColor = Colors.amber;
 
   //TODO: DEVELOPER SWITCH
-  static const isDevelOn = true;
+  static const isDevelOn = false;
 }
