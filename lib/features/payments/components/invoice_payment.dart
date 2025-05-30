@@ -26,7 +26,7 @@ class _InvoicdPaymentState extends State<InvoicePayment> with GetItStateMixin {
     symbol: 'Rp',
     decimalDigits: 0,
   );
-
+  DateTime? _paymentDate;
   dynamic _invoice;
   List<dynamic> _charges = [];
 
@@ -131,6 +131,7 @@ class _InvoicdPaymentState extends State<InvoicePayment> with GetItStateMixin {
             ),
 
             SizedBox(height: 6),
+            SizedBox(height: 15),
             Row(
               children: [
                 SizedBox(width: 40),
@@ -147,7 +148,50 @@ class _InvoicdPaymentState extends State<InvoicePayment> with GetItStateMixin {
               ],
             ),
 
-            SizedBox(height: 6),
+            SizedBox(height: 15),
+
+            Column(
+              children: [
+                Row(
+                  children: [
+                    SizedBox(width: 40),
+                    if (_paymentDate != null)
+                      Text(
+                        "Tanggal Pembayaran",
+                        style: TextStyle(fontSize: 12),
+                      ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    SizedBox(width: 40),
+                    Flexible(
+                      child: _buildDatePicker(
+                        context,
+                        "Tanggal pembayaran",
+                        "",
+                        _paymentDate,
+                        (date) {
+                          _paymentDate = date;
+                          setState(() {
+                            _paymentDate = date;
+                          });
+                        },
+                        dateTextStyle: TextStyle(
+                          fontWeight: FontWeight.w900,
+                          fontSize: 16,
+                        ),
+                        labelTextStyle: TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                    SizedBox(width: 40),
+                  ],
+                ),
+              ],
+            ),
+
+            SizedBox(height: 16),
+
             Text("Pastikan pembayaran telah diterima."),
             SizedBox(height: 26),
             SizedBox(
@@ -170,6 +214,7 @@ class _InvoicdPaymentState extends State<InvoicePayment> with GetItStateMixin {
                       ),
                       elevation: 3,
                       onPressed: () async {
+                        get<RoomViewModel>().transactionDate = _paymentDate;
                         get<RoomViewModel>().transactionAmount = double.parse(
                           _rawValue,
                         );
@@ -192,4 +237,46 @@ class _InvoicdPaymentState extends State<InvoicePayment> with GetItStateMixin {
       ),
     );
   }
+}
+
+Widget _buildDatePicker(
+  BuildContext context,
+  String placeholder,
+  String label,
+  DateTime? selectedDate,
+  Function(DateTime) onDateSelected, {
+  TextStyle? dateTextStyle,
+  TextStyle? labelTextStyle,
+}) {
+  return SizedBox(
+    height: 34,
+    child: ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        shape: ContinuousRectangleBorder(borderRadius: BorderRadius.zero),
+        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+      ),
+      onPressed: () async {
+        DateTime? pickedDate = await showCustomDatePicker(
+          context: context,
+          initialDate: selectedDate ?? DateTime.now(),
+          firstDate: DateTime(2000),
+        );
+        // );
+        if (pickedDate != null) onDateSelected(pickedDate);
+      },
+      child: Row(
+        children: [
+          Text(
+            selectedDate == null ? placeholder : label,
+            style: labelTextStyle,
+          ),
+          Text(
+            selectedDate == null ? "" : formatDateFromYearToDay(selectedDate),
+            // (selectedDate?.toLocal() ?? "").toString().split(' ')[0],
+            style: dateTextStyle,
+          ),
+        ],
+      ),
+    ),
+  );
 }
