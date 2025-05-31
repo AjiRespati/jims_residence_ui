@@ -191,7 +191,7 @@ class _CreateOtherCostContentState extends State<CreateOtherCostContent>
                       }
                       Navigator.pop(context);
                     },
-                    child: Text("Bayar"),
+                    child: Text("Buat"),
                   ),
                 ],
               ),

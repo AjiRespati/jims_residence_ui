@@ -56,6 +56,7 @@ class _PaymentDetailDesktopState extends State<PaymentDetailDesktop>
               ),
 
               Expanded(
+                flex: 2,
                 child: Column(
                   children: [
                     SizedBox(height: 40),
@@ -169,7 +170,7 @@ class _PaymentDetailDesktopState extends State<PaymentDetailDesktop>
                                             children: [
                                               Text("Pembayaran: "),
                                               Text(
-                                                formatDateMinuteString(
+                                                formatDateString(
                                                   item['transactionDate'],
                                                 ),
                                                 style: TextStyle(
