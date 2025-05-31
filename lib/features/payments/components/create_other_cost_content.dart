@@ -187,16 +187,7 @@ class _CreateOtherCostContentState extends State<CreateOtherCostContent>
                       );
 
                       if (get<RoomViewModel>().isSuccess) {
-                        await get<RoomViewModel>().getFinancialOverview(
-                          boardingHouseId: get<RoomViewModel>().roomKostId,
-                          dateFrom: null,
-                          dateTo: null,
-                        );
-                        await get<RoomViewModel>().getFinancialTransactions(
-                          boardingHouseId: get<RoomViewModel>().roomKostId,
-                          dateFrom: null,
-                          dateTo: null,
-                        );
+                        await get<RoomViewModel>().fetchTenant();
                       }
                       Navigator.pop(context);
                     },

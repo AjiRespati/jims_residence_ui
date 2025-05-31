@@ -733,6 +733,34 @@ class RoomViewModel extends ChangeNotifier {
     }
   }
 
+  Future<void> checkoutTenant({
+    required String id,
+    required DateTime? checkoutDate,
+  }) async {
+    isBusy = true;
+    try {
+      await TenantApiService().checkoutTenant(
+        id: id,
+        checkoutDate: checkoutDate,
+      );
+
+      isBusy = false;
+      isSuccess = true;
+      successMessage = "Berhasil Checkout Tenant";
+    } catch (e) {
+      if (e.toString().contains("please reLogin")) {
+        isBusy = false;
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isBusy = false;
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
+  }
+
   // TODO: KOST (Boarding House) Section
   // TODO: BOILERPLATE FOR ALL CONTROLLERS
 

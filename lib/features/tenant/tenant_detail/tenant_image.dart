@@ -46,7 +46,7 @@ class _TenantImageState extends State<TenantImage> with GetItStateMixin {
             // ✅ Image Preview
             (_imageDevice != null || _imageWeb != null)
                 ? Container(
-                  height: 150,
+                  height: 120,
                   width: 200,
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey),
@@ -59,7 +59,7 @@ class _TenantImageState extends State<TenantImage> with GetItStateMixin {
                 )
                 : widget.tenant?['NIKImagePath'] != null
                 ? Container(
-                  height: 150,
+                  height: 120,
                   width: 200,
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey),
@@ -70,7 +70,7 @@ class _TenantImageState extends State<TenantImage> with GetItStateMixin {
                   ),
                 )
                 : Container(
-                  height: 150,
+                  height: 120,
                   width: 200,
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey),
