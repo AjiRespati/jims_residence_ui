@@ -1274,4 +1274,56 @@ class RoomViewModel extends ChangeNotifier {
       isBusy = false;
     }
   }
+
+  Future<void> createOtherCost({
+    required String roomId,
+    required String name,
+    required double amount,
+    required String? description,
+    required bool isOneTime,
+    required DateTime? invoiceIssueDate,
+    required DateTime? invoiceDueDate,
+  }) async {
+    isBusy = true;
+    try {
+      if (invoiceIssueDate == null) {
+        isError = true;
+        errorMessage = "Tanggal pembayaran harus diisi";
+      } else if (invoiceDueDate == null) {
+        isError = true;
+        errorMessage = "Tanggal pembayaran harus diisi";
+      } else if (roomId.isEmpty) {
+        isError = true;
+        errorMessage = "roomId harus diisi";
+      } else if (name.isEmpty) {
+        isError = true;
+        errorMessage = "Peruntukan pembayaran harus diisi";
+      } else if (amount < 1000) {
+        isError = true;
+        errorMessage = "Jumlah harus diisi";
+      } else {
+        await TransactionInvoiceApiService().createOtherCost(
+          roomId: roomId,
+          name: name,
+          amount: amount,
+          isOneTime: isOneTime,
+          description: description ?? '',
+          invoiceIssueDate: invoiceIssueDate,
+          invoiceDueDate: invoiceDueDate,
+        );
+
+        isSuccess = true;
+        successMessage = "Pembuatan biaya lain berhasil";
+      }
+    } catch (e) {
+      if (e.toString().contains("please reLogin")) {
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
+  }
 }

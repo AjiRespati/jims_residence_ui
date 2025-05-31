@@ -59,6 +59,16 @@ String formatHariDateString(String? dateTimeString) {
   return result;
 }
 
+String formatHariTglBulThnDateString(String? dateTimeString) {
+  String result = " -";
+  if (dateTimeString != null) {
+    final dateTime = DateTime.parse(dateTimeString).toLocal();
+    final formatter = DateFormat('EEEE, d MMM yyyy', 'id_ID');
+    result = formatter.format(dateTime);
+  }
+  return result;
+}
+
 String formatBulanTahun(DateTime? dateTime) {
   String result = " -";
   if (dateTime != null) {
