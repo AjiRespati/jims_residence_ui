@@ -18,7 +18,7 @@ class InvoiceCard extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  flex: 9,
+                  flex: 10,
                   child: Column(
                     children: [
                       SizedBox(height: 25),
@@ -41,7 +41,7 @@ class InvoiceCard extends StatelessWidget {
                       Row(
                         children: [
                           Text("Batas pembayaran: "),
-                          Text(formatHariDateString(item['dueDate'])),
+                          Text(formatHariTglBulThnDateString(item['dueDate'])),
                         ],
                       ),
                       Row(
@@ -124,7 +124,7 @@ class InvoiceCard extends StatelessWidget {
                 Spacer(),
                 if (item['Transactions'].isNotEmpty)
                   Text(
-                    formatHariDateString(
+                    formatHariTglBulThnDateString(
                       item['Transactions'].last['transactionDate'],
                     ),
                     // formatHariDateString(item['issueDate']),

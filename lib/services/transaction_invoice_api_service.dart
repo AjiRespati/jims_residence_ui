@@ -223,4 +223,41 @@ class TransactionInvoiceApiService extends BaseApiService {
       );
     }
   }
+
+  Future<bool> createOtherCost({
+    required String roomId,
+    required String name,
+    required double amount,
+    required String description,
+    required bool isOneTime,
+    required DateTime invoiceIssueDate,
+    required DateTime invoiceDueDate,
+  }) async {
+    final response = await performAuthenticatedRequest(
+      (token) => http.post(
+        Uri.parse('$baseUrl/otherCost'),
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": "Bearer $token",
+        },
+        body: jsonEncode({
+          'roomId': roomId,
+          'name': name,
+          'amount': amount,
+          'description': description,
+          'isOneTime': isOneTime,
+          'invoiceIssueDate': generateDateString(invoiceIssueDate),
+          'invoiceDueDate': generateDateString(invoiceDueDate),
+        }),
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
+    }
+  }
 }

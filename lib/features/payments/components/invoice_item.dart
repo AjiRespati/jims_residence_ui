@@ -57,6 +57,14 @@ class InvoiceItem extends StatelessWidget with GetItMixin {
                               Text(room['roomNumber']),
                             ],
                           ),
+                        SizedBox(height: 5),
+                        Text(
+                          invoice['description'] ?? "-",
+                          style: TextStyle(
+                            // fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        ),
                       ],
                     ),
                   ),

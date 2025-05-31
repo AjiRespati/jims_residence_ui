@@ -265,4 +265,33 @@ class TenantApiService extends BaseApiService {
       );
     }
   }
+
+  Future<bool> checkoutTenant({
+    required String id,
+    required DateTime? checkoutDate,
+  }) async {
+    Map<String, dynamic> body = {};
+
+    if (checkoutDate != null) {
+      body['checkoutDate'] = generateDateString(checkoutDate);
+    }
+    final response = await performAuthenticatedRequest(
+      (token) => http.post(
+        Uri.parse('$baseUrl/tenant/$id/checkout'),
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": "Bearer $token",
+        },
+        body: jsonEncode(body),
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
+    }
+  }
 }

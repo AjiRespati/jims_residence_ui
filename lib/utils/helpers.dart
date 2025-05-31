@@ -59,6 +59,16 @@ String formatHariDateString(String? dateTimeString) {
   return result;
 }
 
+String formatHariTglBulThnDateString(String? dateTimeString) {
+  String result = " -";
+  if (dateTimeString != null) {
+    final dateTime = DateTime.parse(dateTimeString).toLocal();
+    final formatter = DateFormat('EEEE, d MMM yyyy', 'id_ID');
+    result = formatter.format(dateTime);
+  }
+  return result;
+}
+
 String formatBulanTahun(DateTime? dateTime) {
   String result = " -";
   if (dateTime != null) {
@@ -102,14 +112,17 @@ Future<DateTime?> showCustomDatePicker({
       return Dialog(
         surfaceTintColor: Colors.transparent,
         backgroundColor: Colors.white,
-        child: CalendarDatePicker(
-          initialDate: initialDate, // DateTime.now(),
-          firstDate: firstDate, //DateTime(1900),
-          lastDate: DateTime(3000),
-          onDateChanged: (DateTime date) {
-            selectedDate = date;
-            Navigator.of(context).pop(date); // Close and return date
-          },
+        child: Container(
+          constraints: BoxConstraints(maxWidth: 500),
+          child: CalendarDatePicker(
+            initialDate: initialDate, // DateTime.now(),
+            firstDate: firstDate, //DateTime(1900),
+            lastDate: DateTime(3000),
+            onDateChanged: (DateTime date) {
+              selectedDate = date;
+              Navigator.of(context).pop(date); // Close and return date
+            },
+          ),
         ),
       );
     },

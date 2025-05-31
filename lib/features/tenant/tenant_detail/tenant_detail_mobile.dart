@@ -1,17 +1,16 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:residenza/application_info.dart';
+import 'package:residenza/features/payments/components/create_other_cost_content.dart';
 import 'package:residenza/features/payments/components/invoice_card.dart';
+import 'package:residenza/features/tenant/components/tenant_checkout_content.dart';
+import 'package:residenza/features/tenant/tenant_detail/tenant_image.dart';
 import 'package:residenza/features/tenant/tenant_detail/tenant_info.dart';
-import 'package:residenza/services/tenant_api_service.dart';
+import 'package:residenza/routes/route_names.dart';
 import 'package:residenza/view_models/room_view_model.dart';
+import 'package:residenza/widgets/buttons/gradient_elevated_button.dart';
 import 'package:residenza/widgets/mobile_navbar.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
-import 'package:image_picker/image_picker.dart';
 
 class TenantDetailMobile extends StatefulWidget with GetItStatefulWidgetMixin {
   TenantDetailMobile({super.key});
@@ -23,8 +22,6 @@ class TenantDetailMobile extends StatefulWidget with GetItStatefulWidgetMixin {
 class _TenantDetailMobileState extends State<TenantDetailMobile>
     with GetItStateMixin {
   dynamic _tenant;
-  XFile? _imageDevice;
-  Uint8List? _imageWeb;
 
   String _name = "";
   String _phone = "";
@@ -32,21 +29,6 @@ class _TenantDetailMobileState extends State<TenantDetailMobile>
   String _status = "";
   DateTime? _startDate;
   DateTime? _endDate;
-
-  Future<void> _submit() async {
-    await get<RoomViewModel>().updateTenant(
-      tenantId: _tenant['id'],
-      name: null,
-      phone: null,
-      nik: null,
-      status: null,
-      startDate: null,
-      endDate: null,
-      imageWeb: _imageWeb,
-      imageDevice: _imageDevice,
-    );
-    // Navigator.pushNamed(context, tenantRoute);
-  }
 
   Future _setup() async {
     await get<RoomViewModel>().fetchTenant();
@@ -94,155 +76,145 @@ class _TenantDetailMobileState extends State<TenantDetailMobile>
               ),
             if (_tenant != null)
               Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(child: SizedBox()),
-                          Column(
-                            children: [
-                              SizedBox(height: 10),
-                              // ✅ Image Preview
-                              (_imageDevice != null || _imageWeb != null)
-                                  ? Container(
-                                    height: 150,
-                                    width: 200,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey),
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(10),
-                                      ),
-                                    ),
-                                    child:
-                                        kIsWeb
-                                            ? Image.memory(_imageWeb!)
-                                            : Image.file(
-                                              File(_imageDevice!.path),
-                                            ),
-                                  )
-                                  : _tenant?['NIKImagePath'] != null
-                                  ? Container(
-                                    height: 150,
-                                    width: 200,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey),
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(10),
-                                      ),
-                                    ),
-                                    child: Image.network(
-                                      ApplicationInfo.baseUrl +
-                                          _tenant['NIKImagePath'],
-                                    ),
-                                  )
-                                  : Container(
-                                    height: 150,
-                                    width: 200,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey),
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(10),
-                                      ),
-                                    ),
-                                    child: Icon(
-                                      Icons.image,
-                                      size: 100,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                            ],
-                          ),
+                child: Column(
+                  children: [
+                    TenantImage(tenant: _tenant),
 
-                          // ✅ Pick Image Buttons
-                          if (kIsWeb) // ✅ Web: File Picker
-                            Expanded(
-                              child: Center(
-                                child: IconButton(
-                                  onPressed: () async {
-                                    _imageWeb =
-                                        await TenantApiService().pickImageWeb();
-                                    setState(() {});
-                                    await _submit();
-                                  },
-                                  icon: Icon(
-                                    Icons.cloud_upload_outlined,
-                                    color: Colors.blue,
-                                    size: 30,
-                                  ),
-                                ),
+                    Divider(),
+
+                    TenantInfo(
+                      id: _tenant['id'],
+                      name: _name,
+                      phone: _phone,
+                      nik: _nik,
+                      status: _status,
+                      startDate: _startDate,
+                      endDate: _endDate,
+                    ),
+
+                    SizedBox(height: 10),
+                    Stack(
+                      alignment: Alignment.centerRight,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Daftar Tagihan",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
                               ),
                             ),
-                          if (!kIsWeb) // ✅ Mobile: Camera & Gallery
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  IconButton(
-                                    icon: Icon(Icons.camera),
-                                    onPressed: () async {
-                                      _imageDevice = await TenantApiService()
-                                          .pickImageMobile(ImageSource.camera);
-                                      setState(() {});
-                                      await _submit();
-                                    },
-                                  ),
-                                  SizedBox(width: 10),
-                                  IconButton(
-                                    icon: Icon(Icons.photo),
-                                    onPressed: () async {
-                                      _imageDevice = await TenantApiService()
-                                          .pickImageMobile(ImageSource.gallery);
-                                      setState(() {});
-                                      await _submit();
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                        ],
-                      ),
-
-                      SizedBox(height: 10),
-                      Divider(),
-                      SizedBox(height: 10),
-
-                      TenantInfo(
-                        id: _tenant['id'],
-                        name: _name,
-                        phone: _phone,
-                        nik: _nik,
-                        status: _status,
-                        startDate: _startDate,
-                        endDate: _endDate,
-                      ),
-
-                      SizedBox(height: 10),
-                      Text(
-                        "Daftar Tagihan",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14,
+                          ],
                         ),
-                      ),
-                      SizedBox(height: 10),
+                        GradientElevatedButton(
+                          gradient: const LinearGradient(
+                            colors: [
+                              Color.fromARGB(240, 244, 67, 54),
+                              Color.fromRGBO(241, 30, 30, 0.641),
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          elevation: 8,
+                          buttonHeight: 25,
+                          onPressed: () async {
+                            await showModalBottomSheet(
+                              isScrollControlled: true,
+                              context: context,
+                              builder: (context) {
+                                return Padding(
+                                  padding: EdgeInsets.only(
+                                    bottom:
+                                        MediaQuery.of(
+                                          context,
+                                        ).viewInsets.bottom,
+                                  ),
+                                  child: SingleChildScrollView(
+                                    child: CreateOtherCostContent(
+                                      roomId: _tenant['roomId'],
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                            _setup();
+                          },
+                          child: Text(
+                            "Biaya Lain",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
 
-                      //TODO: TENANT PAYMENTS LIST
-                      ListView.builder(
+                    //TODO: TENANT PAYMENTS LIST
+                    Expanded(
+                      child: ListView.builder(
                         shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
+                        // physics: NeverScrollableScrollPhysics(),
                         itemCount: _tenant?['Invoices'].length,
                         itemBuilder: (context, index) {
                           final item = _tenant['Invoices'][index];
                           item['Tenant'] = {'id': _tenant['id']};
-                          return InvoiceCard(item: item);
+                          return Padding(
+                            padding: EdgeInsets.only(
+                              bottom:
+                                  index == _tenant?['Invoices'].length - 1
+                                      ? 40
+                                      : 0,
+                            ),
+                            child: InvoiceCard(item: item),
+                          );
                         },
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
           ],
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
+      floatingActionButton: SizedBox(
+        height: 40,
+        child: FloatingActionButton.extended(
+          extendedPadding: EdgeInsets.symmetric(horizontal: 10),
+          label: Text(
+            "Checkout",
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+          ),
+          backgroundColor: const Color.fromARGB(200, 33, 149, 243),
+          onPressed: () async {
+            await showModalBottomSheet(
+              isScrollControlled: true,
+              context: context,
+              builder: (context) {
+                return Padding(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: SingleChildScrollView(
+                    child: TenantCheckoutContent(
+                      tenantId: _tenant['id'],
+                      name: _name,
+                      boardingHouseName: _tenant['boardingHouseName'],
+                    ),
+                  ),
+                );
+              },
+            );
+            if (get<RoomViewModel>().isSuccess) {
+              Navigator.pushNamed(context, roomRoute, arguments: false);
+            }
+          },
+          icon: Icon(Icons.logout, color: Colors.white),
         ),
       ),
       bottomNavigationBar: MobileNavbar(selectedindex: 2),
