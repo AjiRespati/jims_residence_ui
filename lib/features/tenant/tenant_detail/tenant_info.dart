@@ -120,145 +120,146 @@ class _TenantInfoState extends State<TenantInfo> with GetItStateMixin {
             ),
           ],
         ),
-        Padding(
-          padding: const EdgeInsets.only(right: 30),
-          child: EditButton(
-            message: "",
-            size: 35,
-            color: Colors.blue,
-            onPressed: () async {
-              await showModalBottomSheet(
-                isScrollControlled: true,
-                context: context,
-                builder: (context) {
-                  return Padding(
-                    padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom,
-                      left: 24,
-                      right: 24,
-                      top: 24,
-                    ),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          Text(
-                            'Edit Tenant Data',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              color: Colors.blue.shade700,
-                              fontSize: 18,
-                            ),
-                          ),
-                          SizedBox(height: 20),
-                          TextFormField(
-                            decoration: InputDecoration(
-                              isDense: true,
-                              label: Text("Nama"),
-                            ),
-                            controller: _name,
-                          ),
-                          SizedBox(height: 6),
-                          TextFormField(
-                            decoration: InputDecoration(
-                              isDense: true,
-                              label: Text("Telepon"),
-                            ),
-                            controller: _phone,
-                            keyboardType: TextInputType.phone,
-                          ),
-                          SizedBox(height: 6),
-                          TextFormField(
-                            decoration: InputDecoration(
-                              isDense: true,
-                              label: Text("NIK"),
-                            ),
-                            controller: _nik,
-                            keyboardType: TextInputType.number,
-                          ),
-                          SizedBox(height: 6),
-                          SizedBox(height: 6),
-
-                          _buildDatePicker(
-                            context,
-                            "Pilih tanggal mulai",
-                            "Mulai:  ",
-                            _startDate,
-                            (date) {
-                              _startDate = date;
-                              setState(() {
-                                _startDate = date;
-                              });
-                            },
-                            dateTextStyle: TextStyle(
-                              fontWeight: FontWeight.w900,
-                              fontSize: 16,
-                            ),
-                            labelTextStyle: TextStyle(
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          SizedBox(height: 6),
-
-                          SizedBox(height: 6),
-                          DropdownButtonFormField<String>(
-                            decoration: InputDecoration(labelText: "Status"),
-                            value: _status.text,
-                            items:
-                                ['Active', 'Inactive', 'Waiting'].map((item) {
-                                  return DropdownMenuItem<String>(
-                                    value: item,
-                                    child: Text(item),
-                                  );
-                                }).toList(),
-                            onChanged: (value) {
-                              _status.text = value ?? "";
-                              setState(() {});
-                            },
-                          ),
-                          SizedBox(height: 26),
-                          SizedBox(
-                            // height: 36,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                GradientElevatedButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: Text("Batal"),
-                                ),
-                                SizedBox(width: 20),
-                                GradientElevatedButton(
-                                  onPressed: () async {
-                                    await get<RoomViewModel>().updateTenant(
-                                      tenantId: widget.id,
-                                      name: _name.text,
-                                      phone: _phone.text,
-                                      nik: _nik.text,
-                                      status: _status.text,
-                                      startDate: _startDate,
-                                      endDate: _endDate,
-                                      imageWeb: null,
-                                      imageDevice: null,
-                                    );
-
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text("Edit"),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 40),
-                        ],
+        if (widget.status != "Inactive")
+          Padding(
+            padding: const EdgeInsets.only(right: 30),
+            child: EditButton(
+              message: "",
+              size: 35,
+              color: Colors.blue,
+              onPressed: () async {
+                await showModalBottomSheet(
+                  isScrollControlled: true,
+                  context: context,
+                  builder: (context) {
+                    return Padding(
+                      padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom,
+                        left: 24,
+                        right: 24,
+                        top: 24,
                       ),
-                    ),
-                  );
-                },
-              );
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Text(
+                              'Edit Tenant Data',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                color: Colors.blue.shade700,
+                                fontSize: 18,
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                isDense: true,
+                                label: Text("Nama"),
+                              ),
+                              controller: _name,
+                            ),
+                            SizedBox(height: 6),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                isDense: true,
+                                label: Text("Telepon"),
+                              ),
+                              controller: _phone,
+                              keyboardType: TextInputType.phone,
+                            ),
+                            SizedBox(height: 6),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                isDense: true,
+                                label: Text("NIK"),
+                              ),
+                              controller: _nik,
+                              keyboardType: TextInputType.number,
+                            ),
+                            SizedBox(height: 6),
+                            SizedBox(height: 6),
 
-              setState(() {});
-            },
+                            _buildDatePicker(
+                              context,
+                              "Pilih tanggal mulai",
+                              "Mulai:  ",
+                              _startDate,
+                              (date) {
+                                _startDate = date;
+                                setState(() {
+                                  _startDate = date;
+                                });
+                              },
+                              dateTextStyle: TextStyle(
+                                fontWeight: FontWeight.w900,
+                                fontSize: 16,
+                              ),
+                              labelTextStyle: TextStyle(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            SizedBox(height: 6),
+
+                            SizedBox(height: 6),
+                            DropdownButtonFormField<String>(
+                              decoration: InputDecoration(labelText: "Status"),
+                              value: _status.text,
+                              items:
+                                  ['Active', 'Inactive', 'Waiting'].map((item) {
+                                    return DropdownMenuItem<String>(
+                                      value: item,
+                                      child: Text(item),
+                                    );
+                                  }).toList(),
+                              onChanged: (value) {
+                                _status.text = value ?? "";
+                                setState(() {});
+                              },
+                            ),
+                            SizedBox(height: 26),
+                            SizedBox(
+                              // height: 36,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  GradientElevatedButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: Text("Batal"),
+                                  ),
+                                  SizedBox(width: 20),
+                                  GradientElevatedButton(
+                                    onPressed: () async {
+                                      await get<RoomViewModel>().updateTenant(
+                                        tenantId: widget.id,
+                                        name: _name.text,
+                                        phone: _phone.text,
+                                        nik: _nik.text,
+                                        status: _status.text,
+                                        startDate: _startDate,
+                                        endDate: _endDate,
+                                        imageWeb: null,
+                                        imageDevice: null,
+                                      );
+
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text("Edit"),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 40),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+
+                setState(() {});
+              },
+            ),
           ),
-        ),
       ],
     );
   }

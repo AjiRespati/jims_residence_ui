@@ -26,103 +26,113 @@ class _TenantCardState extends State<TenantCard> with GetItStateMixin {
       child: Card(
         elevation: 2,
         child: ClipRRect(
-          child: InkWell(
-            onTap: () {
-              get<RoomViewModel>().tenantId = widget.item['id'];
-              Navigator.pushNamed(context, tenantDetailRoute);
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '${widget.item['boardingHouseName']} ${widget.item['roomNumber']}',
-                            ),
-                            SizedBox(height: 4),
-                            Row(
-                              children: [
-                                Flexible(
-                                  child: Text(
-                                    widget.item['name'] ?? 'N/A',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
+          child: Banner(
+            message:
+                widget.item['tenancyStatus'] == "Inactive" ? "Inactive" : "",
+            location: BannerLocation.topEnd,
+            color:
+                widget.item['tenancyStatus'] == "Inactive"
+                    ? Colors.red
+                    : Colors.transparent,
+            shadow: BoxShadow(color: Colors.transparent),
+            child: InkWell(
+              onTap: () {
+                get<RoomViewModel>().tenantId = widget.item['id'];
+                Navigator.pushNamed(context, tenantDetailRoute);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${widget.item['boardingHouseName']} ${widget.item['roomNumber']}',
+                              ),
+                              SizedBox(height: 4),
+                              Row(
+                                children: [
+                                  Flexible(
+                                    child: Text(
+                                      widget.item['name'] ?? 'N/A',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                              Text(widget.item['phone'] ?? 'N/A'),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if ((widget.item['isNIKCopyDone'] == false))
+                                Text(
+                                  "Fotocopy KTP belum ada !",
+                                  style: TextStyle(
+                                    color: Colors.amber.shade800,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                              ],
-                            ),
-                            Text(widget.item['phone'] ?? 'N/A'),
-                          ],
+                              if (widget.item['Invoices'].length != 0)
+                                Text(
+                                  "Ada tagihan belum lunas !",
+                                  style: TextStyle(
+                                    color: Colors.amber.shade800,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                            ],
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Row(
                           children: [
-                            if ((widget.item['isNIKCopyDone'] == false))
-                              Text(
-                                "Fotocopy KTP belum ada !",
-                                style: TextStyle(
-                                  color: Colors.amber.shade800,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                            Text("Mulai:"),
+                            SizedBox(width: 5),
+                            Text(
+                              formatDateString(widget.item['startDate']),
+                              style: TextStyle(
+                                color: Colors.blue.shade800,
+                                fontWeight: FontWeight.bold,
                               ),
-                            if (widget.item['Invoices'].length != 0)
-                              Text(
-                                "Ada tagihan belum lunas !",
-                                style: TextStyle(
-                                  color: Colors.amber.shade800,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                            ),
                           ],
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Row(
-                        children: [
-                          Text("Mulai:"),
-                          SizedBox(width: 5),
-                          Text(
-                            formatDateString(widget.item['startDate']),
-                            style: TextStyle(
-                              color: Colors.blue.shade800,
-                              fontWeight: FontWeight.bold,
+                        Row(
+                          children: [
+                            Text("  s/d "),
+                            SizedBox(width: 5),
+                            Text(
+                              formatDateString(widget.item['endDate']),
+                              style: TextStyle(
+                                color: Colors.blue.shade800,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text("  s/d "),
-                          SizedBox(width: 5),
-                          Text(
-                            formatDateString(widget.item['endDate']),
-                            style: TextStyle(
-                              color: Colors.blue.shade800,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
