@@ -84,49 +84,53 @@ class _TenantImageState extends State<TenantImage> with GetItStateMixin {
         // ✅ Pick Image Buttons
         if (kIsWeb) // ✅ Web: File Picker
           Expanded(
-            child: Center(
-              child: IconButton(
-                onPressed: () async {
-                  _imageWeb = await TenantApiService().pickImageWeb();
-                  setState(() {});
-                  await _submit();
-                },
-                icon: Icon(
-                  Icons.cloud_upload_outlined,
-                  color: Colors.blue,
-                  size: 30,
-                ),
-              ),
-            ),
+            child:
+                (widget.tenant['tenancyStatus'] == 'Inactive')
+                    ? SizedBox()
+                    : Center(
+                      child: IconButton(
+                        onPressed: () async {
+                          _imageWeb = await TenantApiService().pickImageWeb();
+                          setState(() {});
+                          await _submit();
+                        },
+                        icon: Icon(
+                          Icons.cloud_upload_outlined,
+                          color: Colors.blue,
+                          size: 30,
+                        ),
+                      ),
+                    ),
           ),
         if (!kIsWeb) // ✅ Mobile: Camera & Gallery
           Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.camera),
-                  onPressed: () async {
-                    _imageDevice = await TenantApiService().pickImageMobile(
-                      ImageSource.camera,
-                    );
-                    setState(() {});
-                    await _submit();
-                  },
-                ),
-                SizedBox(width: 10),
-                IconButton(
-                  icon: Icon(Icons.photo),
-                  onPressed: () async {
-                    _imageDevice = await TenantApiService().pickImageMobile(
-                      ImageSource.gallery,
-                    );
-                    setState(() {});
-                    await _submit();
-                  },
-                ),
-              ],
-            ),
+            child:
+                (widget.tenant['tenancyStatus'] == 'Inactive')
+                    ? SizedBox()
+                    : Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.camera),
+                          onPressed: () async {
+                            _imageDevice = await TenantApiService()
+                                .pickImageMobile(ImageSource.camera);
+                            setState(() {});
+                            await _submit();
+                          },
+                        ),
+                        SizedBox(width: 10),
+                        IconButton(
+                          icon: Icon(Icons.photo),
+                          onPressed: () async {
+                            _imageDevice = await TenantApiService()
+                                .pickImageMobile(ImageSource.gallery);
+                            setState(() {});
+                            await _submit();
+                          },
+                        ),
+                      ],
+                    ),
           ),
       ],
     );

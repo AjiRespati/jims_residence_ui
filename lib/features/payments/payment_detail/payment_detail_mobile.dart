@@ -137,7 +137,7 @@ class _PaymentDetailMobileState extends State<PaymentDetailMobile>
                                     children: [
                                       Text("Pembayaran: "),
                                       Text(
-                                        formatDateMinuteString(
+                                        formatDateString(
                                           item['transactionDate'],
                                         ),
                                         style: TextStyle(
