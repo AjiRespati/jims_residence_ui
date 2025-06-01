@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:residenza/features/settings/settings_desktop.dart';
 import 'package:residenza/features/settings/settings_mobile.dart';
+import 'package:residenza/routes/route_names.dart';
 import 'package:residenza/utils/responsive_layout.dart';
 import 'package:residenza/view_models/room_view_model.dart';
 import 'package:residenza/view_models/system_view_model.dart';
@@ -35,6 +36,9 @@ class _SettingsState extends State<Settings> with GetItStateMixin {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (get<SystemViewModel>().user == null) {
+        Navigator.pushNamed(context, signInRoute);
+      }
       get<SystemViewModel>().currentPageIndex =
           get<SystemViewModel>().user['level'] < 1 ? 2 : 4;
       _setup();
