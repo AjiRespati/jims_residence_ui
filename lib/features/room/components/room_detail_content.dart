@@ -498,7 +498,7 @@ class _RoomDetailContentState extends State<RoomDetailContent>
                               Row(
                                 children: [
                                   SizedBox(width: 40),
-                                  Text("Batas pembayaran: "),
+                                  Text("Jatuh tempo: "),
                                   SizedBox(width: 4),
                                   Text(
                                     formatDateString(_tenant['dueDate']),
