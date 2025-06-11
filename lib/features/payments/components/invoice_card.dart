@@ -40,8 +40,11 @@ class InvoiceCard extends StatelessWidget {
                       SizedBox(height: 5),
                       Row(
                         children: [
-                          Text("Batas pembayaran: "),
-                          Text(formatHariTglBulThnDateString(item['dueDate'])),
+                          Text("Jatuh Tempo: "),
+                          Text(
+                            formatHariTglBulThnDateString(item['dueDate']),
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
                         ],
                       ),
                       Row(
@@ -74,10 +77,7 @@ class InvoiceCard extends StatelessWidget {
                         textAlign: TextAlign.center,
                       ),
                       if (item['totalAmountPaid'] < item['totalAmountDue'])
-                        IconButton(
-                          padding: EdgeInsets.zero,
-                          visualDensity: VisualDensity.compact,
-                          style: IconButton.styleFrom(elevation: 8),
+                        ElevatedButton(
                           onPressed: () async {
                             await showModalBottomSheet(
                               isScrollControlled: true,
@@ -97,10 +97,17 @@ class InvoiceCard extends StatelessWidget {
                               },
                             );
                           },
-                          icon: Icon(
-                            Icons.currency_exchange,
-                            color: Colors.amber.shade700,
+                          style: ElevatedButton.styleFrom(
+                            shape: CircleBorder(),
+                            padding: EdgeInsets.all(5), // Adjust size
+                            elevation: 4, // Optional: change elevation
+                            backgroundColor:
+                                Colors.amber.shade400, // Button color
+                            foregroundColor: Colors.white, // Icon color
                           ),
+                          child: Icon(
+                            Icons.currency_exchange,
+                          ), // Your desired icon
                         ),
                       if (item['totalAmountPaid'] >= item['totalAmountDue'])
                         Icon(Icons.check, color: Colors.green, size: 40),
