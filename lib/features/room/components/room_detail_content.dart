@@ -469,32 +469,33 @@ class _RoomDetailContentState extends State<RoomDetailContent>
                                   ),
                                 ],
                               ),
+                              SizedBox(height: 10),
                               Row(
                                 children: [
                                   SizedBox(width: 40),
                                   Text("Mulai: "),
                                   SizedBox(width: 4),
                                   Text(
-                                    formatDateString(_tenant['startDate']),
+                                    formatDateString(_tenant['checkinDate']),
                                     style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
                                 ],
                               ),
-                              Row(
-                                children: [
-                                  SizedBox(width: 40),
-                                  Text("Selesai: "),
-                                  SizedBox(width: 4),
-                                  Text(
-                                    formatDateString(_tenant['endDate']),
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              // Row(
+                              //   children: [
+                              //     SizedBox(width: 40),
+                              //     Text("Selesai: "),
+                              //     SizedBox(width: 4),
+                              //     Text(
+                              //       formatDateString(_tenant['endDate']),
+                              //       style: TextStyle(
+                              //         fontWeight: FontWeight.w600,
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
                               Row(
                                 children: [
                                   SizedBox(width: 40),
@@ -514,7 +515,7 @@ class _RoomDetailContentState extends State<RoomDetailContent>
                                   Text("Batas tinggal: "),
                                   SizedBox(width: 4),
                                   Text(
-                                    formatDateString(_tenant['banishDate']),
+                                    formatDateString(_tenant['dueDate']),
                                     style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                     ),

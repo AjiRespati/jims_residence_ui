@@ -1,4 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
+import 'package:residenza/routes/route_names.dart';
 import 'package:residenza/view_models/system_view_model.dart';
 import '../../application_info.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
@@ -217,9 +220,27 @@ class SideBar extends StatelessWidget with GetItMixin {
             const Spacer(),
             ListTile(
               leading: const Icon(Icons.logout, size: 18),
-              title: const Text('Logout'),
-              onTap: () {
-                // get<AuthViewModel>().handleSignOut(context: context);
+              trailing:
+                  watchOnly((SystemViewModel x) => x.isBusy)
+                      ? SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(),
+                      )
+                      : null,
+              title: const Text(
+                'Logout',
+                style: TextStyle(fontWeight: FontWeight.w600),
+              ),
+              onTap: () async {
+                get<SystemViewModel>().isBusy = true;
+                bool isLogout = await get<SystemViewModel>().logout();
+                if (isLogout) {
+                  get<SystemViewModel>().isBusy = false;
+                  Navigator.pushReplacementNamed(context, signInRoute);
+                } else {
+                  get<SystemViewModel>().isBusy = false;
+                }
               },
               dense: true,
             ),
