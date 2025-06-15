@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:residenza/features/payments/components/invoice_payment.dart';
 import 'package:residenza/utils/helpers.dart';
+import 'package:residenza/view_models/system_view_model.dart';
 
-class InvoiceCard extends StatelessWidget {
-  const InvoiceCard({super.key, required this.item});
+class InvoiceCard extends StatelessWidget with GetItMixin {
+  InvoiceCard({super.key, required this.item});
 
   final dynamic item;
 
   @override
   Widget build(BuildContext context) {
+    int level = get<SystemViewModel>().level;
     return Card(
       elevation: 2,
       child: Padding(
@@ -73,10 +76,12 @@ class InvoiceCard extends StatelessWidget {
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 12,
+                          color: _generateColor(item['status']),
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      if (item['totalAmountPaid'] < item['totalAmountDue'])
+                      if ((item['totalAmountPaid'] < item['totalAmountDue']) &&
+                          level > 0)
                         ElevatedButton(
                           onPressed: () async {
                             await showModalBottomSheet(
@@ -143,5 +148,19 @@ class InvoiceCard extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+/// 'Draft', 'Issued', 'Unpaid', 'PartiallyPaid', 'Paid', 'Void'
+Color _generateColor(String status) {
+  switch (status) {
+    case "Issued":
+      return Colors.amber.shade800;
+    case "PartiallyPaid":
+      return Colors.amber.shade800;
+    case "Paid":
+      return Colors.green.shade700;
+    default:
+      return Colors.red.shade600;
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:residenza/view_models/system_view_model.dart';
 import '../../application_info.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
@@ -10,6 +11,7 @@ class SideBar extends StatelessWidget with GetItMixin {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    int level = get<SystemViewModel>().level;
 
     return Material(
       elevation: 1,
@@ -165,21 +167,22 @@ class SideBar extends StatelessWidget with GetItMixin {
                           },
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 14),
-                        child: ListTile(
-                          leading: const Icon(
-                            Icons.person_pin_outlined,
-                            size: 22,
+                      if (level > 0)
+                        Padding(
+                          padding: const EdgeInsets.only(left: 14),
+                          child: ListTile(
+                            leading: const Icon(
+                              Icons.person_pin_outlined,
+                              size: 22,
+                            ),
+                            // leading: const Icon(Icons.bar_chart_rounded, size: 22),
+                            title: const Text("User Management"),
+                            dense: true,
+                            onTap: () {
+                              onTapMenu(menuTitle: "User Management");
+                            },
                           ),
-                          // leading: const Icon(Icons.bar_chart_rounded, size: 22),
-                          title: const Text("User Management"),
-                          dense: true,
-                          onTap: () {
-                            onTapMenu(menuTitle: "User Management");
-                          },
                         ),
-                      ),
                       if (ApplicationInfo.isDevelOn)
                         Padding(
                           padding: const EdgeInsets.only(left: 14),
