@@ -13,7 +13,14 @@ class TruncateTable extends StatefulWidget with GetItStatefulWidgetMixin {
 class _TruncateTableState extends State<TruncateTable> with GetItStateMixin {
   String? message;
   String? tableChoosen;
-  List<String> tables = ['Transaction', 'Tenant', 'Invoice', 'Charge', 'Room'];
+  List<String> tables = [
+    'Transaction',
+    'Tenant',
+    'Invoice',
+    'Charge',
+    'Room',
+    'Grant',
+  ];
 
   @override
   Widget build(BuildContext context) {
