@@ -19,11 +19,11 @@ class ApplicationInfo {
 
   static const baseUrl = "$mainUrl/service/api";
 
-  static const appVersion = '1.1.1 ${isProduction ? "" : "DEV"}';
+  static const appVersion = '1.1.5 ${isProduction ? "" : "DEV"}';
 
   static const secondColor = Color.fromARGB(255, 171, 203, 60);
   static const thirdColor = Colors.amber;
 
   //TODO: DEVELOPER SWITCH
-  static const isDevelOn = true;
+  static const isDevelOn = false;
 }
