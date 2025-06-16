@@ -105,7 +105,7 @@ class _TenantCardState extends State<TenantCard> with GetItStateMixin {
                       children: [
                         Row(
                           children: [
-                            Text("Mulai:"),
+                            Text("Periode:"),
                             SizedBox(width: 5),
                             Text(
                               formatDateString(widget.item['startDate']),

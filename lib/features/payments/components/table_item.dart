@@ -19,7 +19,7 @@ class TableItem extends StatelessWidget with GetItMixin {
         child: ClipRRect(
           child: InkWell(
             onTap:
-                item['transactionType'] == 'credit'
+                item['transactionType'] == 'debit'
                     ? null
                     : () {
                       get<RoomViewModel>().choosenInvoiceId = item['id'];
@@ -48,7 +48,7 @@ class TableItem extends StatelessWidget with GetItMixin {
                         Padding(
                           padding: const EdgeInsets.only(left: 20),
                           child: Text(
-                            formatDateFromYearToSecond(
+                            formatDateFromYearToDay(
                               DateTime.parse(item['transactionDate']),
                             ),
                             style: TextStyle(
@@ -74,6 +74,40 @@ class TableItem extends StatelessWidget with GetItMixin {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(
+                                  formatCurrency(item['amount'].toDouble()),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    color: Colors.red.shade600,
+                                  ),
+                                ),
+                                SizedBox(height: 5),
+                                Text(
+                                  item['createBy'] == "N/A"
+                                      ? ""
+                                      : invoiceStatusText(item['createBy']),
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                              ],
+                            )
+                            : SizedBox(),
+                  ),
+                  SizedBox(width: 20),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(height: 35, width: 1, color: Colors.grey),
+                    ],
+                  ),
+
+                  Expanded(
+                    flex: 6,
+                    child:
+                        item['transactionType'] == 'credit'
+                            ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
                                   formatCurrency(
                                     item['totalAmountPaid'].toDouble(),
                                   ),
@@ -88,39 +122,6 @@ class TableItem extends StatelessWidget with GetItMixin {
                                   item['status'] == "N/A"
                                       ? ""
                                       : invoiceStatusText(item['status']),
-                                  style: TextStyle(fontSize: 12),
-                                ),
-                              ],
-                            )
-                            : SizedBox(),
-                  ),
-                  SizedBox(width: 20),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(height: 35, width: 1, color: Colors.grey),
-                    ],
-                  ),
-                  Expanded(
-                    flex: 6,
-                    child:
-                        item['transactionType'] == 'credit'
-                            ? Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  formatCurrency(item['amount'].toDouble()),
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                    color: Colors.red.shade600,
-                                  ),
-                                ),
-                                SizedBox(height: 5),
-                                Text(
-                                  item['createBy'] == "N/A"
-                                      ? ""
-                                      : invoiceStatusText(item['createBy']),
                                   style: TextStyle(fontSize: 12),
                                 ),
                               ],

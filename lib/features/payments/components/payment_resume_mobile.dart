@@ -18,6 +18,19 @@ class _PaymentResumeMobileState extends State<PaymentResumeMobile>
   DateTime? _dateTo;
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      DateTime? periode = get<RoomViewModel>().periode;
+      get<RoomViewModel>().getMonthlyReport(
+        boardingHouseId: get<RoomViewModel>().roomKostId,
+        month: periode != null ? periode.month : DateTime.now().month,
+        year: periode != null ? periode.year : DateTime.now().year,
+      );
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     watchOnly((RoomViewModel x) => x.kostMonthlyReport);
     return Column(
@@ -94,6 +107,7 @@ class _PaymentResumeMobileState extends State<PaymentResumeMobile>
                       ) async {
                         _dateFrom = dateFrom;
                         _dateTo = dateTo;
+                        get<RoomViewModel>().periode = dateFrom;
 
                         get<RoomViewModel>().getFinancialOverview(
                           boardingHouseId: _boardingHouseId,
@@ -107,6 +121,7 @@ class _PaymentResumeMobileState extends State<PaymentResumeMobile>
                           year: _dateFrom?.year ?? DateTime.now().year,
                         );
                       },
+                      selectedMonth: watchOnly((RoomViewModel x) => x.periode),
                     ),
                   ),
                   SizedBox(width: 20),

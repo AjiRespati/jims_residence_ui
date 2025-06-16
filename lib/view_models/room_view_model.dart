@@ -78,6 +78,7 @@ class RoomViewModel extends ChangeNotifier {
   DateTime? _startDate;
   DateTime? _dueDate;
   DateTime? _paymentDate;
+  DateTime? _periode;
   String _paymentStatus = "";
   List<dynamic> _rooms = [];
   dynamic _room;
@@ -152,6 +153,12 @@ class RoomViewModel extends ChangeNotifier {
   DateTime? get paymentDate => _paymentDate;
   set paymentDate(DateTime? val) {
     _paymentDate = val;
+    notifyListeners();
+  }
+
+  DateTime? get periode => _periode;
+  set periode(DateTime? val) {
+    _periode = val;
     notifyListeners();
   }
 
@@ -595,7 +602,7 @@ class RoomViewModel extends ChangeNotifier {
           isNIKCopyDone: isIdCopied,
           startDate: tenantStartDate,
           paymentDate: tenantPaymentDate,
-          dueDate: tenantStartDate?.add(Duration(days: 7)),
+          dueDate: tenantStartDate,
           banishDate: tenantStartDate?.add(Duration(days: 14)),
           endDate: tenantStartDate?.add(Duration(days: 30)),
           paymentStatus: "unpaid",
@@ -1205,7 +1212,7 @@ class RoomViewModel extends ChangeNotifier {
       );
 
       transactionsTable = resp['data'];
-      totalInvoicesPaid = resp['summary']['totalInvoicesPaid'].toDouble();
+      totalInvoicesPaid = resp['summary']['totalIncomeAmount'].toDouble();
       totalExpensesAmount = resp['summary']['totalExpensesAmount'].toDouble();
     } catch (e) {
       if (e.toString().contains("please reLogin")) {
