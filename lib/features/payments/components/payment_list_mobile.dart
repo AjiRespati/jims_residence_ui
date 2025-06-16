@@ -14,9 +14,34 @@ class PaymentListMobile extends StatefulWidget with GetItStatefulWidgetMixin {
 
 class _PaymentListMobileState extends State<PaymentListMobile>
     with GetItStateMixin {
+  final now = DateTime.now();
   String? _boardingHouseId;
   DateTime? _dateFrom;
   DateTime? _dateTo;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // final now = DateTime.now();
+
+      DateTime? periode = get<RoomViewModel>().periode;
+      get<RoomViewModel>().getFinancialTransactions(
+        boardingHouseId: get<RoomViewModel>().roomKostId,
+        dateFrom:
+            periode != null
+                ? DateTime(periode.year, periode.month)
+                : DateTime(now.year, now.month),
+        dateTo:
+            periode != null
+                ? DateTime(periode.year, periode.month + 1)
+                : DateTime(
+                  now.year,
+                  now.month + 1,
+                ).subtract(Duration(seconds: 1)),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,6 +120,7 @@ class _PaymentListMobileState extends State<PaymentListMobile>
                       ) async {
                         _dateFrom = dateFrom;
                         _dateTo = dateTo;
+                        get<RoomViewModel>().periode = dateFrom;
 
                         get<RoomViewModel>().getFinancialOverview(
                           boardingHouseId: _boardingHouseId,
@@ -108,6 +134,7 @@ class _PaymentListMobileState extends State<PaymentListMobile>
                           year: _dateFrom?.year ?? DateTime.now().year,
                         );
                       },
+                      selectedMonth: watchOnly((RoomViewModel x) => x.periode),
                     ),
                   ),
                   SizedBox(width: 20),

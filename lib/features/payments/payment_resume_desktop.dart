@@ -23,10 +23,11 @@ class _PaymentResumeDesktopState extends State<PaymentResumeDesktop>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      DateTime? periode = get<RoomViewModel>().periode;
       get<RoomViewModel>().getMonthlyReport(
         boardingHouseId: get<RoomViewModel>().roomKostId,
-        month: DateTime.now().month,
-        year: DateTime.now().year,
+        month: periode != null ? periode.month : DateTime.now().month,
+        year: periode != null ? periode.year : DateTime.now().year,
       );
     });
   }
@@ -113,6 +114,7 @@ class _PaymentResumeDesktopState extends State<PaymentResumeDesktop>
                       ) async {
                         _dateFrom = dateFrom;
                         _dateTo = dateTo;
+                        get<RoomViewModel>().periode = dateFrom;
 
                         get<RoomViewModel>().getFinancialOverview(
                           boardingHouseId: _boardingHouseId,
@@ -126,6 +128,7 @@ class _PaymentResumeDesktopState extends State<PaymentResumeDesktop>
                           year: _dateFrom?.year ?? DateTime.now().year,
                         );
                       },
+                      selectedMonth: watchOnly((RoomViewModel x) => x.periode),
                     ),
                   ),
                   SizedBox(width: 20),

@@ -26,15 +26,21 @@ class _PaymentListDesktopState extends State<PaymentListDesktop>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // final now = DateTime.now();
+      DateTime? periode = get<RoomViewModel>().periode;
 
       get<RoomViewModel>().getFinancialTransactions(
         boardingHouseId: get<RoomViewModel>().roomKostId,
-        dateFrom: DateTime(now.year, now.month),
-        dateTo: DateTime(
-          now.year,
-          now.month + 1,
-        ).subtract(Duration(seconds: 1)),
+        dateFrom:
+            periode != null
+                ? DateTime(periode.year, periode.month)
+                : DateTime(now.year, now.month),
+        dateTo:
+            periode != null
+                ? DateTime(periode.year, periode.month + 1)
+                : DateTime(
+                  now.year,
+                  now.month + 1,
+                ).subtract(Duration(seconds: 1)),
       );
     });
   }
@@ -139,6 +145,7 @@ class _PaymentListDesktopState extends State<PaymentListDesktop>
                                 ) async {
                                   _dateFrom = dateFrom;
                                   _dateTo = dateTo;
+                                  get<RoomViewModel>().periode = dateFrom;
 
                                   // get<RoomViewModel>().getFinancialOverview(
                                   //   boardingHouseId: _boardingHouseId,
@@ -165,6 +172,9 @@ class _PaymentListDesktopState extends State<PaymentListDesktop>
                                         ).subtract(Duration(seconds: 1)),
                                   );
                                 },
+                                selectedMonth: watchOnly(
+                                  (RoomViewModel x) => x.periode,
+                                ),
                               ),
                             ),
                             SizedBox(width: 20),
@@ -271,12 +281,12 @@ class _PaymentListDesktopState extends State<PaymentListDesktop>
                             children: [
                               Text(
                                 formatCurrency(
-                                  get<RoomViewModel>().totalInvoicesPaid,
+                                  get<RoomViewModel>().totalExpensesAmount,
                                 ),
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
-                                  color: Colors.green.shade600,
+                                  color: Colors.red.shade600,
                                 ),
                               ),
                             ],
@@ -290,12 +300,12 @@ class _PaymentListDesktopState extends State<PaymentListDesktop>
                             children: [
                               Text(
                                 formatCurrency(
-                                  get<RoomViewModel>().totalExpensesAmount,
+                                  get<RoomViewModel>().totalInvoicesPaid,
                                 ),
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
-                                  color: Colors.red.shade600,
+                                  color: Colors.green.shade600,
                                 ),
                               ),
                             ],

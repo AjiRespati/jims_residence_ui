@@ -106,12 +106,16 @@ class _TenantMobileState extends State<TenantMobile> with GetItStateMixin {
                         ) async {
                           _dateFrom = dateFrom;
                           _dateTo = dateTo;
+                          get<RoomViewModel>().periode = dateFrom;
                           await get<RoomViewModel>().fetchTenants(
                             boardingHouseId: _boardingHouseId,
                             dateFrom: _dateFrom,
                             dateTo: _dateTo,
                           );
                         },
+                        selectedMonth: watchOnly(
+                          (RoomViewModel x) => x.periode,
+                        ),
                       ),
                     ),
                     SizedBox(width: 20),

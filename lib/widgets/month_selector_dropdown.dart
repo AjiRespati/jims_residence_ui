@@ -2,7 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class MonthSelectorDropdown extends StatefulWidget {
-  const MonthSelectorDropdown({required this.onMonthSelected, super.key});
+  const MonthSelectorDropdown({
+    required this.selectedMonth,
+    required this.onMonthSelected,
+    super.key,
+  });
+
+  final DateTime? selectedMonth;
   final Function(DateTime dateFrom, DateTime dateTo) onMonthSelected;
 
   @override
@@ -21,7 +27,13 @@ class _MonthSelectorDropdownState extends State<MonthSelectorDropdown> {
 
   void _generateMonths() {
     final now = DateTime.now();
-    selectedMonth = DateTime(now.year, now.month);
+    selectedMonth =
+        widget.selectedMonth != null
+            ? (DateTime(
+              widget.selectedMonth!.year,
+              widget.selectedMonth!.month,
+            ))
+            : DateTime(now.year, now.month);
 
     availableMonths = [];
 
@@ -32,7 +44,7 @@ class _MonthSelectorDropdownState extends State<MonthSelectorDropdown> {
     }
 
     // Add current month
-    availableMonths.add(selectedMonth);
+    availableMonths.add(DateTime(now.year, now.month));
 
     // Generate 3 months after
     for (int i = 1; i <= 2; i++) {
