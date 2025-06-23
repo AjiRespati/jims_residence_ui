@@ -26,6 +26,7 @@ class TenantCheckoutContent extends StatefulWidget
 class _TenantCheckoutContentState extends State<TenantCheckoutContent>
     with GetItStateMixin {
   DateTime? _checkoutDate;
+  bool? _isForced;
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +82,50 @@ class _TenantCheckoutContentState extends State<TenantCheckoutContent>
                   ),
                 ],
               ),
+
+              SizedBox(height: 30),
+
+              Row(
+                children: [
+                  Text(
+                    "Force Checkout",
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue.shade800,
+                    ),
+                  ),
+                ],
+              ),
+              RadioListTile<bool>(
+                title: Text('True'),
+                value: true,
+                groupValue: _isForced,
+                onChanged: (value) {
+                  setState(() {
+                    _isForced = value;
+                  });
+                },
+                dense: true,
+                radioScaleFactor: 0.8,
+                activeColor: Colors.blue.shade700,
+              ),
+              RadioListTile<bool>(
+                title: Text('False'),
+                value: false,
+                groupValue: _isForced,
+                onChanged: (value) {
+                  setState(() {
+                    _isForced = value;
+                  });
+                },
+                dense: true,
+                radioScaleFactor: 0.8,
+                activeColor: Colors.blue.shade700,
+              ),
+
               SizedBox(height: 26),
+
               SizedBox(
                 height: 35,
                 child: Padding(
@@ -108,6 +152,7 @@ class _TenantCheckoutContentState extends State<TenantCheckoutContent>
                           await get<RoomViewModel>().checkoutTenant(
                             id: widget.tenantId,
                             checkoutDate: _checkoutDate,
+                            forceCheckout: _isForced,
                           );
                           Navigator.pop(context);
                         },

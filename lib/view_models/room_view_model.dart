@@ -743,28 +743,36 @@ class RoomViewModel extends ChangeNotifier {
   Future<void> checkoutTenant({
     required String id,
     required DateTime? checkoutDate,
+    required bool? forceCheckout,
   }) async {
     isBusy = true;
-    try {
-      await TenantApiService().checkoutTenant(
-        id: id,
-        checkoutDate: checkoutDate,
-      );
+    if (checkoutDate == null) {
+      errorMessage = "Tanggal checkout harus diisi";
+      isBusy = false;
+      isError = true;
+    } else {
+      try {
+        await TenantApiService().checkoutTenant(
+          id: id,
+          checkoutDate: checkoutDate,
+          forceCheckout: forceCheckout,
+        );
 
-      isBusy = false;
-      isSuccess = true;
-      successMessage = "Berhasil Checkout Tenant";
-    } catch (e) {
-      if (e.toString().contains("please reLogin")) {
         isBusy = false;
-        isNoSession = true;
-      } else {
-        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isSuccess = true;
+        successMessage = "Berhasil Checkout Tenant";
+      } catch (e) {
+        if (e.toString().contains("please reLogin")) {
+          isBusy = false;
+          isNoSession = true;
+        } else {
+          errorMessage = e.toString().replaceAll('Exception: ', '');
+          isBusy = false;
+          isError = true;
+        }
+      } finally {
         isBusy = false;
-        isError = true;
       }
-    } finally {
-      isBusy = false;
     }
   }
 

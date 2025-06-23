@@ -269,12 +269,18 @@ class TenantApiService extends BaseApiService {
   Future<bool> checkoutTenant({
     required String id,
     required DateTime? checkoutDate,
+    required bool? forceCheckout,
   }) async {
     Map<String, dynamic> body = {};
 
     if (checkoutDate != null) {
       body['checkoutDate'] = generateDateString(checkoutDate);
     }
+
+    if (forceCheckout != null) {
+      body['forceCheckout'] = forceCheckout;
+    }
+
     final response = await performAuthenticatedRequest(
       (token) => http.post(
         Uri.parse('$baseUrl/tenant/$id/checkout'),
