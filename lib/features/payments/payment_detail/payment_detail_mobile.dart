@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:residenza/application_info.dart';
 import 'package:residenza/features/payments/components/invoice_payment.dart';
 import 'package:residenza/utils/helpers.dart';
 import 'package:residenza/view_models/room_view_model.dart';
@@ -195,6 +196,39 @@ class _PaymentDetailMobileState extends State<PaymentDetailMobile>
                             ),
                           ],
                         ),
+                        SizedBox(height: 20),
+
+                        invoice['invoicePaymentProofPath'] != null
+                            ? Container(
+                              height: 200,
+                              width: 250,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                              child: Image.network(
+                                ApplicationInfo.baseUrl +
+                                    invoice['invoicePaymentProofPath'],
+                              ),
+                            )
+                            : Container(
+                              height: 200,
+                              width: 250,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                              child: Icon(
+                                Icons.image,
+                                size: 50,
+                                color: Colors.grey,
+                              ),
+                            ),
+                        SizedBox(height: 20),
                       ],
                     ),
                   ),

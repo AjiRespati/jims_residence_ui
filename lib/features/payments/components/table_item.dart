@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
+import 'package:residenza/application_info.dart';
 import 'package:residenza/routes/route_names.dart';
 import 'package:residenza/utils/helpers.dart';
 import 'package:residenza/view_models/room_view_model.dart';
@@ -11,6 +12,7 @@ class TableItem extends StatelessWidget with GetItMixin {
 
   @override
   Widget build(BuildContext context) {
+    print(item);
     return Padding(
       padding: const EdgeInsets.only(left: 8, right: 8, bottom: 4),
       child: Card(
@@ -33,29 +35,66 @@ class TableItem extends StatelessWidget with GetItMixin {
                   SizedBox(width: 20),
                   Expanded(
                     flex: 15,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Row(
                       children: [
-                        Text(
-                          item['tenant'] == "N/A"
-                              ? item['description']
-                              : item['tenant'],
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20),
-                          child: Text(
-                            formatDateFromYearToDay(
-                              DateTime.parse(item['transactionDate']),
+                        item['invoicePaymentProofPath'] != null
+                            ? Container(
+                              height: 60,
+                              width: 85,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                              child: Image.network(
+                                ApplicationInfo.baseUrl +
+                                    item['invoicePaymentProofPath'],
+                              ),
+                            )
+                            : Container(
+                              height: 60,
+                              width: 85,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                              child: Icon(
+                                Icons.image,
+                                size: 50,
+                                color: Colors.grey,
+                              ),
                             ),
-                            style: TextStyle(
-                              // fontWeight: FontWeight.bold,
-                              fontSize: 12,
+
+                        SizedBox(width: 10),
+
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              item['tenant'] == "N/A"
+                                  ? item['description']
+                                  : item['tenant'] + "xxx",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
                             ),
-                          ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 20),
+                              child: Text(
+                                formatDateFromYearToDay(
+                                  DateTime.parse(item['transactionDate']),
+                                ),
+                                style: TextStyle(
+                                  // fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
+import 'package:residenza/application_info.dart';
 import 'package:residenza/features/payments/components/invoice_payment.dart';
 import 'package:residenza/utils/helpers.dart';
 import 'package:residenza/view_models/room_view_model.dart';
@@ -44,7 +45,7 @@ class _PaymentDetailDesktopState extends State<PaymentDetailDesktop>
                         icon: Icon(Icons.arrow_back_ios_new, size: 25),
                       ),
                       Text(
-                        "Detail Kamar",
+                        "Detail Pembayaran",
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 18,
@@ -235,6 +236,39 @@ class _PaymentDetailDesktopState extends State<PaymentDetailDesktop>
                                     ),
                                   ],
                                 ),
+                                SizedBox(height: 20),
+
+                                invoice['invoicePaymentProofPath'] != null
+                                    ? Container(
+                                      height: 200,
+                                      width: 250,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.grey),
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(10),
+                                        ),
+                                      ),
+                                      child: Image.network(
+                                        ApplicationInfo.baseUrl +
+                                            invoice['invoicePaymentProofPath'],
+                                      ),
+                                    )
+                                    : Container(
+                                      height: 200,
+                                      width: 250,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.grey),
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(10),
+                                        ),
+                                      ),
+                                      child: Icon(
+                                        Icons.image,
+                                        size: 50,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                SizedBox(height: 20),
                               ],
                             ),
                           ),
