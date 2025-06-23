@@ -165,7 +165,10 @@ class _TenantDetailMobileState extends State<TenantDetailMobile>
                         itemCount: _tenant?['Invoices'].length,
                         itemBuilder: (context, index) {
                           final item = _tenant['Invoices'][index];
-                          item['Tenant'] = {'id': _tenant['id']};
+                          item['Tenant'] = {
+                            'id': _tenant['id'],
+                            'name': _tenant['name'],
+                          };
                           return Padding(
                             padding: EdgeInsets.only(
                               bottom:

@@ -1361,4 +1361,34 @@ class RoomViewModel extends ChangeNotifier {
       isBusy = false;
     }
   }
+
+  Future<void> uploadInvoiceProof({
+    required String invoiceId,
+    required Uint8List? imageWeb,
+    required XFile? imageDevice,
+  }) async {
+    try {
+      isBusy = true;
+      dynamic resp = await TransactionInvoiceApiService().uploadInvoiceProof(
+        invoiceId: invoiceId,
+        imageWeb: imageWeb,
+        imageDevice: imageDevice,
+      );
+      invoice = resp['data'];
+      isBusy = false;
+      isSuccess = true;
+      successMessage = "Berhasil upload bukti bayar";
+    } catch (e) {
+      if (e.toString().contains("please reLogin")) {
+        isBusy = false;
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isBusy = false;
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
+  }
 }
