@@ -76,7 +76,7 @@ class TableItem extends StatelessWidget with GetItMixin {
                             Text(
                               item['tenant'] == "N/A"
                                   ? item['description']
-                                  : item['tenant'] + "xxx",
+                                  : item['tenant'],
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
