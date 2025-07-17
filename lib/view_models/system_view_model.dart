@@ -167,7 +167,7 @@ class SystemViewModel extends ChangeNotifier {
       isBusy = false;
       return true;
     } catch (e) {
-      if (e.toString().contains("please reLogin")) {
+      if (e.toString().contains("Please re-login")) {
         isBusy = false;
         Navigator.pushNamed(context, signInRoute);
         return false;
@@ -184,7 +184,7 @@ class SystemViewModel extends ChangeNotifier {
       dynamic resp = await AuthApiService().getAllUsers();
       users = resp;
     } catch (e) {
-      if (e.toString().contains("please reLogin")) {
+      if (e.toString().contains("Please re-login")) {
         isBusy = false;
       } else {
         isBusy = false;
@@ -207,7 +207,7 @@ class SystemViewModel extends ChangeNotifier {
       isBusy = false;
       return resp;
     } catch (e) {
-      if (e.toString().contains("please reLogin")) {
+      if (e.toString().contains("Please re-login")) {
         isBusy = false;
       } else {
         isBusy = false;

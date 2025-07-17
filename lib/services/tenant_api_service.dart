@@ -211,7 +211,7 @@ class TenantApiService extends BaseApiService {
 
       if (response.statusCode == 401) {
         token = await refreshAccessToken(); // Using the base class method
-        if (token == null) throw Exception("please reLogin");
+        if (token == null) throw Exception("Please re-login");
         // Retry the request with the new token
         request.headers['Authorization'] = "Bearer $token";
         streamedResponse = await request.send();

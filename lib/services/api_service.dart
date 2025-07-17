@@ -114,7 +114,7 @@
 //       if (token == null) {
 //         SharedPreferences prefs = await SharedPreferences.getInstance();
 //         await prefs.remove('accessToken');
-//         throw Exception("please reLogin");
+//         throw Exception("Please re-login");
 //       }
 //       return self(refreshToken: refreshToken);
 //     } else if (response.statusCode == 200) {
@@ -139,7 +139,7 @@
 
 //     if (response.statusCode == 401) {
 //       token = await refreshAccessToken();
-//       if (token == null) throw Exception("please reLogin");
+//       if (token == null) throw Exception("Please re-login");
 //       return getAllUsers();
 //     } else if (response.statusCode == 200) {
 //       return jsonDecode(response.body);
@@ -168,7 +168,7 @@
 
 //     if (response.statusCode == 401) {
 //       token = await refreshAccessToken();
-//       if (token == null) throw Exception("please reLogin");
+//       if (token == null) throw Exception("Please re-login");
 //       return updateUser(id: id, level: level, status: status);
 //     } else if (response.statusCode == 200) {
 //       return true;
@@ -191,7 +191,7 @@
 //     );
 //     if (response.statusCode == 401 || response.statusCode == 403) {
 //       token = await refreshAccessToken();
-//       if (token == null) throw Exception("please reLogin");
+//       if (token == null) throw Exception("Please re-login");
 //       return generic(table);
 //     } else if (response.statusCode == 200) {
 //       return true;
@@ -231,7 +231,7 @@
 
 //     if (response.statusCode == 401) {
 //       token = await refreshAccessToken();
-//       if (token == null) throw Exception("please reLogin");
+//       if (token == null) throw Exception("Please re-login");
 //       return createRoom(
 //         boardingHouseId: boardingHouseId,
 //         roomNumber: roomNumber,
@@ -282,7 +282,7 @@
 
 //     if (response.statusCode == 401) {
 //       token = await refreshAccessToken();
-//       if (token == null) throw Exception("please reLogin");
+//       if (token == null) throw Exception("Please re-login");
 //       return fetchRooms(
 //         boardingHouseId: boardingHouseId,
 //         dateFrom: dateFrom,
@@ -310,7 +310,7 @@
 
 //     if (response.statusCode == 401) {
 //       token = await refreshAccessToken();
-//       if (token == null) throw Exception("please reLogin");
+//       if (token == null) throw Exception("Please re-login");
 //       return fetchRoom(roomId: roomId);
 //     } else if (response.statusCode == 200) {
 //       return jsonDecode(response.body);
@@ -344,7 +344,7 @@
 
 //     if (response.statusCode == 401) {
 //       token = await refreshAccessToken();
-//       if (token == null) throw Exception("please reLogin");
+//       if (token == null) throw Exception("Please re-login");
 //       return updateRoom(
 //         roomId: roomId,
 //         roomUpdateData: roomUpdateData,
@@ -376,7 +376,7 @@
 
 //     if (response.statusCode == 401) {
 //       token = await refreshAccessToken();
-//       if (token == null) throw Exception("please reLogin");
+//       if (token == null) throw Exception("Please re-login");
 //       return fetchRoom(roomId: roomId);
 //     } else if (response.statusCode == 200) {
 //       return jsonDecode(response.body);
@@ -467,7 +467,7 @@
 
 //     if (response.statusCode == 401) {
 //       token = await refreshAccessToken();
-//       if (token == null) throw Exception("please reLogin");
+//       if (token == null) throw Exception("Please re-login");
 //       return createTenant(
 //         roomId: roomId,
 //         name: name,
@@ -532,7 +532,7 @@
 
 //     if (response.statusCode == 401) {
 //       token = await refreshAccessToken();
-//       if (token == null) throw Exception("please reLogin");
+//       if (token == null) throw Exception("Please re-login");
 //       return fetchTenants(
 //         boardingHouseId: boardingHouseId,
 //         dateFrom: dateFrom,
@@ -560,7 +560,7 @@
 
 //     if (response.statusCode == 401) {
 //       token = await refreshAccessToken();
-//       if (token == null) throw Exception("please reLogin");
+//       if (token == null) throw Exception("Please re-login");
 //       return fetchTenant(id: id);
 //     } else if (response.statusCode == 200) {
 //       return jsonDecode(response.body);
@@ -635,7 +635,7 @@
 
 //       if (response.statusCode == 401) {
 //         token = await refreshAccessToken();
-//         if (token == null) throw Exception("please reLogin");
+//         if (token == null) throw Exception("Please re-login");
 //         return updateTenant(
 //           tenantId: tenantId,
 //           imageWeb: imageWeb,
@@ -688,7 +688,7 @@
 
 //     if (response.statusCode == 401) {
 //       token = await refreshAccessToken();
-//       if (token == null) throw Exception("please reLogin");
+//       if (token == null) throw Exception("Please re-login");
 //       return deleteTenant(id: id);
 //     } else if (response.statusCode == 200) {
 //       return true;
@@ -724,7 +724,7 @@
 
 //     if (response.statusCode == 401) {
 //       token = await refreshAccessToken();
-//       if (token == null) throw Exception("please reLogin");
+//       if (token == null) throw Exception("Please re-login");
 //       return createAdditionalPrice(
 //         roomId: roomId,
 //         name: name,
@@ -764,7 +764,7 @@
 //     );
 //     if (response.statusCode == 401) {
 //       token = await refreshAccessToken();
-//       if (token == null) throw Exception("please reLogin");
+//       if (token == null) throw Exception("Please re-login");
 //       return createKost(name: name, address: address, description: description);
 //     } else if (response.statusCode == 200) {
 //       return true;
@@ -788,7 +788,7 @@
 
 //     if (response.statusCode == 401) {
 //       token = await refreshAccessToken();
-//       if (token == null) throw Exception("please reLogin");
+//       if (token == null) throw Exception("Please re-login");
 //       return fetchKosts();
 //     } else if (response.statusCode == 200) {
 //       return jsonDecode(response.body);
@@ -826,7 +826,7 @@
 
 //     if (response.statusCode == 401) {
 //       token = await refreshAccessToken();
-//       if (token == null) throw Exception("please reLogin");
+//       if (token == null) throw Exception("Please re-login");
 //       return createPrice(
 //         boardingHouseId: boardingHouseId,
 //         name: name,
@@ -856,7 +856,7 @@
 
 //     if (response.statusCode == 401) {
 //       token = await refreshAccessToken();
-//       if (token == null) throw Exception("please reLogin");
+//       if (token == null) throw Exception("Please re-login");
 //       return fetchPrices();
 //     } else if (response.statusCode == 200) {
 //       return jsonDecode(response.body);
@@ -880,7 +880,7 @@
 
 //     if (response.statusCode == 401) {
 //       token = await refreshAccessToken();
-//       if (token == null) throw Exception("please reLogin");
+//       if (token == null) throw Exception("Please re-login");
 //       return fetchPrice(id: id);
 //     } else if (response.statusCode == 200) {
 //       return jsonDecode(response.body);
@@ -907,7 +907,7 @@
 
 //     if (response.statusCode == 401) {
 //       token = await refreshAccessToken();
-//       if (token == null) throw Exception("please reLogin");
+//       if (token == null) throw Exception("Please re-login");
 //       return updatePrice(id: id, updateItems: updateItems);
 //     } else if (response.statusCode == 200) {
 //       return jsonDecode(response.body);
@@ -930,7 +930,7 @@
 
 //     if (response.statusCode == 401) {
 //       token = await refreshAccessToken();
-//       if (token == null) throw Exception("please reLogin");
+//       if (token == null) throw Exception("Please re-login");
 //       return deletePrice(id: id);
 //     } else if (response.statusCode == 200) {
 //       return true;
@@ -976,7 +976,7 @@
 
 //     if (response.statusCode == 401) {
 //       token = await refreshAccessToken();
-//       if (token == null) throw Exception("please reLogin");
+//       if (token == null) throw Exception("Please re-login");
 //       return getAllInvoices(
 //         boardingHouseId: boardingHouseId,
 //         dateFrom: dateFrom,
@@ -1004,7 +1004,7 @@
 
 //     if (response.statusCode == 401) {
 //       token = await refreshAccessToken();
-//       if (token == null) throw Exception("please reLogin");
+//       if (token == null) throw Exception("Please re-login");
 //       return fetchPrice(id: id);
 //     } else if (response.statusCode == 200) {
 //       return jsonDecode(response.body);
@@ -1041,7 +1041,7 @@
 
 //     if (response.statusCode == 401) {
 //       token = await refreshAccessToken();
-//       if (token == null) throw Exception("please reLogin");
+//       if (token == null) throw Exception("Please re-login");
 //       return await recordTransaction(
 //         invoiceId: invoiceId,
 //         transactionDate: transactionDate,
@@ -1071,7 +1071,7 @@
 
 //     if (response.statusCode == 401) {
 //       token = await refreshAccessToken();
-//       if (token == null) throw Exception("please reLogin");
+//       if (token == null) throw Exception("Please re-login");
 //       return getAllTransacations();
 //     } else if (response.statusCode == 200) {
 //       return jsonDecode(response.body);
@@ -1095,7 +1095,7 @@
 
 //     if (response.statusCode == 401) {
 //       token = await refreshAccessToken();
-//       if (token == null) throw Exception("please reLogin");
+//       if (token == null) throw Exception("Please re-login");
 //       return fetchPrice(id: id);
 //     } else if (response.statusCode == 200) {
 //       return jsonDecode(response.body);
@@ -1136,7 +1136,7 @@
 
 //     if (response.statusCode == 401) {
 //       token = await refreshAccessToken();
-//       if (token == null) throw Exception("please reLogin");
+//       if (token == null) throw Exception("Please re-login");
 //       return await createExpense(
 //         boardingHouseId: boardingHouseId,
 //         category: category,
@@ -1196,7 +1196,7 @@
 
 //     if (response.statusCode == 401) {
 //       token = await refreshAccessToken();
-//       if (token == null) throw Exception("please reLogin");
+//       if (token == null) throw Exception("Please re-login");
 //       return getAllExpenses(
 //         boardingHouseId: boardingHouseId,
 //         category: category,
@@ -1240,7 +1240,7 @@
 
 //     if (response.statusCode == 401) {
 //       token = await refreshAccessToken();
-//       if (token == null) throw Exception("please reLogin");
+//       if (token == null) throw Exception("Please re-login");
 //       return getMonthlyReport(
 //         boardingHouseId: boardingHouseId,
 //         month: month,

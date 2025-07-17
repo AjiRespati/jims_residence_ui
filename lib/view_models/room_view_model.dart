@@ -563,7 +563,7 @@ class RoomViewModel extends ChangeNotifier {
       isSuccess = true;
       notifyListeners();
     } catch (e) {
-      if (e.toString().contains("please reLogin")) {
+      if (e.toString().contains("Please re-login")) {
         isBusy = false;
         isNoSession = true;
       } else {
@@ -639,7 +639,7 @@ class RoomViewModel extends ChangeNotifier {
         successMessage = "Berhasil menambah penghuni";
       }
     } catch (e) {
-      if (e.toString().contains("please reLogin")) {
+      if (e.toString().contains("Please re-login")) {
         isBusy = false;
         isNoSession = true;
       } else {
@@ -705,7 +705,7 @@ class RoomViewModel extends ChangeNotifier {
       isSuccess = true;
       successMessage = "Berhasil update data tenant";
     } catch (e) {
-      if (e.toString().contains("please reLogin")) {
+      if (e.toString().contains("Please re-login")) {
         isBusy = false;
         isNoSession = true;
       } else {
@@ -727,7 +727,7 @@ class RoomViewModel extends ChangeNotifier {
       isSuccess = true;
       successMessage = "Berhasil delete Tenant";
     } catch (e) {
-      if (e.toString().contains("please reLogin")) {
+      if (e.toString().contains("Please re-login")) {
         isBusy = false;
         isNoSession = true;
       } else {
@@ -762,7 +762,7 @@ class RoomViewModel extends ChangeNotifier {
         isSuccess = true;
         successMessage = "Berhasil Checkout Tenant";
       } catch (e) {
-        if (e.toString().contains("please reLogin")) {
+        if (e.toString().contains("Please re-login")) {
           isBusy = false;
           isNoSession = true;
         } else {
@@ -791,7 +791,7 @@ class RoomViewModel extends ChangeNotifier {
       isSuccess = true;
       successMessage = "Berhasil create kost ";
     } catch (e) {
-      if (e.toString().contains("please reLogin")) {
+      if (e.toString().contains("Please re-login")) {
         isBusy = false;
         isNoSession = true;
       } else {
@@ -810,7 +810,7 @@ class RoomViewModel extends ChangeNotifier {
       var resp = await BoardingHouseApiService().fetchKosts();
       kosts = resp['data'];
     } catch (e) {
-      if (e.toString().contains("please reLogin")) {
+      if (e.toString().contains("Please re-login")) {
         isNoSession = true;
       } else {
         errorMessage = e.toString().replaceAll('Exception: ', '');
@@ -852,7 +852,7 @@ class RoomViewModel extends ChangeNotifier {
       successMessage = "Tambah kamar berhasil.";
       isSuccess = true;
     } catch (e) {
-      if (e.toString().contains("please reLogin")) {
+      if (e.toString().contains("Please re-login")) {
         isBusy = false;
         isNoSession = true;
       } else {
@@ -879,7 +879,7 @@ class RoomViewModel extends ChangeNotifier {
       );
       rooms = resp['data'];
     } catch (e) {
-      if (e.toString().contains("please reLogin")) {
+      if (e.toString().contains("Please re-login")) {
         isNoSession = true;
       } else {
         errorMessage = e.toString().replaceAll('Exception: ', '');
@@ -898,7 +898,7 @@ class RoomViewModel extends ChangeNotifier {
         room = resp['data'];
       }
     } catch (e) {
-      if (e.toString().contains("please reLogin")) {
+      if (e.toString().contains("Please re-login")) {
         isNoSession = true;
       } else {
         errorMessage = e.toString().replaceAll('Exception: ', '');
@@ -926,7 +926,7 @@ class RoomViewModel extends ChangeNotifier {
       }
       isBusy = false;
     } catch (e) {
-      if (e.toString().contains("please reLogin")) {
+      if (e.toString().contains("Please re-login")) {
         isNoSession = true;
       } else {
         errorMessage = e.toString().replaceAll('Exception: ', '');
@@ -960,7 +960,7 @@ class RoomViewModel extends ChangeNotifier {
       isSuccess = true;
       successMessage = "Berhasil menambah harga";
     } catch (e) {
-      if (e.toString().contains("please reLogin")) {
+      if (e.toString().contains("Please re-login")) {
         isBusy = false;
         isNoSession = true;
       } else {
@@ -979,7 +979,7 @@ class RoomViewModel extends ChangeNotifier {
       var resp = await PriceApiService().fetchPrices();
       prices = resp['data'];
     } catch (e) {
-      if (e.toString().contains("please reLogin")) {
+      if (e.toString().contains("Please re-login")) {
         isNoSession = true;
       } else {
         errorMessage = e.toString().replaceAll('Exception: ', '');
@@ -1006,7 +1006,7 @@ class RoomViewModel extends ChangeNotifier {
       );
       invoices = resp['data'];
     } catch (e) {
-      if (e.toString().contains("please reLogin")) {
+      if (e.toString().contains("Please re-login")) {
         isNoSession = true;
       } else {
         errorMessage = e.toString().replaceAll('Exception: ', '');
@@ -1025,7 +1025,7 @@ class RoomViewModel extends ChangeNotifier {
       );
       invoice = resp['data'];
     } catch (e) {
-      if (e.toString().contains("please reLogin")) {
+      if (e.toString().contains("Please re-login")) {
         isNoSession = true;
       } else {
         errorMessage = e.toString().replaceAll('Exception: ', '');
@@ -1045,7 +1045,7 @@ class RoomViewModel extends ChangeNotifier {
       isSuccess = true;
       successMessage = "Berhasil delete Invoice";
     } catch (e) {
-      if (e.toString().contains("please reLogin")) {
+      if (e.toString().contains("Please re-login")) {
         isBusy = false;
         isNoSession = true;
       } else {
@@ -1078,7 +1078,7 @@ class RoomViewModel extends ChangeNotifier {
       isSuccess = true;
       successMessage = "Pembayaran berhasil";
     } catch (e) {
-      if (e.toString().contains("please reLogin")) {
+      if (e.toString().contains("Please re-login")) {
         isBusy = false;
         isNoSession = true;
       } else {
@@ -1128,7 +1128,7 @@ class RoomViewModel extends ChangeNotifier {
         successMessage = "Pembayaran berhasil";
       }
     } catch (e) {
-      if (e.toString().contains("please reLogin")) {
+      if (e.toString().contains("Please re-login")) {
         isNoSession = true;
       } else {
         errorMessage = e.toString().replaceAll('Exception: ', '');
@@ -1154,7 +1154,7 @@ class RoomViewModel extends ChangeNotifier {
 
       kostMonthlyReport = resp['data'];
     } catch (e) {
-      if (e.toString().contains("please reLogin")) {
+      if (e.toString().contains("Please re-login")) {
         isNoSession = true;
       } else {
         errorMessage = e.toString().replaceAll('Exception: ', '');
@@ -1187,7 +1187,7 @@ class RoomViewModel extends ChangeNotifier {
       totalInvoicesPaid = resp['data']['totalInvoicesPaid'].toDouble();
       totalExpensesAmount = resp['data']['totalExpensesAmount'].toDouble();
     } catch (e) {
-      if (e.toString().contains("please reLogin")) {
+      if (e.toString().contains("Please re-login")) {
         isNoSession = true;
       } else {
         errorMessage = e.toString().replaceAll('Exception: ', '');
@@ -1223,7 +1223,7 @@ class RoomViewModel extends ChangeNotifier {
       totalInvoicesPaid = resp['summary']['totalIncomeAmount'].toDouble();
       totalExpensesAmount = resp['summary']['totalExpensesAmount'].toDouble();
     } catch (e) {
-      if (e.toString().contains("please reLogin")) {
+      if (e.toString().contains("Please re-login")) {
         isNoSession = true;
       } else {
         errorMessage = e.toString().replaceAll('Exception: ', '');
@@ -1243,7 +1243,7 @@ class RoomViewModel extends ChangeNotifier {
 
       transactionsTable = resp['data'];
     } catch (e) {
-      if (e.toString().contains("please reLogin")) {
+      if (e.toString().contains("Please re-login")) {
         isNoSession = true;
       } else {
         errorMessage = e.toString().replaceAll('Exception: ', '');
@@ -1263,7 +1263,7 @@ class RoomViewModel extends ChangeNotifier {
 
       charges = resp['data'];
     } catch (e) {
-      if (e.toString().contains("please reLogin")) {
+      if (e.toString().contains("Please re-login")) {
         isNoSession = true;
       } else {
         errorMessage = e.toString().replaceAll('Exception: ', '');
@@ -1283,7 +1283,7 @@ class RoomViewModel extends ChangeNotifier {
       isSuccess = true;
       successMessage = "Berhasil delete Charge";
     } catch (e) {
-      if (e.toString().contains("please reLogin")) {
+      if (e.toString().contains("Please re-login")) {
         isBusy = false;
         isNoSession = true;
       } else {
@@ -1305,7 +1305,7 @@ class RoomViewModel extends ChangeNotifier {
       isSuccess = true;
       successMessage = "Berhasil delete Transaction";
     } catch (e) {
-      if (e.toString().contains("please reLogin")) {
+      if (e.toString().contains("Please re-login")) {
         isBusy = false;
         isNoSession = true;
       } else {
@@ -1359,7 +1359,7 @@ class RoomViewModel extends ChangeNotifier {
         successMessage = "Pembuatan biaya lain berhasil";
       }
     } catch (e) {
-      if (e.toString().contains("please reLogin")) {
+      if (e.toString().contains("Please re-login")) {
         isNoSession = true;
       } else {
         errorMessage = e.toString().replaceAll('Exception: ', '');
@@ -1387,7 +1387,7 @@ class RoomViewModel extends ChangeNotifier {
       isSuccess = true;
       successMessage = "Berhasil upload bukti bayar";
     } catch (e) {
-      if (e.toString().contains("please reLogin")) {
+      if (e.toString().contains("Please re-login")) {
         isBusy = false;
         isNoSession = true;
       } else {
