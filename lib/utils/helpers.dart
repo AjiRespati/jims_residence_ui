@@ -152,8 +152,14 @@ Color generateRoomStatusColor({required String? roomSatus}) {
 void snackbarGenerator(BuildContext context, RoomViewModel model) {
   return WidgetsBinding.instance.addPostFrameCallback((_) {
     if (model.isNoSession) {
-      Navigator.pushNamed(context, signInRoute);
+      _showSnackBar(
+        context,
+        "Please re-login",
+        color: Colors.red.shade400,
+        duration: Duration(seconds: 2),
+      );
       model.isNoSession = false;
+      Navigator.pushNamed(context, signInRoute);
     } else if (model.isError == true) {
       _showSnackBar(
         context,
