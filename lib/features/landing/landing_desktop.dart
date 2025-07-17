@@ -38,12 +38,34 @@ class _LandingDesktopState extends State<LandingDesktop> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: [Text("Residenza")],
+                children: [
+                  SizedBox(
+                    height: 40,
+                    child: Image.asset('logo/mini_logo.png'),
+                  ),
+                  SizedBox(
+                    height: 54,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          "esidenza",
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.green.shade900,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
         ],
       ),
+      backgroundColor: Colors.white,
     );
   }
 }
