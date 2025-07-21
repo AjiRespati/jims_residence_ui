@@ -1,17 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:get_it_mixin/get_it_mixin.dart';
+import 'package:residenza/view_models/room_view_model.dart';
 
-class LandingDesktop extends StatefulWidget {
-  const LandingDesktop({super.key});
+class LandingDesktop extends StatefulWidget with GetItStatefulWidgetMixin {
+  LandingDesktop({super.key});
 
   @override
   State<LandingDesktop> createState() => _LandingDesktopState();
 }
 
-class _LandingDesktopState extends State<LandingDesktop> {
+class _LandingDesktopState extends State<LandingDesktop> with GetItStateMixin {
   ScrollController scrollControl = ScrollController();
+  List<dynamic> _kosts = [];
 
   @override
   Widget build(BuildContext context) {
+    watchOnly((RoomViewModel x) {
+      _kosts = x.kosts;
+      return x.kosts;
+    });
+
     return Scaffold(
       body: Stack(
         children: [
@@ -22,7 +30,44 @@ class _LandingDesktopState extends State<LandingDesktop> {
             thickness: 8,
             child: SingleChildScrollView(
               controller: scrollControl,
-              child: Container(height: 4000),
+              child: Column(
+                children: [
+                  SizedBox(height: 80),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: _kosts.length,
+                    itemBuilder: (context, idx) {
+                      if (idx % 2 != 0) {
+                        return Column(
+                          children: [
+                            Row(children: [Text(_kosts[idx]['name'])]),
+                            Row(
+                              children: [
+                                Text(_kosts[idx]['availableRoomsCount']),
+                              ],
+                            ),
+                          ],
+                        );
+                      }
+                      return Row(
+                        children: [
+                          SizedBox(width: 50),
+                          Column(
+                            children: [
+                              Text(_kosts[idx]['name']),
+                              Row(
+                                children: [
+                                  Text(_kosts[idx]['availableRoomsCount']),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
           Padding(
