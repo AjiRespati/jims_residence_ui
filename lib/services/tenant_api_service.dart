@@ -300,4 +300,24 @@ class TenantApiService extends BaseApiService {
       );
     }
   }
+
+  Future<dynamic> searchTenant({required String query}) async {
+    final response = await performAuthenticatedRequest(
+      (token) => http.get(
+        Uri.parse('$baseUrl/tenant/search?query=$query'),
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": "Bearer $token",
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
+    }
+  }
 }
