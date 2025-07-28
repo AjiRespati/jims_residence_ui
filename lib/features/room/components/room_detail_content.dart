@@ -2,11 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:residenza/features/room/components/add_price.dart';
+import 'package:residenza/features/room/components/edit_price.dart';
 import 'package:residenza/features/tenant/components/add_tenant.dart';
 import 'package:residenza/routes/route_names.dart';
 import 'package:residenza/utils/helpers.dart';
 import 'package:residenza/view_models/room_view_model.dart';
 import 'package:residenza/widgets/buttons/add_button.dart';
+import 'package:residenza/widgets/buttons/edit_button.dart';
 import 'package:residenza/widgets/buttons/gradient_elevated_button.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:residenza/widgets/buttons/remove_button.dart';
@@ -26,9 +28,11 @@ class _RoomDetailContentState extends State<RoomDetailContent>
   dynamic _kost;
   dynamic _tenant;
   dynamic _payments;
-  // dynamic _payment;
+  dynamic _price;
   double _totalAdditionalPrice = 0;
   double _priceAmount = 0;
+  DateTime? _startDate;
+  DateTime? _endDate;
 
   Future<void> _setup() async {
     await get<RoomViewModel>().fetchRoom();
@@ -64,6 +68,12 @@ class _RoomDetailContentState extends State<RoomDetailContent>
 
   @override
   Widget build(BuildContext context) {
+    watchOnly((RoomViewModel x) => x.room);
+    watchOnly((RoomViewModel x) => x.isError);
+    watchOnly((RoomViewModel x) => x.isSuccess);
+    if (mounted) {
+      snackbarGenerator(context, get<RoomViewModel>());
+    }
     return _room == null
         ? SizedBox()
         : Column(
@@ -353,8 +363,39 @@ class _RoomDetailContentState extends State<RoomDetailContent>
                             SizedBox(width: 20),
                             Text("Harga: "),
                             Text(
-                              formatCurrency(_room['Price']?['amount'] ?? 0),
+                              formatCurrency(_room?['Price']?['amount'] ?? 0),
                               style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            Spacer(),
+                            EditButton(
+                              message: "",
+                              size: 35,
+                              color: Colors.blue,
+                              onPressed: () async {
+                                await get<RoomViewModel>().fetchPrice(
+                                  id: _room['priceId'],
+                                );
+                                setState(() {
+                                  _price = get<RoomViewModel>().price;
+                                  _amountController.text =
+                                      _price['amount'].toString();
+                                  _startDate = DateTime.parse(
+                                    _price['createdAt'],
+                                  );
+                                });
+
+                                await showModalBottomSheet(
+                                  isScrollControlled: true,
+                                  context: context,
+                                  builder: (context) {
+                                    return EditPrice();
+                                  },
+                                );
+
+                                setState(() {
+                                  _room = get<RoomViewModel>().room;
+                                });
+                              },
                             ),
                           ],
                         ),
@@ -396,7 +437,7 @@ class _RoomDetailContentState extends State<RoomDetailContent>
                               style: TextStyle(fontWeight: FontWeight.w600),
                             ),
                             Text(
-                              formatCurrency(_room['totalPrice']),
+                              formatCurrency(_room?['totalPrice'] ?? 0),
                               style: TextStyle(
                                 fontWeight: FontWeight.w700,
                                 color: Colors.greenAccent.shade700,
@@ -509,19 +550,19 @@ class _RoomDetailContentState extends State<RoomDetailContent>
                                   ),
                                 ],
                               ),
-                              Row(
-                                children: [
-                                  SizedBox(width: 40),
-                                  Text("Batas tinggal: "),
-                                  SizedBox(width: 4),
-                                  Text(
-                                    formatDateString(_tenant['dueDate']),
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              // Row(
+                              //   children: [
+                              //     SizedBox(width: 40),
+                              //     Text("Batas tinggal: "),
+                              //     SizedBox(width: 4),
+                              //     Text(
+                              //       formatDateString(_tenant['dueDate']),
+                              //       style: TextStyle(
+                              //         fontWeight: FontWeight.w600,
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
                               Divider(),
                             ],
                           ),

@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:residenza/features/tenant/components/tenant_search.dart';
 import 'package:residenza/utils/helpers.dart';
 import 'package:residenza/view_models/room_view_model.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
@@ -36,12 +37,14 @@ class _AddTenantState extends State<AddTenant> with GetItStateMixin {
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
           SizedBox(height: 6),
-          TextFormField(
-            decoration: InputDecoration(isDense: true, label: Text("Nama")),
-            keyboardType: TextInputType.name,
-            onChanged: (value) => get<RoomViewModel>().tenantName = value,
-          ),
+          SizedBox(height: 40, child: TenantSearch()),
           SizedBox(height: 6),
+          // TextFormField(
+          //   decoration: InputDecoration(isDense: true, label: Text("Nama")),
+          //   keyboardType: TextInputType.name,
+          //   onChanged: (value) => get<RoomViewModel>().tenantName = value,
+          // ),
+          // SizedBox(height: 6),
           TextFormField(
             decoration: InputDecoration(isDense: true, label: Text("Telepon")),
             keyboardType: TextInputType.number,

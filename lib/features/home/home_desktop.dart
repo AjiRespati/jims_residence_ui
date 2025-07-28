@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
-import 'package:residenza/features/tenant/components/tenant_search.dart';
 import 'package:residenza/routes/route_names.dart';
 import 'package:residenza/utils/helpers.dart';
 import 'package:residenza/view_models/room_view_model.dart';
@@ -182,7 +181,7 @@ class _HomeDesktopState extends State<HomeDesktop> with GetItStateMixin {
                   },
                 ),
               ),
-              SizedBox(height: 350, child: TenantSearch()),
+              // SizedBox(height: 350, child: TenantSearch()),
               SizedBox(height: 50),
             ],
           ),

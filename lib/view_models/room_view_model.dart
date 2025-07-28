@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:residenza/services/boarding_house_api_service.dart';
 import 'package:residenza/services/expense_api_service.dart';
-import 'package:residenza/services/price_api_serevice.dart';
+import 'package:residenza/services/price_api_service.dart';
 import 'package:residenza/services/report_api_service.dart';
 import 'package:residenza/services/room_api_service.dart';
 import 'package:residenza/services/tenant_api_service.dart';
@@ -350,6 +350,7 @@ class RoomViewModel extends ChangeNotifier {
 
   List<dynamic> _prices = [];
   List<dynamic> _pricesByKost = [];
+  dynamic _price;
   String _priceName = "";
   double _priceAmount = 0;
   String? _priceRoomSize;
@@ -363,6 +364,12 @@ class RoomViewModel extends ChangeNotifier {
   List<dynamic> get prices => _prices;
   set prices(List<dynamic> val) {
     _prices = val;
+    notifyListeners();
+  }
+
+  dynamic get price => _price;
+  set price(dynamic val) {
+    _price = val;
     notifyListeners();
   }
 
@@ -978,6 +985,50 @@ class RoomViewModel extends ChangeNotifier {
     try {
       var resp = await PriceApiService().fetchPrices();
       prices = resp['data'];
+    } catch (e) {
+      if (e.toString().contains("Please re-login")) {
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
+  }
+
+  Future<void> fetchPrice({required String id}) async {
+    isBusy = true;
+    try {
+      var resp = await PriceApiService().fetchPrice(id: id);
+      price = resp['data'];
+    } catch (e) {
+      if (e.toString().contains("Please re-login")) {
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
+  }
+
+  Future<void> updatePrice({
+    required String id,
+    required double amount,
+    required DateTime? startDate,
+  }) async {
+    isBusy = true;
+    try {
+      var resp = await PriceApiService().updatePrice(
+        id: id,
+        amount: amount,
+        startDate: startDate,
+      );
+      price = resp['data'];
+      successMessage = "Update harga berhasil.";
+      isSuccess = true;
     } catch (e) {
       if (e.toString().contains("Please re-login")) {
         isNoSession = true;

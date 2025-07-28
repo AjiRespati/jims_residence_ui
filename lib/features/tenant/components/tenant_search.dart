@@ -72,8 +72,9 @@ class _TenantSearchState extends State<TenantSearch> with GetItStateMixin {
               decoration: const InputDecoration(
                 labelText: 'Search Tenants (Name, Phone, NIK)',
                 hintText: 'e.g., John, 0812, 12345',
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(),
+                // prefixIcon: Icon(Icons.search),
+                // border: OutlineInputBorder(),
+                isDense: true,
               ),
               onSubmitted: (String value) {
                 onFieldSubmitted(); // Call this to trigger option selection if applicable
@@ -99,12 +100,15 @@ class _TenantSearchState extends State<TenantSearch> with GetItStateMixin {
                     itemBuilder: (BuildContext context, int index) {
                       final Tenant option = options.elementAt(index);
                       return ListTile(
+                        enabled: option.tenancyStatus != "Active",
+                        dense: true,
                         title: Text(option.name),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('Phone: ${option.phone}'),
                             Text('NIK: ${option.nikNumber}'),
+                            Text('Status: ${option.tenancyStatus}'),
                           ],
                         ),
                         onTap: () {
@@ -130,8 +134,8 @@ class _TenantSearchState extends State<TenantSearch> with GetItStateMixin {
           },
         ),
         // You can add other widgets below the Autocomplete if needed
-        const SizedBox(height: 20),
-        Text('Current search text: ${_textEditingController.text}'),
+        // const SizedBox(height: 20),
+        // Text('Current search text: ${_textEditingController.text}'),
       ],
     );
   }
