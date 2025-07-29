@@ -144,6 +144,7 @@ class TenantApiService extends BaseApiService {
     required String? phone,
     required String? nik,
     required String? status,
+    required DateTime? checkinDate,
     required DateTime? startDate,
     required DateTime? endDate,
     required Uint8List? imageWeb,
@@ -197,6 +198,9 @@ class TenantApiService extends BaseApiService {
     }
     if (status != null) {
       request.fields['tenancyStatus'] = status;
+    }
+    if (checkinDate != null) {
+      request.fields['checkinDate'] = generateDateString(checkinDate);
     }
     if (startDate != null) {
       request.fields['startDate'] = generateDateString(startDate);
@@ -294,6 +298,26 @@ class TenantApiService extends BaseApiService {
 
     if (response.statusCode == 200) {
       return true;
+    } else {
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
+    }
+  }
+
+  Future<dynamic> searchTenant({required String query}) async {
+    final response = await performAuthenticatedRequest(
+      (token) => http.get(
+        Uri.parse('$baseUrl/tenant/search?query=$query'),
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": "Bearer $token",
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
     } else {
       throw Exception(
         jsonDecode(response.body)['message'] ?? 'Internal service error',

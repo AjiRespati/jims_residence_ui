@@ -149,6 +149,7 @@ class _TenantImageState extends State<TenantImage> with GetItStateMixin {
       phone: null,
       nik: null,
       status: null,
+      checkinDate: null,
       startDate: null,
       endDate: null,
       imageWeb: _imageWeb,

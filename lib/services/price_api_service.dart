@@ -78,8 +78,14 @@ class PriceApiService extends BaseApiService {
 
   Future<dynamic> updatePrice({
     required String id,
-    required dynamic updateItems,
+    required double amount,
+    required DateTime? startDate,
   }) async {
+    Map<String, dynamic> updateItems = {};
+    updateItems['amount'] = amount;
+    if (startDate != null) {
+      updateItems['startDate'] = startDate;
+    }
     final response = await performAuthenticatedRequest(
       (token) => http.put(
         Uri.parse('$baseUrl/price/$id'),

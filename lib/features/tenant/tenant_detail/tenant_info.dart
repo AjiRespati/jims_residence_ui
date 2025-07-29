@@ -235,6 +235,7 @@ class _TenantInfoState extends State<TenantInfo> with GetItStateMixin {
                                         phone: _phone.text,
                                         nik: _nik.text,
                                         status: _status.text,
+                                        checkinDate: _startDate,
                                         startDate: _startDate,
                                         endDate: _endDate,
                                         imageWeb: null,
