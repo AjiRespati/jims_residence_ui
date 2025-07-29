@@ -248,6 +248,7 @@ class _InvoiceCardState extends State<InvoiceCard> with GetItStateMixin {
                         ),
                         textAlign: TextAlign.center,
                       ),
+                      Divider(),
                       SizedBox(height: 5),
                       if ((widget.item["status"] != 'Paid') &&
                           (widget.item['invoicePaymentProofPath'] == null))
@@ -271,7 +272,7 @@ class _InvoiceCardState extends State<InvoiceCard> with GetItStateMixin {
                             child: Icon(Icons.upload, size: 20),
                           ),
                         ),
-                      SizedBox(height: 3),
+                      // SizedBox(height: 3),
                       if ((widget.item["status"] != 'Paid') &&
                           (widget.item['invoicePaymentProofPath'] == null))
                         Text(
@@ -285,6 +286,9 @@ class _InvoiceCardState extends State<InvoiceCard> with GetItStateMixin {
                           overflow: TextOverflow.ellipsis,
                         ),
                       SizedBox(height: 3),
+                      if ((widget.item["status"] != 'Paid') &&
+                          (widget.item['invoicePaymentProofPath'] == null))
+                        Divider(),
 
                       if (widget.item['invoicePaymentProofPath'] != null)
                         GestureDetector(

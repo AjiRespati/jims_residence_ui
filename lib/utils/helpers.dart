@@ -21,8 +21,12 @@ String formatDateFromYearToSecond(DateTime date) {
   return DateFormat('dd MMMM yyyy HH:mm:ss', "id").format(date.toLocal());
 }
 
-String formatDateFromYearToDay(DateTime date) {
-  return DateFormat('dd MMMM yyyy', "id").format(date.toLocal());
+String formatDateFromYearToDay(DateTime? date) {
+  if (date != null) {
+    return DateFormat('dd MMMM yyyy', "id").format(date.toLocal());
+  } else {
+    return " -";
+  }
 }
 
 String getYesOrNo(bool condition) {

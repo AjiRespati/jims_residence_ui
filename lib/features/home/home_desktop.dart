@@ -181,6 +181,8 @@ class _HomeDesktopState extends State<HomeDesktop> with GetItStateMixin {
                   },
                 ),
               ),
+              // SizedBox(height: 350, child: TenantSearch()),
+              SizedBox(height: 50),
             ],
           ),
         ),
