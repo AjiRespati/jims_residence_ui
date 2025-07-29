@@ -22,12 +22,12 @@ class _EditPriceState extends State<EditPrice> with GetItStateMixin {
     symbol: 'Rp',
     decimalDigits: 0,
   );
-  dynamic _room;
-  dynamic _kost;
-  dynamic _tenant;
-  dynamic _payments;
+  // dynamic _room;
+  // dynamic _kost;
+  // dynamic _tenant;
+  // dynamic _payments;
   dynamic _price;
-  final double _totalAdditionalPrice = 0;
+  // final double _totalAdditionalPrice = 0;
   double? _priceAmount;
   DateTime? _startDate;
   DateTime? _startDateEdit;
@@ -37,16 +37,16 @@ class _EditPriceState extends State<EditPrice> with GetItStateMixin {
     super.initState();
 
     _price = get<RoomViewModel>().price;
-    _startDate = DateTime.parse(_price['createdAt']);
+    // _startDate = DateTime.parse(_price['createdAt']);
 
-    // String checkinDate = _price['Rooms'][0]['Tenants'][0]['checkinDate'];
-    // _startDate = DateTime.parse(checkinDate);
+    String checkinDate = _price['Rooms'][0]['Tenants'][0]['checkinDate'];
+    _startDate = DateTime.parse(checkinDate);
 
     final rawText = (_price['amount'] ?? "").toString();
 
     final number = int.parse(rawText.isEmpty ? "0" : rawText);
     _amountController.text = _currencyFormatter.format(number);
-    _room = get<RoomViewModel>().room;
+    // _room = get<RoomViewModel>().room;
   }
 
   @override

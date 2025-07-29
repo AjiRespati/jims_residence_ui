@@ -37,7 +37,7 @@ class _AddTenantState extends State<AddTenant> with GetItStateMixin {
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
           SizedBox(height: 6),
-          SizedBox(height: 40, child: TenantSearch()),
+          SizedBox(height: 40, child: TenantSearch(label: "Nama", hint: "")),
           SizedBox(height: 6),
           // TextFormField(
           //   decoration: InputDecoration(isDense: true, label: Text("Nama")),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:residenza/features/room/components/add_price.dart';
 import 'package:residenza/features/room/components/edit_price.dart';
 import 'package:residenza/features/tenant/components/add_tenant.dart';
+import 'package:residenza/features/tenant/components/edit_tenant.dart';
 import 'package:residenza/routes/route_names.dart';
 import 'package:residenza/utils/helpers.dart';
 import 'package:residenza/view_models/room_view_model.dart';
@@ -31,8 +32,8 @@ class _RoomDetailContentState extends State<RoomDetailContent>
   dynamic _price;
   double _totalAdditionalPrice = 0;
   double _priceAmount = 0;
-  DateTime? _startDate;
-  DateTime? _endDate;
+  // DateTime? _startDate;
+  // DateTime? _endDate;
 
   Future<void> _setup() async {
     await get<RoomViewModel>().fetchRoom();
@@ -369,7 +370,7 @@ class _RoomDetailContentState extends State<RoomDetailContent>
                             Spacer(),
                             EditButton(
                               message: "",
-                              size: 35,
+                              size: 32,
                               color: Colors.blue,
                               onPressed: () async {
                                 await get<RoomViewModel>().fetchPrice(
@@ -379,9 +380,9 @@ class _RoomDetailContentState extends State<RoomDetailContent>
                                   _price = get<RoomViewModel>().price;
                                   _amountController.text =
                                       _price['amount'].toString();
-                                  _startDate = DateTime.parse(
-                                    _price['createdAt'],
-                                  );
+                                  // _startDate = DateTime.parse(
+                                  //   _price['createdAt'],
+                                  // );
                                 });
 
                                 await showModalBottomSheet(
@@ -448,122 +449,148 @@ class _RoomDetailContentState extends State<RoomDetailContent>
                         ),
                         Divider(),
                         if (_tenant != null)
-                          Column(
+                          Stack(
+                            alignment: AlignmentDirectional.centerEnd,
                             children: [
-                              Row(
+                              Column(
                                 children: [
-                                  SizedBox(width: 20),
-                                  Text("Penghuni: "),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  SizedBox(width: 40),
-                                  Text("Nama: "),
-                                  SizedBox(width: 4),
-                                  Text(
-                                    (_tenant?['name'] ?? " -"),
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                                  Row(
+                                    children: [
+                                      SizedBox(width: 20),
+                                      Text("Penghuni: "),
+                                    ],
                                   ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  SizedBox(width: 40),
-                                  Text("Telepon: "),
-                                  SizedBox(width: 4),
-                                  Text(
-                                    (_tenant?['phone'] ?? " -"),
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                                  Row(
+                                    children: [
+                                      SizedBox(width: 40),
+                                      Text("Nama: "),
+                                      SizedBox(width: 4),
+                                      Text(
+                                        (_tenant?['name'] ?? " -"),
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  SizedBox(width: 40),
-                                  Text("NIK: "),
-                                  SizedBox(width: 4),
-                                  Text(
-                                    (_tenant?['NIKNumber'] ?? " -"),
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                                  Row(
+                                    children: [
+                                      SizedBox(width: 40),
+                                      Text("Telepon: "),
+                                      SizedBox(width: 4),
+                                      Text(
+                                        (_tenant?['phone'] ?? " -"),
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  SizedBox(width: 40),
-                                  Text("Fotocopy KTP: "),
-                                  SizedBox(width: 4),
-                                  Text(
-                                    (_tenant?['isNIKCopyDone'] ?? false)
-                                        ? "Sudah"
-                                        : "Belum",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                                  Row(
+                                    children: [
+                                      SizedBox(width: 40),
+                                      Text("NIK: "),
+                                      SizedBox(width: 4),
+                                      Text(
+                                        (_tenant?['NIKNumber'] ?? " -"),
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                              SizedBox(height: 10),
-                              Row(
-                                children: [
-                                  SizedBox(width: 40),
-                                  Text("Mulai: "),
-                                  SizedBox(width: 4),
-                                  Text(
-                                    formatDateString(_tenant['checkinDate']),
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                                  Row(
+                                    children: [
+                                      SizedBox(width: 40),
+                                      Text("Fotocopy KTP: "),
+                                      SizedBox(width: 4),
+                                      Text(
+                                        (_tenant?['isNIKCopyDone'] ?? false)
+                                            ? "Sudah"
+                                            : "Belum",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                              // Row(
-                              //   children: [
-                              //     SizedBox(width: 40),
-                              //     Text("Selesai: "),
-                              //     SizedBox(width: 4),
-                              //     Text(
-                              //       formatDateString(_tenant['endDate']),
-                              //       style: TextStyle(
-                              //         fontWeight: FontWeight.w600,
-                              //       ),
-                              //     ),
-                              //   ],
-                              // ),
-                              Row(
-                                children: [
-                                  SizedBox(width: 40),
-                                  Text("Jatuh tempo: "),
-                                  SizedBox(width: 4),
-                                  Text(
-                                    formatDateString(_tenant['dueDate']),
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                                  SizedBox(height: 10),
+                                  Row(
+                                    children: [
+                                      SizedBox(width: 40),
+                                      Text("Mulai: "),
+                                      SizedBox(width: 4),
+                                      Text(
+                                        formatDateString(
+                                          _tenant['checkinDate'],
+                                        ),
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
                                   ),
+                                  // Row(
+                                  //   children: [
+                                  //     SizedBox(width: 40),
+                                  //     Text("Selesai: "),
+                                  //     SizedBox(width: 4),
+                                  //     Text(
+                                  //       formatDateString(_tenant['endDate']),
+                                  //       style: TextStyle(
+                                  //         fontWeight: FontWeight.w600,
+                                  //       ),
+                                  //     ),
+                                  //   ],
+                                  // ),
+                                  Row(
+                                    children: [
+                                      SizedBox(width: 40),
+                                      Text("Jatuh tempo: "),
+                                      SizedBox(width: 4),
+                                      Text(
+                                        formatDateString(_tenant['dueDate']),
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  // Row(
+                                  //   children: [
+                                  //     SizedBox(width: 40),
+                                  //     Text("Batas tinggal: "),
+                                  //     SizedBox(width: 4),
+                                  //     Text(
+                                  //       formatDateString(_tenant['dueDate']),
+                                  //       style: TextStyle(
+                                  //         fontWeight: FontWeight.w600,
+                                  //       ),
+                                  //     ),
+                                  //   ],
+                                  // ),
+                                  Divider(),
                                 ],
                               ),
-                              // Row(
-                              //   children: [
-                              //     SizedBox(width: 40),
-                              //     Text("Batas tinggal: "),
-                              //     SizedBox(width: 4),
-                              //     Text(
-                              //       formatDateString(_tenant['dueDate']),
-                              //       style: TextStyle(
-                              //         fontWeight: FontWeight.w600,
-                              //       ),
-                              //     ),
-                              //   ],
-                              // ),
-                              Divider(),
+                              EditButton(
+                                message: "",
+                                size: 32,
+                                color: Colors.blue,
+                                onPressed: () async {
+                                  await showModalBottomSheet(
+                                    isScrollControlled: true,
+                                    context: context,
+                                    builder: (context) {
+                                      return EditTenant(tenant: _tenant);
+                                    },
+                                  );
+
+                                  setState(() {
+                                    _room = get<RoomViewModel>().room;
+                                    _tenant = _room['latestTenant'];
+                                  });
+                                },
+                              ),
                             ],
                           ),
                         if (_payments != null)

@@ -7,10 +7,16 @@ import 'package:residenza/services/tenant_api_service.dart';
 import 'package:residenza/view_models/room_view_model.dart';
 
 class TenantSearch extends StatefulWidget with GetItStatefulWidgetMixin {
-  TenantSearch({required this.label, required this.hint, super.key});
+  TenantSearch({
+    required this.label,
+    required this.hint,
+    this.initialName,
+    super.key,
+  });
 
   final String? label;
   final String? hint;
+  final String? initialName;
 
   @override
   State<TenantSearch> createState() => _TenantSearchState();
@@ -46,6 +52,14 @@ class _TenantSearchState extends State<TenantSearch> with GetItStateMixin {
   }
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.initialName != null && widget.initialName!.isNotEmpty) {
+      _textEditingController.text = widget.initialName!;
+    }
+  }
+
+  @override
   void dispose() {
     _textEditingController.dispose();
     super.dispose();
@@ -53,6 +67,7 @@ class _TenantSearchState extends State<TenantSearch> with GetItStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    print(_textEditingController.text);
     return Column(
       children: [
         Autocomplete<Tenant>(
@@ -67,12 +82,12 @@ class _TenantSearchState extends State<TenantSearch> with GetItStateMixin {
             VoidCallback onFieldSubmitted,
           ) {
             // Use the provided textEditingController for the TextField
-            _textEditingController.text =
-                textEditingController.text; // Keep local controller in sync
+            // _textEditingController.text =
+            //     textEditingController.text; // Keep local controller in sync
             get<RoomViewModel>().tenantName = textEditingController.text;
             return TextField(
               controller:
-                  textEditingController, // This is the controller Autocomplete manages
+                  _textEditingController, // This is the controller Autocomplete manages
               focusNode: focusNode,
               decoration: InputDecoration(
                 labelText: widget.label ?? 'Search Tenants (Name, Phone, NIK)',

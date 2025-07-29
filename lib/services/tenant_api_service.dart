@@ -144,6 +144,7 @@ class TenantApiService extends BaseApiService {
     required String? phone,
     required String? nik,
     required String? status,
+    required DateTime? checkinDate,
     required DateTime? startDate,
     required DateTime? endDate,
     required Uint8List? imageWeb,
@@ -197,6 +198,9 @@ class TenantApiService extends BaseApiService {
     }
     if (status != null) {
       request.fields['tenancyStatus'] = status;
+    }
+    if (checkinDate != null) {
+      request.fields['checkinDate'] = generateDateString(checkinDate);
     }
     if (startDate != null) {
       request.fields['startDate'] = generateDateString(startDate);
