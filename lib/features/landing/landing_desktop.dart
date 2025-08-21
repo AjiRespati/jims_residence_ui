@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
+import 'package:residenza/features/landing/components/facilities.dart';
 import 'package:residenza/view_models/room_view_model.dart';
 import 'package:residenza/widgets/asset_image_with_border.dart';
 
@@ -105,7 +106,7 @@ class _LandingDesktopState extends State<LandingDesktop> with GetItStateMixin {
           TextButton(
             onPressed: () => _scrollToSection(_aboutKey),
             child: Text(
-              'About',
+              'Fasilitas',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 color: Colors.green.shade900,
@@ -224,17 +225,7 @@ class _LandingDesktopState extends State<LandingDesktop> with GetItStateMixin {
               key: _aboutKey,
               padding: const EdgeInsets.all(24),
               color: Colors.grey[200],
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'About',
-                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 16),
-                  _buildContentSection(),
-                ],
-              ),
+              child: Facilities(),
             ),
             // Gallery Section
             Container(
