@@ -75,10 +75,14 @@ class _RoomDetailContentState extends State<RoomDetailContent>
     if (mounted) {
       snackbarGenerator(context, get<RoomViewModel>());
     }
-    return _room == null
+
+    return _room ==
+            null // roomnya null
         ? SizedBox()
+        // ada room
         : Column(
           children: [
+            // Nama kost
             Row(
               children: [
                 Text(
@@ -87,6 +91,8 @@ class _RoomDetailContentState extends State<RoomDetailContent>
                 ),
               ],
             ),
+
+            // nomor kamar
             SizedBox(
               width: 50,
               child: Text(
@@ -96,14 +102,18 @@ class _RoomDetailContentState extends State<RoomDetailContent>
             ),
             Divider(),
 
+            // Belum ada tenant!!!
             if (_tenant == null)
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
+                      ///TODO: TAMBAH TENANT...!
                       AddTenant(),
-                      // Divider(),
+
                       SizedBox(height: 10),
+
+                      // HARGA KAMAR DAN BIAYA TAMBAHAN
                       Padding(
                         padding: const EdgeInsets.all(3.0),
                         child: CurrencyTextField(
@@ -242,6 +252,8 @@ class _RoomDetailContentState extends State<RoomDetailContent>
                         ],
                       ),
                       SizedBox(height: 50),
+
+                      // TOMBOL DAFTARKAN PENGHUNI
                       if (_tenant == null)
                         Stack(
                           alignment: AlignmentDirectional.center,
@@ -326,6 +338,8 @@ class _RoomDetailContentState extends State<RoomDetailContent>
                   ),
                 ),
               ),
+
+            // Sudah ada tenant
             if (_tenant != null)
               Expanded(
                 child: SizedBox(

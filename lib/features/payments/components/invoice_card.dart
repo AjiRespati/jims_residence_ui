@@ -275,15 +275,18 @@ class _InvoiceCardState extends State<InvoiceCard> with GetItStateMixin {
                       // SizedBox(height: 3),
                       if ((widget.item["status"] != 'Paid') &&
                           (widget.item['invoicePaymentProofPath'] == null))
-                        Text(
-                          "Upload bukti bayar",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w800,
-                            fontSize: 11,
-                            color: _generateColor(widget.item['status']),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 2),
+                          child: Text(
+                            "Upload bukti bayar",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w800,
+                              fontSize: 11,
+                              color: Colors.grey.shade800,
+                            ),
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          overflow: TextOverflow.ellipsis,
                         ),
                       SizedBox(height: 3),
                       if ((widget.item["status"] != 'Paid') &&
@@ -354,15 +357,18 @@ class _InvoiceCardState extends State<InvoiceCard> with GetItStateMixin {
                       if ((widget.item['totalAmountPaid'] <
                               widget.item['totalAmountDue']) &&
                           level > 0)
-                        Text(
-                          "Konfirmasi",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w800,
-                            fontSize: 11,
-                            color: _generateColor(widget.item['status']),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 2.0),
+                          child: Text(
+                            "Konfirmasi",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w800,
+                              fontSize: 11,
+                              color: Colors.grey.shade800,
+                            ),
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          overflow: TextOverflow.ellipsis,
                         ),
 
                       if (widget.item['totalAmountPaid'] >=
