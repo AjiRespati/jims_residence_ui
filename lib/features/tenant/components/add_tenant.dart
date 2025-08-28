@@ -15,6 +15,9 @@ class AddTenant extends StatefulWidget with GetItStatefulWidgetMixin {
 
 class _AddTenantState extends State<AddTenant> with GetItStateMixin {
   DateTime? _selectedDate;
+  final TextEditingController _phone = TextEditingController();
+  final TextEditingController _nik = TextEditingController();
+
   // final DateTime _selectedDateNow = DateTime.now();
   // final String _selectedShowDate = 'Sekarang';
   // final List<String> _pilihDate = ['Sekarang', 'Nanti'];
@@ -25,6 +28,43 @@ class _AddTenantState extends State<AddTenant> with GetItStateMixin {
 
   //   get<RoomViewModel>().tenantStartDate = _selectedDateNow;
   // }
+
+  @override
+  void initState() {
+    super.initState();
+    get<RoomViewModel>().tenantPhone = "";
+    get<RoomViewModel>().tenantIdNumber = "";
+
+    _phone.addListener(_phoneListener);
+    _nik.addListener(_nikListener);
+    get<RoomViewModel>().addListener(_onNotifierChanged);
+  }
+
+  void _phoneListener() {
+    get<RoomViewModel>().tenantPhone = _phone.text;
+  }
+
+  void _nikListener() {
+    get<RoomViewModel>().tenantIdNumber = _nik.text;
+  }
+
+  void _onNotifierChanged() {
+    if (_phone.text != get<RoomViewModel>().tenantPhone) {
+      _phone.text = get<RoomViewModel>().tenantPhone;
+    }
+    if (_nik.text != get<RoomViewModel>().tenantIdNumber) {
+      _nik.text = get<RoomViewModel>().tenantIdNumber;
+    }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    get<RoomViewModel>().removeListener(_onNotifierChanged);
+    _phone.removeListener(_phoneListener);
+    _phone.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,40 +79,21 @@ class _AddTenantState extends State<AddTenant> with GetItStateMixin {
           SizedBox(height: 6),
           SizedBox(height: 40, child: TenantSearch(label: "Nama", hint: "")),
           SizedBox(height: 6),
-          // TextFormField(
-          //   decoration: InputDecoration(isDense: true, label: Text("Nama")),
-          //   keyboardType: TextInputType.name,
-          //   onChanged: (value) => get<RoomViewModel>().tenantName = value,
-          // ),
-          // SizedBox(height: 6),
           TextFormField(
+            controller: _phone,
             decoration: InputDecoration(isDense: true, label: Text("Telepon")),
             keyboardType: TextInputType.number,
-            onChanged: (value) => get<RoomViewModel>().tenantPhone = value,
+            // onChanged: (value) => get<RoomViewModel>().tenantPhone = value,
           ),
           SizedBox(height: 6),
           TextFormField(
+            controller: _nik,
             decoration: InputDecoration(isDense: true, label: Text("NIK")),
             keyboardType: TextInputType.number,
-            onChanged: (value) => get<RoomViewModel>().tenantIdNumber = value,
+            // onChanged: (value) => get<RoomViewModel>().tenantIdNumber = value,
           ),
           SizedBox(height: 6),
-          // DropdownButtonFormField<String>(
-          //   decoration: InputDecoration(labelText: "Menyerahkan Foto Copy KTP"),
-          //   value: get<RoomViewModel>().isIdCopiedText,
-          //   items:
-          //       ["Ya", "Belum"].map((item) {
-          //         return DropdownMenuItem<String>(
-          //           value: item,
-          //           child: Text(item),
-          //         );
-          //       }).toList(),
-          //   onChanged: (value) {
-          //     get<RoomViewModel>().isIdCopiedText = value ?? "Belum";
-          //   },
-          // ),
           SizedBox(height: 16),
-          // Row(children: [Text("Pilih tanggal mulai:")]),
           _buildDatePicker(
             context,
             "Pilih tanggal mulai",

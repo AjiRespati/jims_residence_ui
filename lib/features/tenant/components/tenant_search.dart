@@ -136,6 +136,8 @@ class _TenantSearchState extends State<TenantSearch> with GetItStateMixin {
             // This is called when a user selects an option from the suggestions.
             debugPrint('You just selected ${selection.name}');
             get<RoomViewModel>().tenantName = selection.name;
+            get<RoomViewModel>().tenantPhone = selection.phone;
+            get<RoomViewModel>().tenantIdNumber = selection.nikNumber;
             // You can perform actions here, e.g., navigate to a detail page
           },
         ),
