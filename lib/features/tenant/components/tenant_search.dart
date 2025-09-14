@@ -84,7 +84,7 @@ class _TenantSearchState extends State<TenantSearch> with GetItStateMixin {
               onSubmitted: (String value) {
                 onFieldSubmitted(); // Call this to trigger option selection if applicable
                 // You might want to do something specific when user presses Enter
-                print('Search submitted: $value');
+                // print('Search submitted: $value');
               },
             );
           },

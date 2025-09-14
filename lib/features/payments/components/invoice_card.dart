@@ -5,6 +5,7 @@ import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:residenza/application_info.dart';
 import 'package:residenza/features/payments/components/invoice_payment.dart';
+// import 'package:residenza/features/payments/components/invoice_void.dart';
 import 'package:residenza/utils/helpers.dart';
 import 'package:residenza/view_models/room_view_model.dart';
 import 'package:residenza/view_models/system_view_model.dart';
@@ -187,6 +188,7 @@ class _InvoiceCardState extends State<InvoiceCard> with GetItStateMixin {
           children: [
             Row(
               children: [
+                /// SISI KIRI
                 Expanded(
                   flex: 10,
                   child: Column(
@@ -234,6 +236,7 @@ class _InvoiceCardState extends State<InvoiceCard> with GetItStateMixin {
                   ),
                 ),
 
+                /// SISI KANAN
                 Expanded(
                   flex: 3,
                   child: Column(
@@ -380,6 +383,7 @@ class _InvoiceCardState extends State<InvoiceCard> with GetItStateMixin {
               ],
             ),
 
+            /// TOTAL STACK
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -402,6 +406,53 @@ class _InvoiceCardState extends State<InvoiceCard> with GetItStateMixin {
                   ),
               ],
             ),
+
+            // /// VOID TRANSACTION
+            // if ((widget.item['totalAmountPaid'] <
+            //         widget.item['totalAmountDue']) &&
+            //     level > 1)
+            //   SizedBox(
+            //     height: 200,
+            //     child: Column(
+            //       children: [
+            //         Expanded(child: SizedBox()),
+            //         Row(
+            //           children: [
+            //             Text(
+            //               "Void this invoice!",
+            //               style: TextStyle(
+            //                 fontWeight: FontWeight.bold,
+            //                 color: Colors.red,
+            //               ),
+            //             ),
+            //             IconButton(
+            //               onPressed: () async {
+            //                 await showModalBottomSheet(
+            //                   isScrollControlled: true,
+            //                   context: context,
+            //                   builder: (context) {
+            //                     return Padding(
+            //                       padding: EdgeInsets.only(
+            //                         bottom:
+            //                             MediaQuery.of(
+            //                               context,
+            //                             ).viewInsets.bottom,
+            //                       ),
+            //                       child: SingleChildScrollView(
+            //                         child: InvoiceVoid(item: widget.item),
+            //                       ),
+            //                     );
+            //                   },
+            //                 );
+            //               },
+            //               icon: Icon(Icons.delete),
+            //               color: Colors.red,
+            //             ),
+            //           ],
+            //         ),
+            //       ],
+            //     ),
+            //   ),
           ],
         ),
       ),
