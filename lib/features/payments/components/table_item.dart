@@ -12,7 +12,6 @@ class TableItem extends StatelessWidget with GetItMixin {
 
   @override
   Widget build(BuildContext context) {
-    print(item);
     return Padding(
       padding: const EdgeInsets.only(left: 8, right: 8, bottom: 4),
       child: Card(

@@ -149,6 +149,7 @@ class _TenantDetailDesktopState extends State<TenantDetailDesktop>
                                         ],
                                       ),
                                       if (_status != 'Inactive')
+                                        // TOMBOL BIAYA LAIN
                                         GradientElevatedButton(
                                           gradient: const LinearGradient(
                                             colors: [
