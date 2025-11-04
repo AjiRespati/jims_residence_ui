@@ -56,7 +56,7 @@ class _MonthSelectorDropdownState extends State<MonthSelectorDropdown> {
 
   void _notifyParent() {
     final dateFrom = DateTime(selectedMonth.year, selectedMonth.month, 1);
-    final dateTo = DateTime(selectedMonth.year, selectedMonth.month + 1, 0);
+    final dateTo = DateTime(selectedMonth.year, selectedMonth.month + 1, 1);
     widget.onMonthSelected(dateFrom, dateTo);
   }
 

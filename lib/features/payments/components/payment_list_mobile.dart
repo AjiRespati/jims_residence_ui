@@ -23,29 +23,50 @@ class _PaymentListMobileState extends State<PaymentListMobile>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // final now = DateTime.now();
+      RoomViewModel model = get<RoomViewModel>();
+      DateTime? periode = model.periode;
+      if (model.roomKostId != null) {
+        var item =
+            model.kosts
+                .where((el) => el['id'] == model.roomKostId)
+                .toList()
+                .first;
+        model.roomKostName = item['name'];
+        _boardingHouseId = item['id'];
+      } else {
+        model.roomKostName = null;
+        _boardingHouseId = null;
+      }
 
-      DateTime? periode = get<RoomViewModel>().periode;
-      get<RoomViewModel>().getFinancialTransactions(
-        boardingHouseId: get<RoomViewModel>().roomKostId,
+      model.getFinancialTransactions(
+        boardingHouseId: model.roomKostId,
         dateFrom:
             periode != null
                 ? DateTime(periode.year, periode.month)
                 : DateTime(now.year, now.month),
         dateTo:
             periode != null
-                ? DateTime(periode.year, periode.month + 1)
+                ? DateTime(
+                  periode.year,
+                  periode.month + 1,
+                ).subtract(Duration(seconds: 1))
                 : DateTime(
                   now.year,
                   now.month + 1,
                 ).subtract(Duration(seconds: 1)),
       );
+      model.periode =
+          periode != null
+              ? DateTime(periode.year, periode.month)
+              : DateTime(now.year, now.month);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     watchOnly((RoomViewModel x) => x.invoices);
+    watchOnly((RoomViewModel x) => x.roomKostId);
+
     return Column(
       children: [
         SizedBox(
@@ -99,7 +120,7 @@ class _PaymentListMobileState extends State<PaymentListMobile>
                         get<RoomViewModel>().getFinancialOverview(
                           boardingHouseId: _boardingHouseId,
                           dateFrom: _dateFrom,
-                          dateTo: _dateTo,
+                          dateTo: _dateTo?.subtract(Duration(seconds: 1)),
                         );
 
                         get<RoomViewModel>().getMonthlyReport(
@@ -125,7 +146,7 @@ class _PaymentListMobileState extends State<PaymentListMobile>
                         get<RoomViewModel>().getFinancialOverview(
                           boardingHouseId: _boardingHouseId,
                           dateFrom: _dateFrom,
-                          dateTo: _dateTo,
+                          dateTo: _dateTo?.subtract(Duration(seconds: 1)),
                         );
 
                         get<RoomViewModel>().getMonthlyReport(

@@ -21,18 +21,36 @@ class _PaymentResumeMobileState extends State<PaymentResumeMobile>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      DateTime? periode = get<RoomViewModel>().periode;
-      get<RoomViewModel>().getMonthlyReport(
-        boardingHouseId: get<RoomViewModel>().roomKostId,
+      RoomViewModel model = get<RoomViewModel>();
+      DateTime? periode = model.periode;
+      if (model.roomKostId != null) {
+        var item =
+            get<RoomViewModel>().kosts
+                .where((el) => el['id'] == model.roomKostId)
+                .toList()
+                .first;
+        get<RoomViewModel>().roomKostName = item['name'];
+        _boardingHouseId = item['id'];
+      } else {
+        get<RoomViewModel>().roomKostName = null;
+        _boardingHouseId = null;
+      }
+
+      model.getMonthlyReport(
+        boardingHouseId: model.roomKostId,
         month: periode != null ? periode.month : DateTime.now().month,
         year: periode != null ? periode.year : DateTime.now().year,
       );
+      model.periode = periode ?? DateTime.now();
+      _dateFrom = periode ?? DateTime.now();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     watchOnly((RoomViewModel x) => x.kostMonthlyReport);
+    watchOnly((RoomViewModel x) => x.roomKostId);
+
     return Column(
       children: [
         SizedBox(
@@ -86,7 +104,7 @@ class _PaymentResumeMobileState extends State<PaymentResumeMobile>
                         get<RoomViewModel>().getFinancialOverview(
                           boardingHouseId: _boardingHouseId,
                           dateFrom: _dateFrom,
-                          dateTo: _dateTo,
+                          dateTo: _dateTo?.subtract(Duration(seconds: 1)),
                         );
 
                         get<RoomViewModel>().getMonthlyReport(
@@ -112,7 +130,7 @@ class _PaymentResumeMobileState extends State<PaymentResumeMobile>
                         get<RoomViewModel>().getFinancialOverview(
                           boardingHouseId: _boardingHouseId,
                           dateFrom: _dateFrom,
-                          dateTo: _dateTo,
+                          dateTo: _dateTo?.subtract(Duration(seconds: 1)),
                         );
 
                         get<RoomViewModel>().getMonthlyReport(

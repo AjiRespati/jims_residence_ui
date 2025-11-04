@@ -23,18 +23,35 @@ class _PaymentResumeDesktopState extends State<PaymentResumeDesktop>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      DateTime? periode = get<RoomViewModel>().periode;
-      get<RoomViewModel>().getMonthlyReport(
-        boardingHouseId: get<RoomViewModel>().roomKostId,
+      RoomViewModel model = get<RoomViewModel>();
+      DateTime? periode = model.periode;
+      if (model.roomKostId != null) {
+        var item =
+            get<RoomViewModel>().kosts
+                .where((el) => el['id'] == model.roomKostId)
+                .toList()
+                .first;
+        get<RoomViewModel>().roomKostName = item['name'];
+        _boardingHouseId = item['id'];
+      } else {
+        get<RoomViewModel>().roomKostName = null;
+        _boardingHouseId = null;
+      }
+
+      model.getMonthlyReport(
+        boardingHouseId: model.roomKostId,
         month: periode != null ? periode.month : DateTime.now().month,
         year: periode != null ? periode.year : DateTime.now().year,
       );
+      model.periode = periode ?? DateTime.now();
+      _dateFrom = periode ?? DateTime.now();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     watchOnly((RoomViewModel x) => x.kostMonthlyReport);
+    watchOnly((RoomViewModel x) => x.roomKostId);
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
