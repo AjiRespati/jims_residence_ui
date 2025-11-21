@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:residenza/routes/route_names.dart';
+import 'package:residenza/utils/calendar_with_sunday.dart';
 import 'package:residenza/view_models/room_view_model.dart';
 import 'package:intl/intl.dart';
 
@@ -108,31 +109,20 @@ Future<DateTime?> showCustomDatePicker({
   required DateTime initialDate,
   required DateTime firstDate,
 }) async {
-  DateTime? selectedDate;
-
-  await showDialog<DateTime>(
+  return await showDialog<DateTime>(
     context: context,
     builder: (BuildContext context) {
       return Dialog(
         surfaceTintColor: Colors.transparent,
         backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Container(
-          constraints: BoxConstraints(maxWidth: 500),
-          child: CalendarDatePicker(
-            initialDate: initialDate, // DateTime.now(),
-            firstDate: firstDate, //DateTime(1900),
-            lastDate: DateTime(3000),
-            onDateChanged: (DateTime date) {
-              selectedDate = date;
-              Navigator.of(context).pop(date); // Close and return date
-            },
-          ),
+          constraints: BoxConstraints(maxWidth: 450, maxHeight: 500),
+          child: CalendarWithRedSunday(),
         ),
       );
     },
   );
-
-  return selectedDate;
 }
 
 Color generateRoomStatusColor({required String? roomSatus}) {

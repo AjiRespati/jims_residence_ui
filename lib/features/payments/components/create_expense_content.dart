@@ -225,7 +225,7 @@ class _CreateExpenseContentState extends State<CreateExpenseContent>
         child: Row(
           children: [
             Text(
-              selectedDate == null ? placeholder : label,
+              " ${(selectedDate == null) ? placeholder : label}",
               style: labelTextStyle,
             ),
             Text(

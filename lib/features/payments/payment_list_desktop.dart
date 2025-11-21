@@ -349,13 +349,12 @@ class _PaymentListDesktopState extends State<PaymentListDesktop>
                 child: GradientElevatedButton(
                   gradient: const LinearGradient(
                     colors: [
-                      Color.fromARGB(200, 211, 47, 47),
-                      Color.fromARGB(200, 211, 47, 47),
+                      Color.fromARGB(199, 47, 107, 211),
+                      Color.fromARGB(199, 47, 74, 211),
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
-
                   onPressed: () async {
                     await showModalBottomSheet(
                       isScrollControlled: true,
@@ -372,13 +371,7 @@ class _PaymentListDesktopState extends State<PaymentListDesktop>
                       },
                     );
                   },
-                  child: Text(
-                    "Pengeluaran",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
+                  child: Icon(Icons.add, size: 30),
                 ),
               ),
             ],

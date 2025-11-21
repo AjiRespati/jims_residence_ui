@@ -19,6 +19,7 @@ class App extends StatelessWidget {
       builder: (context, child) {
         return MaterialApp(
           title: ApplicationInfo.appName,
+          locale: const Locale('id', 'ID'),
           theme: ThemeData(
             textTheme: GoogleFonts.mulishTextTheme(),
             colorScheme: ColorScheme.fromSeed(
@@ -34,8 +35,12 @@ class App extends StatelessWidget {
             return FadeRoute(page: const NotFoundPage(), settings: settings);
           },
           scrollBehavior: CustomScrollBehavior(),
-          localizationsDelegates: const [GlobalMaterialLocalizations.delegate],
-          supportedLocales: const [Locale('en'), Locale('id')],
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [Locale('id', 'ID'), Locale('en', 'US')],
           debugShowCheckedModeBanner: false,
         );
       },
