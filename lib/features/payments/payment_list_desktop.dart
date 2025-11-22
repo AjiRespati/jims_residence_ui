@@ -346,32 +346,46 @@ class _PaymentListDesktopState extends State<PaymentListDesktop>
               ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 100, right: 30),
-                child: GradientElevatedButton(
-                  gradient: const LinearGradient(
-                    colors: [
-                      Color.fromARGB(199, 47, 107, 211),
-                      Color.fromARGB(199, 47, 74, 211),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  onPressed: () async {
-                    await showModalBottomSheet(
-                      isScrollControlled: true,
-                      context: context,
-                      builder: (context) {
-                        return Padding(
-                          padding: EdgeInsets.only(
-                            bottom: MediaQuery.of(context).viewInsets.bottom,
-                          ),
-                          child: SingleChildScrollView(
-                            child: CreateExpenseContent(),
-                          ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    GradientElevatedButton(
+                      gradient: const LinearGradient(
+                        colors: [
+                          Color.fromARGB(199, 47, 107, 211),
+                          Color.fromARGB(199, 47, 74, 211),
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      onPressed: () async {
+                        await showModalBottomSheet(
+                          isScrollControlled: true,
+                          context: context,
+                          builder: (context) {
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                bottom:
+                                    MediaQuery.of(context).viewInsets.bottom,
+                              ),
+                              child: SingleChildScrollView(
+                                child: CreateExpenseContent(),
+                              ),
+                            );
+                          },
                         );
                       },
-                    );
-                  },
-                  child: Icon(Icons.add, size: 30),
+                      child: Icon(Icons.add, size: 30),
+                    ),
+                    Text(
+                      "Tambah Transaksi",
+                      style: TextStyle(
+                        color: Color.fromARGB(199, 47, 107, 211),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
