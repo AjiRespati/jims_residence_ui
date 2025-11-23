@@ -80,7 +80,6 @@ class SideBar extends StatelessWidget with GetItMixin {
                     onTap: () {
                       onTapMenu(menuTitle: "Penghuni");
                     },
-                    // trailing: const Icon(Icons.keyboard_arrow_down, size: 24),
                   ),
                   ExpansionTile(
                     initiallyExpanded: true,
@@ -100,10 +99,23 @@ class SideBar extends StatelessWidget with GetItMixin {
                         padding: const EdgeInsets.only(left: 14),
                         child: ListTile(
                           leading: const Icon(
+                            Icons.currency_exchange,
+                            size: 22,
+                          ),
+                          title: const Text("Transfer Ke Pemilik"),
+                          dense: true,
+                          onTap: () {
+                            onTapMenu(menuTitle: "Transfer Ke Pemilik");
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 14),
+                        child: ListTile(
+                          leading: const Icon(
                             Icons.table_rows_rounded,
                             size: 22,
                           ),
-                          // leading: const Icon(Icons.bar_chart_rounded, size: 22),
                           title: const Text("Daftar Transaksi"),
                           dense: true,
                           onTap: () {
@@ -118,7 +130,6 @@ class SideBar extends StatelessWidget with GetItMixin {
                             Icons.fact_check_outlined,
                             size: 22,
                           ),
-                          // leading: const Icon(Icons.bar_chart_rounded, size: 22),
                           title: const Text("Resume Transaksi"),
                           dense: true,
                           onTap: () {
@@ -147,10 +158,8 @@ class SideBar extends StatelessWidget with GetItMixin {
                         child: ListTile(
                           leading: const Icon(
                             Icons.apartment_rounded,
-                            // Icons.table_rows_rounded,
                             size: 22,
                           ),
-                          // leading: const Icon(Icons.bar_chart_rounded, size: 22),
                           title: const Text("Kost Management"),
                           dense: true,
                           onTap: () {
@@ -162,7 +171,6 @@ class SideBar extends StatelessWidget with GetItMixin {
                         padding: const EdgeInsets.only(left: 14),
                         child: ListTile(
                           leading: const Icon(Icons.room_preferences, size: 22),
-                          // leading: const Icon(Icons.bar_chart_rounded, size: 22),
                           title: const Text("Room Management"),
                           dense: true,
                           onTap: () {
@@ -178,7 +186,6 @@ class SideBar extends StatelessWidget with GetItMixin {
                               Icons.person_pin_outlined,
                               size: 22,
                             ),
-                            // leading: const Icon(Icons.bar_chart_rounded, size: 22),
                             title: const Text("User Management"),
                             dense: true,
                             onTap: () {
@@ -194,7 +201,6 @@ class SideBar extends StatelessWidget with GetItMixin {
                               Icons.person_pin_outlined,
                               size: 22,
                             ),
-                            // leading: const Icon(Icons.bar_chart_rounded, size: 22),
                             title: const Text("All Tables"),
                             dense: true,
                             onTap: () {

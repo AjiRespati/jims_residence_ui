@@ -7,6 +7,7 @@ import 'package:residenza/features/payments/payment_resume_desktop.dart';
 import 'package:residenza/features/payments/payment_list_desktop.dart';
 import 'package:residenza/features/payments/payment_detail/payment_detail.dart';
 import 'package:residenza/features/payments/payments.dart';
+import 'package:residenza/features/payments/transfer_owner_list.dart';
 // import 'package:residenza/features/price/price.dart';
 import 'package:residenza/features/room/room_add_tenant/room_add_tenant.dart';
 import 'package:residenza/features/room/room_settings/room_settings.dart';
@@ -77,6 +78,9 @@ class AppRouter {
           break;
         case paymentResumeRoute:
           screen = PaymentResumeDesktop();
+          break;
+        case paymentsTransferOwnerRoute:
+          screen = TransferOwnerList();
           break;
         case allTablesRoute:
           screen = AllTables();

@@ -219,17 +219,29 @@ class _TenantImageState extends State<TenantImage> with GetItStateMixin {
                 (widget.tenant['tenancyStatus'] == 'Inactive')
                     ? SizedBox()
                     : Center(
-                      child: IconButton(
-                        onPressed: () async {
-                          _imageWeb = await TenantApiService().pickImageWeb();
-                          setState(() {});
-                          await _submit();
-                        },
-                        icon: Icon(
-                          Icons.cloud_upload_outlined,
-                          color: Colors.blue,
-                          size: 30,
-                        ),
+                      child: Column(
+                        children: [
+                          IconButton(
+                            onPressed: () async {
+                              _imageWeb =
+                                  await TenantApiService().pickImageWeb();
+                              setState(() {});
+                              await _submit();
+                            },
+                            icon: Icon(
+                              Icons.cloud_upload_outlined,
+                              color: Colors.blue,
+                              size: 30,
+                            ),
+                          ),
+                          Text(
+                            "Upload KTP",
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
           ),

@@ -25,7 +25,7 @@ class PageContainer extends StatefulWidget {
 class _PageContainerState extends State<PageContainer> {
   bool sideBarExpanding = false;
 
-  void onTapMenu(String? menuTitle) {
+  void onTapMenu(String? menuTitle) async {
     setState(() {
       sideBarExpanding = !sideBarExpanding;
     });
@@ -63,6 +63,9 @@ class _PageContainerState extends State<PageContainer> {
         break;
       case "All Tables":
         Navigator.pushNamed(context, allTablesRoute);
+        break;
+      case "Transfer Ke Pemilik":
+        Navigator.pushNamed(context, paymentsTransferOwnerRoute);
         break;
       default:
     }
