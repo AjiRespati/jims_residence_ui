@@ -20,7 +20,6 @@ class _CreateExpenseContentState extends State<CreateExpenseContent>
   TextEditingController nameController = TextEditingController();
   TextEditingController amountController = TextEditingController();
   String? paymentMethod = "Bank Transfer";
-  String? transactionType = "Pemasukan";
   TextEditingController descriptionController = TextEditingController();
   double amount = 0;
   DateTime? expenseDate;
@@ -45,7 +44,7 @@ class _CreateExpenseContentState extends State<CreateExpenseContent>
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "Transaksi Lain",
+                "Pengeluaran",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ],
@@ -84,26 +83,6 @@ class _CreateExpenseContentState extends State<CreateExpenseContent>
             },
           ),
           SizedBox(height: 12),
-          DropdownButtonFormField<String>(
-            decoration: InputDecoration(
-              isDense: true,
-              label: Text("Jenis Transaksi"),
-            ),
-            value: transactionType,
-            items:
-                ['Pemasukan', 'Pengeluaran'].map((item) {
-                  return DropdownMenuItem<String>(
-                    value: item,
-                    child: Text(item),
-                  );
-                }).toList(),
-            onChanged: (value) {
-              transactionType = value ?? "Pemasukan";
-              setState(() {});
-            },
-          ),
-
-          SizedBox(height: 12),
           _buildDatePicker(
             context,
             "Tanggal",
@@ -132,7 +111,6 @@ class _CreateExpenseContentState extends State<CreateExpenseContent>
             keyboardType: TextInputType.name,
             controller: nameController,
           ),
-
           SizedBox(height: 12),
           DropdownButtonFormField<String>(
             decoration: InputDecoration(

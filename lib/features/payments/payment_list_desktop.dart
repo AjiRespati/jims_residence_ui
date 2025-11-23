@@ -352,8 +352,8 @@ class _PaymentListDesktopState extends State<PaymentListDesktop>
                     GradientElevatedButton(
                       gradient: const LinearGradient(
                         colors: [
-                          Color.fromARGB(199, 47, 107, 211),
-                          Color.fromARGB(199, 47, 74, 211),
+                          Color.fromARGB(200, 211, 47, 47),
+                          Color.fromARGB(200, 211, 47, 47),
                         ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
@@ -378,9 +378,9 @@ class _PaymentListDesktopState extends State<PaymentListDesktop>
                       child: Icon(Icons.add, size: 30),
                     ),
                     Text(
-                      "Tambah Transaksi",
+                      "Pengeluaran",
                       style: TextStyle(
-                        color: Color.fromARGB(199, 47, 107, 211),
+                        color: Color.fromARGB(200, 211, 47, 47),
                         fontWeight: FontWeight.w600,
                         fontSize: 12,
                       ),
