@@ -20,7 +20,7 @@ class TransferOwnerApiService extends BaseApiService {
         body: jsonEncode({
           'boardingHouseId': boardingHouseId,
           'amount': amount,
-          'expenseDate': generateDateString(transferDate),
+          'transferDate': generateDateString(transferDate),
           'description': description,
         }),
       ),

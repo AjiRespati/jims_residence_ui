@@ -1170,7 +1170,7 @@ class RoomViewModel extends ChangeNotifier {
         );
 
         isSuccess = true;
-        successMessage = "Pembayaran berhasil";
+        successMessage = "Transfer Ke Pemilik Berhasil";
       }
     } catch (e) {
       if (e.toString().contains("Please re-login")) {
