@@ -18,17 +18,15 @@ class CreateTransferOwnerContent extends StatefulWidget
 
 class _CreateTransferOwnerContentState extends State<CreateTransferOwnerContent>
     with GetItStateMixin {
-  TextEditingController nameController = TextEditingController();
   TextEditingController amountController = TextEditingController();
   String? paymentMethod = "Bank Transfer";
   TextEditingController descriptionController = TextEditingController();
   double amount = 0;
-  DateTime? expenseDate;
+  DateTime? transferDate;
 
   @override
   void dispose() {
     super.dispose();
-    nameController.dispose();
     amountController.dispose();
     descriptionController.dispose();
   }
@@ -88,10 +86,10 @@ class _CreateTransferOwnerContentState extends State<CreateTransferOwnerContent>
             context,
             "Tanggal",
             "Tanggal:  ",
-            expenseDate,
+            transferDate,
             (date) {
               setState(() {
-                expenseDate = date;
+                transferDate = date;
               });
             },
             dateTextStyle: TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
@@ -133,12 +131,9 @@ class _CreateTransferOwnerContentState extends State<CreateTransferOwnerContent>
                     ),
                     elevation: 3,
                     onPressed: () async {
-                      await get<RoomViewModel>().createExpense(
-                        category: null,
-                        name: nameController.text,
+                      await get<RoomViewModel>().createTransferOwner(
                         amount: amount,
-                        expenseDate: expenseDate,
-                        paymentMethod: paymentMethod,
+                        transferDate: transferDate,
                         description: descriptionController.text,
                       );
 

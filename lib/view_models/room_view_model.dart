@@ -11,6 +11,7 @@ import 'package:residenza/services/report_api_service.dart';
 import 'package:residenza/services/room_api_service.dart';
 import 'package:residenza/services/tenant_api_service.dart';
 import 'package:residenza/services/transaction_invoice_api_service.dart';
+import 'package:residenza/services/transfer_owner_api_service.dart';
 
 class RoomViewModel extends ChangeNotifier {
   bool _isUpdating = false;
@@ -1137,6 +1138,45 @@ class RoomViewModel extends ChangeNotifier {
       } else {
         errorMessage = e.toString().replaceAll('Exception: ', '');
         isBusy = false;
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
+  }
+
+  Future<void> createTransferOwner({
+    required double amount,
+    required DateTime? transferDate,
+    required String? description, // Optional
+  }) async {
+    isBusy = true;
+    try {
+      if (transferDate == null) {
+        isError = true;
+        errorMessage = "Tanggal pembayaran harus diisi";
+      } else if (amount < 1000) {
+        isError = true;
+        errorMessage = "Jumlah harus diisi";
+      } else if (roomKostId == null) {
+        isError = true;
+        errorMessage = "Kost harus dipilih";
+      } else {
+        await TransferOwnerApiService().createExpense(
+          boardingHouseId: roomKostId,
+          amount: amount,
+          transferDate: transferDate,
+          description: description,
+        );
+
+        isSuccess = true;
+        successMessage = "Pembayaran berhasil";
+      }
+    } catch (e) {
+      if (e.toString().contains("Please re-login")) {
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
         isError = true;
       }
     } finally {
