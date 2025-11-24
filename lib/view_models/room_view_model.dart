@@ -1149,6 +1149,8 @@ class RoomViewModel extends ChangeNotifier {
     required double amount,
     required DateTime? transferDate,
     required String? description, // Optional
+    required Uint8List? imageWeb,
+    required XFile? imageDevice,
   }) async {
     isBusy = true;
     try {
@@ -1167,11 +1169,51 @@ class RoomViewModel extends ChangeNotifier {
           amount: amount,
           transferDate: transferDate,
           description: description,
+          imageDevice: imageDevice,
+          imageWeb: imageWeb,
         );
 
         isSuccess = true;
         successMessage = "Transfer Ke Pemilik Berhasil";
       }
+    } catch (e) {
+      if (e.toString().contains("Please re-login")) {
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
+  }
+
+  Future<void> getAllTransferOwners({
+    required String? boardingHouseId,
+    required DateTime? dateFrom,
+    required DateTime? dateTo,
+  }) async {
+    isBusy = true;
+    transactionsTable = [];
+    totalInvoicesPaid = 0;
+    totalExpensesAmount = 0;
+
+    final now = DateTime.now();
+
+    try {
+      var resp = await TransferOwnerApiService().getAllTransferOwner(
+        boardingHouseId: boardingHouseId,
+        dateFrom: dateFrom ?? DateTime(now.year, now.month),
+        dateTo:
+            dateTo ??
+            DateTime(now.year, now.month + 1).subtract(Duration(seconds: 1)),
+      );
+
+      // transactionsTable = resp['data'];
+      // totalInvoicesPaid = resp['summary']['totalIncomeAmount'].toDouble();
+      // totalExpensesAmount = resp['summary']['totalExpensesAmount'].toDouble();
+
+      print(resp);
     } catch (e) {
       if (e.toString().contains("Please re-login")) {
         isNoSession = true;

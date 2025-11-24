@@ -1,7 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:residenza/utils/helpers.dart';
 import 'package:residenza/view_models/room_view_model.dart';
 import 'package:residenza/widgets/buttons/gradient_elevated_button.dart';
@@ -23,6 +28,32 @@ class _CreateTransferOwnerContentState extends State<CreateTransferOwnerContent>
   TextEditingController descriptionController = TextEditingController();
   double amount = 0;
   DateTime? transferDate;
+
+  final ImagePicker _picker = ImagePicker();
+  XFile? imageDevice;
+  Uint8List? imageWeb;
+
+  // ✅ Pick Image for Mobile
+  Future<void> _pickImageMobile(ImageSource source) async {
+    final XFile? pickedImage = await _picker.pickImage(source: source);
+    setState(() {
+      imageDevice = pickedImage;
+    });
+    // await _submit();
+  }
+
+  // ✅ Pick Image for Web
+  Future<void> _pickImageWeb() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+    );
+    if (result != null) {
+      setState(() {
+        imageWeb = result.files.first.bytes;
+      });
+      // await _submit();
+    }
+  }
 
   @override
   void dispose() {
@@ -109,6 +140,64 @@ class _CreateTransferOwnerContentState extends State<CreateTransferOwnerContent>
             ),
             controller: descriptionController,
           ),
+          SizedBox(height: 30),
+
+          // ✅ Image Preview
+          (imageDevice != null || imageWeb != null)
+              ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 250,
+                    width: 200,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    child:
+                        kIsWeb
+                            ? Image.memory(imageWeb!)
+                            : Image.file(File(imageDevice!.path)),
+                  ),
+                ],
+              )
+              : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Column(
+                    children: [
+                      SizedBox(
+                        width: 35,
+                        height: 35,
+                        child: ElevatedButton(
+                          onPressed:
+                              () =>
+                                  kIsWeb
+                                      ? _pickImageWeb()
+                                      : _pickImageMobile(ImageSource.gallery),
+                          style: ElevatedButton.styleFrom(
+                            shape: CircleBorder(),
+                            padding: EdgeInsets.all(0), // Adjust size
+                            elevation: 2, // Optional: change elevation
+                            backgroundColor:
+                                Colors.amber.shade400, // Button color
+                            foregroundColor: Colors.white, // Icon color
+                          ),
+                          child: Icon(Icons.upload, size: 30),
+                        ),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        "Upload bukti transfer",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
           SizedBox(height: 12),
           SizedBox(height: 30),
           SizedBox(
@@ -135,6 +224,8 @@ class _CreateTransferOwnerContentState extends State<CreateTransferOwnerContent>
                         amount: amount,
                         transferDate: transferDate,
                         description: descriptionController.text,
+                        imageDevice: imageDevice,
+                        imageWeb: imageWeb,
                       );
 
                       if (get<RoomViewModel>().isSuccess) {
@@ -151,7 +242,7 @@ class _CreateTransferOwnerContentState extends State<CreateTransferOwnerContent>
                       }
                       Navigator.pop(context);
                     },
-                    child: Text("Bayar"),
+                    child: Text("Transfer"),
                   ),
                 ],
               ),

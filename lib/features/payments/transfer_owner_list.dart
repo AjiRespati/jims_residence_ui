@@ -41,7 +41,7 @@ class _TransferOwnerListState extends State<TransferOwnerList>
         _boardingHouseId = null;
       }
 
-      model.getFinancialTransactions(
+      model.getAllTransferOwners(
         boardingHouseId: model.roomKostId,
         dateFrom:
             periode != null
@@ -350,10 +350,7 @@ class _TransferOwnerListState extends State<TransferOwnerList>
                   children: [
                     GradientElevatedButton(
                       gradient: const LinearGradient(
-                        colors: [
-                          Color.fromARGB(200, 211, 47, 47),
-                          Color.fromARGB(200, 211, 47, 47),
-                        ],
+                        colors: [Colors.blueAccent, Colors.blue],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
@@ -377,9 +374,9 @@ class _TransferOwnerListState extends State<TransferOwnerList>
                       child: Icon(Icons.add, size: 30),
                     ),
                     Text(
-                      "Pengeluaran",
+                      "Transfer Ke Pemilik",
                       style: TextStyle(
-                        color: Color.fromARGB(200, 211, 47, 47),
+                        color: Colors.blueAccent,
                         fontWeight: FontWeight.w600,
                         fontSize: 12,
                       ),
