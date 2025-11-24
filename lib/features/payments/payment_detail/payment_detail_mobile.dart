@@ -199,18 +199,29 @@ class _PaymentDetailMobileState extends State<PaymentDetailMobile>
                         SizedBox(height: 20),
 
                         invoice['invoicePaymentProofPath'] != null
-                            ? Container(
-                              height: 200,
-                              width: 250,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10),
+                            ? GestureDetector(
+                              onTap:
+                                  () => showPopup(
+                                    context,
+                                    null,
+                                    ApplicationInfo.baseUrl +
+                                        invoice['invoicePaymentProofPath'],
+                                    "${invoice['Tenant']['name']}",
+                                    false,
+                                  ),
+                              child: Container(
+                                height: 200,
+                                width: 250,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10),
+                                  ),
                                 ),
-                              ),
-                              child: Image.network(
-                                ApplicationInfo.baseUrl +
-                                    invoice['invoicePaymentProofPath'],
+                                child: Image.network(
+                                  ApplicationInfo.baseUrl +
+                                      invoice['invoicePaymentProofPath'],
+                                ),
                               ),
                             )
                             : Container(

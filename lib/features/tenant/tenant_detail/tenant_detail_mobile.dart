@@ -176,7 +176,7 @@ class _TenantDetailMobileState extends State<TenantDetailMobile>
                                       ? 40
                                       : 0,
                             ),
-                            child: InvoiceCard(item: item),
+                            child: InvoiceCard(item: item, isMobile: true),
                           );
                         },
                       ),
