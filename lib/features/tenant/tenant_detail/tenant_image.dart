@@ -7,12 +7,14 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:residenza/application_info.dart';
 import 'package:residenza/services/tenant_api_service.dart';
+import 'package:residenza/utils/helpers.dart';
 import 'package:residenza/view_models/room_view_model.dart';
 import 'package:universal_html/html.dart' as html;
 
 class TenantImage extends StatefulWidget with GetItStatefulWidgetMixin {
-  TenantImage({required this.tenant, super.key});
+  TenantImage({required this.tenant, required this.isMobile, super.key});
   final dynamic tenant;
+  final bool isMobile;
 
   @override
   State<TenantImage> createState() => _TenantImageState();
@@ -84,64 +86,6 @@ class _TenantImageState extends State<TenantImage> with GetItStateMixin {
     }
   }
 
-  void showPopup(BuildContext context, String imageUrl, String name) {
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (dialogContext) {
-        return Dialog(
-          insetPadding: const EdgeInsets.all(10),
-          backgroundColor: Colors.black87,
-          child: Stack(
-            alignment: Alignment.topRight,
-            children: [
-              InteractiveViewer(
-                panEnabled: true,
-                scaleEnabled: true,
-                minScale: 1.0,
-                maxScale: 4.0,
-                child:
-                    imageData != null
-                        ? Image.memory(
-                          imageData!,
-                          fit: BoxFit.contain,
-                          width: double.infinity,
-                        )
-                        : Image.network(
-                          imageUrl,
-                          fit: BoxFit.contain,
-                          width: double.infinity,
-                        ),
-              ),
-              Positioned(
-                top: 2,
-                right: 2,
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.download, color: Colors.blue.shade700),
-                      onPressed:
-                          () => downloadImageAndClosePopup(
-                            dialogContext,
-                            imageUrl,
-                            name,
-                          ),
-                    ),
-                    SizedBox(width: 5),
-                    IconButton(
-                      icon: Icon(Icons.close, color: Colors.blue.shade700),
-                      onPressed: () => Navigator.of(dialogContext).pop(),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
   Future<void> _submit() async {
     await get<RoomViewModel>().updateTenant(
       tenantId: widget.tenant['id'],
@@ -185,8 +129,10 @@ class _TenantImageState extends State<TenantImage> with GetItStateMixin {
                   onTap:
                       () => showPopup(
                         context,
+                        null,
                         ApplicationInfo.baseUrl + widget.tenant['NIKImagePath'],
                         "${widget.tenant['name']}",
+                        widget.isMobile,
                       ),
                   child: Container(
                     height: 120,

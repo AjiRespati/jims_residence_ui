@@ -554,6 +554,16 @@ class RoomViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  // TODO:  TRANSFER OWNER STATE
+
+  List<dynamic> _transferOwners = [];
+
+  List<dynamic> get transferOwners => _transferOwners;
+  set transferOwners(List<dynamic> val) {
+    _transferOwners = val;
+    notifyListeners();
+  }
+
   /// ################## ///
   ///       METHOD       ///
   /// ################## ///
@@ -1164,7 +1174,7 @@ class RoomViewModel extends ChangeNotifier {
         isError = true;
         errorMessage = "Kost harus dipilih";
       } else {
-        await TransferOwnerApiService().createExpense(
+        await TransferOwnerApiService().createTransferOwner(
           boardingHouseId: roomKostId,
           amount: amount,
           transferDate: transferDate,
@@ -1209,11 +1219,9 @@ class RoomViewModel extends ChangeNotifier {
             DateTime(now.year, now.month + 1).subtract(Duration(seconds: 1)),
       );
 
-      // transactionsTable = resp['data'];
+      transferOwners = resp['data'];
       // totalInvoicesPaid = resp['summary']['totalIncomeAmount'].toDouble();
       // totalExpensesAmount = resp['summary']['totalExpensesAmount'].toDouble();
-
-      print(resp);
     } catch (e) {
       if (e.toString().contains("Please re-login")) {
         isNoSession = true;

@@ -117,7 +117,7 @@ class _TenantDetailDesktopState extends State<TenantDetailDesktop>
                             child: SingleChildScrollView(
                               child: Column(
                                 children: [
-                                  TenantImage(tenant: _tenant),
+                                  TenantImage(tenant: _tenant, isMobile: false),
 
                                   Divider(),
 

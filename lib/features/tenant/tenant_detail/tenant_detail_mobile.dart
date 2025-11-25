@@ -80,7 +80,7 @@ class _TenantDetailMobileState extends State<TenantDetailMobile>
               Expanded(
                 child: Column(
                   children: [
-                    TenantImage(tenant: _tenant),
+                    TenantImage(tenant: _tenant, isMobile: true),
 
                     Divider(),
 

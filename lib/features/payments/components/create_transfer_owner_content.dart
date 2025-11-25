@@ -229,12 +229,12 @@ class _CreateTransferOwnerContentState extends State<CreateTransferOwnerContent>
                       );
 
                       if (get<RoomViewModel>().isSuccess) {
-                        await get<RoomViewModel>().getFinancialOverview(
-                          boardingHouseId: get<RoomViewModel>().roomKostId,
-                          dateFrom: null,
-                          dateTo: null,
-                        );
-                        await get<RoomViewModel>().getFinancialTransactions(
+                        // await get<RoomViewModel>().getFinancialOverview(
+                        //   boardingHouseId: get<RoomViewModel>().roomKostId,
+                        //   dateFrom: null,
+                        //   dateTo: null,
+                        // );
+                        await get<RoomViewModel>().getAllTransferOwners(
                           boardingHouseId: get<RoomViewModel>().roomKostId,
                           dateFrom: null,
                           dateTo: null,

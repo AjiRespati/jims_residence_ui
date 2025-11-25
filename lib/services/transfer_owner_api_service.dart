@@ -8,7 +8,7 @@ import 'package:residenza/utils/helpers.dart';
 import 'base_api_service.dart'; // Assuming base_api_service.dart is in the same directory
 
 class TransferOwnerApiService extends BaseApiService {
-  Future<bool> createExpense({
+  Future<bool> createTransferOwner({
     required String? boardingHouseId,
     required double amount,
     required DateTime transferDate,
@@ -43,7 +43,7 @@ class TransferOwnerApiService extends BaseApiService {
     String? token = await getToken(); // Using the base class method
 
     var request = http.MultipartRequest(
-      "PUT",
+      "POST",
       Uri.parse('$baseUrl/transferOwner'),
     );
     request.headers['Authorization'] = "Bearer $token";

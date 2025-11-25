@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:residenza/features/payments/components/create_transfer_owner_content.dart';
-import 'package:residenza/features/payments/components/table_item.dart';
+import 'package:residenza/features/payments/components/transfer_owner_item.dart';
 import 'package:residenza/utils/helpers.dart';
 import 'package:residenza/view_models/room_view_model.dart';
 import 'package:residenza/widgets/buttons/gradient_elevated_button.dart';
@@ -67,7 +67,7 @@ class _TransferOwnerListState extends State<TransferOwnerList>
 
   @override
   Widget build(BuildContext context) {
-    watchOnly((RoomViewModel x) => x.transactionsTable);
+    watchOnly((RoomViewModel x) => x.transferOwners);
     watchOnly((RoomViewModel x) => x.roomKostId);
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -268,11 +268,10 @@ class _TransferOwnerListState extends State<TransferOwnerList>
                   ),
                   Expanded(
                     child: ListView.builder(
-                      itemCount: get<RoomViewModel>().transactionsTable.length,
+                      itemCount: get<RoomViewModel>().transferOwners.length,
                       itemBuilder: (context, idx) {
-                        dynamic item =
-                            get<RoomViewModel>().transactionsTable[idx];
-                        return TableItem(item: item);
+                        dynamic item = get<RoomViewModel>().transferOwners[idx];
+                        return TransferOwnerItem(item: item, isMobile: false);
                       },
                     ),
                   ),
