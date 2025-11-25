@@ -1197,6 +1197,8 @@ class RoomViewModel extends ChangeNotifier {
       if (e.toString().contains("Please re-login")) {
         isNoSession = true;
       } else {
+        print('disinikah???');
+        print(e);
         errorMessage = e.toString().replaceAll('Exception: ', '');
         isError = true;
       }
@@ -1227,7 +1229,7 @@ class RoomViewModel extends ChangeNotifier {
       );
 
       transferOwners = resp['data']['transferOwners'];
-      totalTransferOwnerAmount = resp['data']['totalAmount'].toDouble();
+      totalTransferOwnerAmount = resp?['data']?['totalAmount'] ?? 0.toDouble();
       // totalInvoicesPaid = resp['summary']['totalIncomeAmount'].toDouble();
     } catch (e) {
       if (e.toString().contains("Please re-login")) {
@@ -1334,8 +1336,9 @@ class RoomViewModel extends ChangeNotifier {
 
       invoices = resp['data']['invoices'];
       expenses = resp['data']['expenses'];
-      totalInvoicesPaid = resp['data']['totalInvoicesPaid'].toDouble();
-      totalExpensesAmount = resp['data']['totalExpensesAmount'].toDouble();
+      totalInvoicesPaid = resp?['data']?['totalInvoicesPaid'] ?? 0.toDouble();
+      totalExpensesAmount =
+          resp?['data']?['totalExpensesAmount'] ?? 0.toDouble();
     } catch (e) {
       if (e.toString().contains("Please re-login")) {
         isNoSession = true;
@@ -1370,8 +1373,10 @@ class RoomViewModel extends ChangeNotifier {
       );
 
       transactionsTable = resp['data'];
-      totalInvoicesPaid = resp['summary']['totalIncomeAmount'].toDouble();
-      totalExpensesAmount = resp['summary']['totalExpensesAmount'].toDouble();
+      totalInvoicesPaid =
+          resp?['summary']?['totalIncomeAmount'] ?? 0.toDouble();
+      totalExpensesAmount =
+          resp?['summary']?['totalExpensesAmount'] ?? 0.toDouble();
     } catch (e) {
       if (e.toString().contains("Please re-login")) {
         isNoSession = true;

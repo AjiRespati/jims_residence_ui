@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
@@ -100,8 +99,7 @@ class TransferOwnerApiService extends BaseApiService {
       }
 
       if (response.statusCode == 200) {
-        final responseData = json.decode(response.body);
-        return responseData;
+        return true;
       } else {
         throw Exception(
           'Failed to transferOwner. Status: ${response.statusCode}. Body: ${response.body}',

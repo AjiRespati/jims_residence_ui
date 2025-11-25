@@ -79,7 +79,7 @@ class _MonthSelectorDropdownState extends State<MonthSelectorDropdown> {
                 style: TextStyle(
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                   fontSize: 16,
-                  color: Colors.black,
+                  color: isSelected ? Colors.blueAccent : Colors.black,
                 ),
               ),
             );

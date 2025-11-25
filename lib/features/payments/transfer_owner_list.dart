@@ -129,19 +129,7 @@ class _TransferOwnerListState extends State<TransferOwnerList>
                                   get<RoomViewModel>().roomKostId = item['id'];
                                   _boardingHouseId = item['id'];
 
-                                  // get<RoomViewModel>().getFinancialOverview(
-                                  //   boardingHouseId: _boardingHouseId,
-                                  //   dateFrom: _dateFrom,
-                                  //   dateTo: _dateTo,
-                                  // );
-
-                                  // get<RoomViewModel>().getMonthlyReport(
-                                  //   boardingHouseId: _boardingHouseId,
-                                  //   month: _dateFrom?.month ?? DateTime.now().month,
-                                  //   year: _dateFrom?.year ?? DateTime.now().year,
-                                  // );
-
-                                  get<RoomViewModel>().getFinancialTransactions(
+                                  get<RoomViewModel>().getAllTransferOwners(
                                     boardingHouseId: _boardingHouseId,
                                     dateFrom:
                                         _dateFrom ??
@@ -171,19 +159,7 @@ class _TransferOwnerListState extends State<TransferOwnerList>
                                   );
                                   get<RoomViewModel>().periode = dateFrom;
 
-                                  // get<RoomViewModel>().getFinancialOverview(
-                                  //   boardingHouseId: _boardingHouseId,
-                                  //   dateFrom: _dateFrom,
-                                  //   dateTo: _dateTo,
-                                  // );
-
-                                  // get<RoomViewModel>().getMonthlyReport(
-                                  //   boardingHouseId: _boardingHouseId,
-                                  //   month: _dateFrom?.month ?? DateTime.now().month,
-                                  //   year: _dateFrom?.year ?? DateTime.now().year,
-                                  // );
-
-                                  get<RoomViewModel>().getFinancialTransactions(
+                                  get<RoomViewModel>().getAllTransferOwners(
                                     boardingHouseId: _boardingHouseId,
                                     dateFrom:
                                         _dateFrom ??
@@ -317,7 +293,7 @@ class _TransferOwnerListState extends State<TransferOwnerList>
                             ],
                           ),
                         ),
-                        SizedBox(width: 30),
+                        SizedBox(width: 130),
                       ],
                     ),
                   ),
@@ -325,7 +301,7 @@ class _TransferOwnerListState extends State<TransferOwnerList>
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.only(bottom: 100, right: 30),
+                padding: const EdgeInsets.only(bottom: 80, right: 30),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [

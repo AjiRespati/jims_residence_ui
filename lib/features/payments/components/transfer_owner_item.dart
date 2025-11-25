@@ -141,7 +141,7 @@ class TransferOwnerItem extends StatelessWidget with GetItMixin {
                       ],
                     ),
                   ),
-                  SizedBox(width: 20),
+                  SizedBox(width: 120),
                 ],
               ),
             ),
