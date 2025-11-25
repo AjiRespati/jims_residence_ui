@@ -28,11 +28,11 @@ class TransferOwnerItem extends StatelessWidget with GetItMixin {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(width: 20),
                   Expanded(
-                    flex: 15,
+                    flex: 6,
                     child: Row(
                       children: [
                         item['proofPath'] != null
@@ -75,13 +75,15 @@ class TransferOwnerItem extends StatelessWidget with GetItMixin {
                               ),
                             ),
 
-                        SizedBox(width: 10),
+                        SizedBox(width: 20),
 
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              item['description'],
+                              formatDateFromYearToDay(
+                                DateTime.parse(item['transferDate']),
+                              ),
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
@@ -90,13 +92,8 @@ class TransferOwnerItem extends StatelessWidget with GetItMixin {
                             Padding(
                               padding: const EdgeInsets.only(left: 20),
                               child: Text(
-                                formatDateFromYearToDay(
-                                  DateTime.parse(item['transferDate']),
-                                ),
-                                style: TextStyle(
-                                  // fontWeight: FontWeight.bold,
-                                  fontSize: 12,
-                                ),
+                                item['BoardingHouse']['name'],
+                                style: TextStyle(fontSize: 12),
                               ),
                             ),
                           ],
@@ -110,7 +107,16 @@ class TransferOwnerItem extends StatelessWidget with GetItMixin {
                       Container(height: 35, width: 1, color: Colors.grey),
                     ],
                   ),
-                  Expanded(flex: 6, child: SizedBox()),
+                  Expanded(
+                    flex: 10,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20),
+                      child: Text(
+                        item['description'],
+                        // style: TextStyle(fontSize: 12),
+                      ),
+                    ),
+                  ),
                   SizedBox(width: 20),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -120,7 +126,7 @@ class TransferOwnerItem extends StatelessWidget with GetItMixin {
                   ),
 
                   Expanded(
-                    flex: 6,
+                    flex: 4,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [

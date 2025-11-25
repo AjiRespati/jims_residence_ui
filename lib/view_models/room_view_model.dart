@@ -557,10 +557,17 @@ class RoomViewModel extends ChangeNotifier {
   // TODO:  TRANSFER OWNER STATE
 
   List<dynamic> _transferOwners = [];
+  double _totalTransferOwnerAmount = 0;
 
   List<dynamic> get transferOwners => _transferOwners;
   set transferOwners(List<dynamic> val) {
     _transferOwners = val;
+    notifyListeners();
+  }
+
+  double get totalTransferOwnerAmount => _totalTransferOwnerAmount;
+  set totalTransferOwnerAmount(double val) {
+    _totalTransferOwnerAmount = val;
     notifyListeners();
   }
 
@@ -1219,9 +1226,9 @@ class RoomViewModel extends ChangeNotifier {
             DateTime(now.year, now.month + 1).subtract(Duration(seconds: 1)),
       );
 
-      transferOwners = resp['data'];
+      transferOwners = resp['data']['transferOwners'];
+      totalTransferOwnerAmount = resp['data']['totalAmount'].toDouble();
       // totalInvoicesPaid = resp['summary']['totalIncomeAmount'].toDouble();
-      // totalExpensesAmount = resp['summary']['totalExpensesAmount'].toDouble();
     } catch (e) {
       if (e.toString().contains("Please re-login")) {
         isNoSession = true;

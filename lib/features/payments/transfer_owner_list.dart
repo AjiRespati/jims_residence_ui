@@ -217,7 +217,22 @@ class _TransferOwnerListState extends State<TransferOwnerList>
                       children: [
                         SizedBox(width: 30),
                         Expanded(
-                          flex: 15,
+                          flex: 6,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Tanggal",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          flex: 10,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -225,22 +240,7 @@ class _TransferOwnerListState extends State<TransferOwnerList>
                                 "Keterangan",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          flex: 6,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Debit",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
+                                  fontSize: 20,
                                 ),
                               ),
                             ],
@@ -248,12 +248,12 @@ class _TransferOwnerListState extends State<TransferOwnerList>
                         ),
                         SizedBox(width: 20),
                         Expanded(
-                          flex: 6,
+                          flex: 4,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                "Kredit",
+                                "Jumlah",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
@@ -298,33 +298,15 @@ class _TransferOwnerListState extends State<TransferOwnerList>
                             ],
                           ),
                         ),
-                        Expanded(
-                          flex: 6,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                formatCurrency(
-                                  get<RoomViewModel>().totalExpensesAmount,
-                                ),
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  color: Colors.red.shade600,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
                         SizedBox(width: 20),
                         Expanded(
-                          flex: 6,
+                          flex: 4,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Text(
                                 formatCurrency(
-                                  get<RoomViewModel>().totalInvoicesPaid,
+                                  get<RoomViewModel>().totalTransferOwnerAmount,
                                 ),
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
