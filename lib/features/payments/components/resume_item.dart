@@ -68,6 +68,25 @@ class ResumeItem extends StatelessWidget {
                             ),
                           ],
                         ),
+
+                        SizedBox(height: 15),
+                        Text(
+                          "Transfer Ke Pemilik",
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ),
+                        Row(
+                          children: [
+                            SizedBox(width: 10),
+                            Text(
+                              formatCurrency(item['totalTransferOwner'] ?? 0),
+                              style: TextStyle(
+                                color: Colors.green.shade700,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
