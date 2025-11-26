@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:residenza/features/payments/components/create_expense_content.dart';
+import 'package:residenza/features/payments/components/create_transfer_owner_content.dart';
 import 'package:residenza/features/payments/components/payment_list_mobile.dart';
 import 'package:residenza/features/payments/components/payment_resume_mobile.dart';
+import 'package:residenza/features/payments/components/transfer_owner_mobile.dart';
 import 'package:residenza/utils/helpers.dart';
 import 'package:residenza/view_models/room_view_model.dart';
 import 'package:residenza/widgets/mobile_navbar.dart';
@@ -17,16 +19,20 @@ class PaymentsMobile extends StatefulWidget with GetItStatefulWidgetMixin {
 class _PaymentsMobileState extends State<PaymentsMobile>
     with GetItStateMixin, SingleTickerProviderStateMixin {
   late TabController _tabController;
+  int tabCount = 3;
+  int _tabIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: tabCount, vsync: this);
     _tabController.addListener(() {
       // kalau index tidak berubah berarti swipe.
       if (!_tabController.indexIsChanging) {
         // get<StockViewModel>().stockTabIndex = _tabController.index;
       }
+      _tabIndex = _tabController.index;
+      setState(() {});
     });
   }
 
@@ -58,6 +64,7 @@ class _PaymentsMobileState extends State<PaymentsMobile>
           indicatorWeight: 6,
           labelStyle: TextStyle(fontWeight: FontWeight.w600),
           tabs: [
+            Tab(icon: Icon(Icons.currency_exchange), text: "Transfer Pemilik"),
             Tab(icon: Icon(Icons.list_alt), text: "List"),
             Tab(icon: Icon(Icons.note_add_outlined), text: "Resume"),
           ],
@@ -65,37 +72,81 @@ class _PaymentsMobileState extends State<PaymentsMobile>
       ),
       body: TabBarView(
         controller: _tabController,
-        children: [PaymentListMobile(), PaymentResumeMobile()],
+        children: [
+          TransferOwnerMobile(),
+          PaymentListMobile(),
+          PaymentResumeMobile(),
+        ],
       ),
 
       bottomNavigationBar: MobileNavbar(selectedindex: 3),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
-      floatingActionButton: SizedBox(
-        height: 40,
-        child: FloatingActionButton.extended(
-          extendedPadding: EdgeInsets.symmetric(horizontal: 10),
-          label: Text(
-            "Pengeluaran",
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
-          ),
-          backgroundColor: const Color.fromARGB(200, 211, 47, 47),
-          onPressed: () async {
-            await showModalBottomSheet(
-              isScrollControlled: true,
-              context: context,
-              builder: (context) {
-                return Padding(
-                  padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom,
+      floatingActionButton:
+          _tabIndex == 0
+              ? SizedBox(
+                height: 40,
+                child: FloatingActionButton.extended(
+                  extendedPadding: EdgeInsets.symmetric(horizontal: 10),
+                  label: Text(
+                    "Transfer Ke Pemilik",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
-                  child: SingleChildScrollView(child: CreateExpenseContent()),
-                );
-              },
-            );
-          },
-          icon: Icon(Icons.add, color: Colors.white),
-        ),
-      ),
+                  backgroundColor: Colors.blue,
+                  onPressed: () async {
+                    await showModalBottomSheet(
+                      isScrollControlled: true,
+                      context: context,
+                      builder: (context) {
+                        return Padding(
+                          padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom,
+                          ),
+                          child: SingleChildScrollView(
+                            child: CreateTransferOwnerContent(),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  icon: Icon(Icons.add, color: Colors.white),
+                ),
+              )
+              : _tabIndex == 1
+              ? SizedBox(
+                height: 40,
+                child: FloatingActionButton.extended(
+                  extendedPadding: EdgeInsets.symmetric(horizontal: 10),
+                  label: Text(
+                    "Pengeluaran",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  backgroundColor: const Color.fromARGB(200, 211, 47, 47),
+                  onPressed: () async {
+                    await showModalBottomSheet(
+                      isScrollControlled: true,
+                      context: context,
+                      builder: (context) {
+                        return Padding(
+                          padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom,
+                          ),
+                          child: SingleChildScrollView(
+                            child: CreateExpenseContent(),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  icon: Icon(Icons.add, color: Colors.white),
+                ),
+              )
+              : null,
     );
   }
 }

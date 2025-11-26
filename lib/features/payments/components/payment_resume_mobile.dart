@@ -62,7 +62,7 @@ class _PaymentResumeMobileState extends State<PaymentResumeMobile>
                 children: [
                   SizedBox(width: 20),
                   Flexible(
-                    flex: 7,
+                    flex: 6,
                     child: DropdownButtonFormField<String>(
                       decoration: InputDecoration(
                         labelText: "Pilih Kost",

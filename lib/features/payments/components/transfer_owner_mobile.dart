@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
-import 'package:residenza/features/payments/components/invoice_item.dart';
+import 'package:residenza/application_info.dart';
 import 'package:residenza/utils/helpers.dart';
 import 'package:residenza/view_models/room_view_model.dart';
 import 'package:residenza/widgets/month_selector_dropdown.dart';
 
-class PaymentListMobile extends StatefulWidget with GetItStatefulWidgetMixin {
-  PaymentListMobile({super.key});
+class TransferOwnerMobile extends StatefulWidget with GetItStatefulWidgetMixin {
+  TransferOwnerMobile({super.key});
 
   @override
-  State<PaymentListMobile> createState() => _PaymentListMobileState();
+  State<TransferOwnerMobile> createState() => _TransferOwnerMobileState();
 }
 
-class _PaymentListMobileState extends State<PaymentListMobile>
+class _TransferOwnerMobileState extends State<TransferOwnerMobile>
     with GetItStateMixin {
   final now = DateTime.now();
   String? _boardingHouseId;
@@ -38,12 +38,12 @@ class _PaymentListMobileState extends State<PaymentListMobile>
         _boardingHouseId = null;
       }
 
-      model.getFinancialTransactions(
+      model.getAllTransferOwners(
         boardingHouseId: model.roomKostId,
         dateFrom:
             periode != null
-                ? DateTime(periode.year, periode.month)
-                : DateTime(now.year, now.month),
+                ? DateTime(periode.year, periode.month, 1)
+                : DateTime(now.year, now.month, 1),
         dateTo:
             periode != null
                 ? DateTime(
@@ -64,7 +64,7 @@ class _PaymentListMobileState extends State<PaymentListMobile>
 
   @override
   Widget build(BuildContext context) {
-    watchOnly((RoomViewModel x) => x.invoices);
+    watchOnly((RoomViewModel x) => x.transferOwners);
     watchOnly((RoomViewModel x) => x.roomKostId);
 
     return Column(
@@ -117,16 +117,10 @@ class _PaymentListMobileState extends State<PaymentListMobile>
                         get<RoomViewModel>().roomKostId = item['id'];
                         _boardingHouseId = item['id'];
 
-                        get<RoomViewModel>().getFinancialOverview(
+                        get<RoomViewModel>().getAllTransferOwners(
                           boardingHouseId: _boardingHouseId,
                           dateFrom: _dateFrom,
                           dateTo: _dateTo?.subtract(Duration(seconds: 1)),
-                        );
-
-                        get<RoomViewModel>().getMonthlyReport(
-                          boardingHouseId: _boardingHouseId,
-                          month: _dateFrom?.month ?? DateTime.now().month,
-                          year: _dateFrom?.year ?? DateTime.now().year,
                         );
                       },
                     ),
@@ -143,16 +137,10 @@ class _PaymentListMobileState extends State<PaymentListMobile>
                         _dateTo = dateTo;
                         get<RoomViewModel>().periode = dateFrom;
 
-                        get<RoomViewModel>().getFinancialOverview(
+                        get<RoomViewModel>().getAllTransferOwners(
                           boardingHouseId: _boardingHouseId,
                           dateFrom: _dateFrom,
                           dateTo: _dateTo?.subtract(Duration(seconds: 1)),
-                        );
-
-                        get<RoomViewModel>().getMonthlyReport(
-                          boardingHouseId: _boardingHouseId,
-                          month: _dateFrom?.month ?? DateTime.now().month,
-                          year: _dateFrom?.year ?? DateTime.now().year,
                         );
                       },
                       selectedMonth: watchOnly((RoomViewModel x) => x.periode),
@@ -170,7 +158,7 @@ class _PaymentListMobileState extends State<PaymentListMobile>
           children: [
             SizedBox(width: 20),
             Text(
-              "Tagihan (${get<RoomViewModel>().invoices.length})",
+              "Transfer Ke Pemilik (${get<RoomViewModel>().transferOwners.length})",
               style: TextStyle(
                 color: Colors.blue.shade700,
                 fontSize: 18,
@@ -179,7 +167,7 @@ class _PaymentListMobileState extends State<PaymentListMobile>
             ),
             Spacer(),
             Text(
-              formatCurrency(get<RoomViewModel>().totalInvoicesPaid),
+              formatCurrency(get<RoomViewModel>().totalTransferOwnerAmount),
               style: TextStyle(
                 color: Colors.blue.shade700,
                 fontSize: 18,
@@ -192,51 +180,9 @@ class _PaymentListMobileState extends State<PaymentListMobile>
         SizedBox(height: 4),
         Expanded(
           child: ListView.builder(
-            itemCount: get<RoomViewModel>().invoices.length,
+            itemCount: get<RoomViewModel>().transferOwners.length,
             itemBuilder: (context, idx) {
-              dynamic invoice = get<RoomViewModel>().invoices[idx];
-              dynamic tenant = invoice['Tenant'];
-              dynamic room = invoice['Room'];
-              dynamic transactions = invoice['Transactions'];
-              return InvoiceItem(
-                invoice: invoice,
-                tenant: tenant,
-                room: room,
-                transactions: transactions,
-              );
-            },
-          ),
-        ),
-        Divider(thickness: 0.5),
-        Row(
-          children: [
-            SizedBox(width: 20),
-            Text(
-              "Pengeluaran (${get<RoomViewModel>().expenses.length})",
-              style: TextStyle(
-                color: Colors.red.shade700,
-                fontSize: 18,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            Spacer(),
-            Text(
-              formatCurrency(get<RoomViewModel>().totalExpensesAmount),
-              style: TextStyle(
-                color: Colors.red.shade700,
-                fontSize: 18,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            SizedBox(width: 20),
-          ],
-        ),
-        SizedBox(height: 4),
-        Expanded(
-          child: ListView.builder(
-            itemCount: get<RoomViewModel>().expenses.length,
-            itemBuilder: (context, idx) {
-              dynamic expense = get<RoomViewModel>().expenses[idx];
+              dynamic item = get<RoomViewModel>().transferOwners[idx];
               return Padding(
                 padding: EdgeInsets.only(
                   left: 8,
@@ -257,6 +203,51 @@ class _PaymentListMobileState extends State<PaymentListMobile>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
+                          flex: 3,
+                          child:
+                              item['proofPath'] != null
+                                  ? GestureDetector(
+                                    onTap:
+                                        () => showPopup(
+                                          context,
+                                          null,
+                                          ApplicationInfo.baseUrl +
+                                              item['proofPath'],
+                                          "bukti_transfer",
+                                          true,
+                                        ),
+                                    child: Container(
+                                      height: 60,
+                                      width: 85,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.grey),
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(10),
+                                        ),
+                                      ),
+                                      child: Image.network(
+                                        ApplicationInfo.baseUrl +
+                                            item['proofPath'],
+                                      ),
+                                    ),
+                                  )
+                                  : Container(
+                                    height: 60,
+                                    width: 85,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey),
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(10),
+                                      ),
+                                    ),
+                                    child: Icon(
+                                      Icons.image,
+                                      size: 50,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                        ),
+                        Expanded(
                           flex: 15,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -265,7 +256,9 @@ class _PaymentListMobileState extends State<PaymentListMobile>
                                 children: [
                                   Flexible(
                                     child: Text(
-                                      expense['name'],
+                                      formatDateFromYearToDay(
+                                        DateTime.parse(item['transferDate']),
+                                      ),
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,
@@ -275,17 +268,13 @@ class _PaymentListMobileState extends State<PaymentListMobile>
                                   ),
                                 ],
                               ),
-                              Text(expense['BoardingHouse']['name']),
+                              Text(item['BoardingHouse']['name']),
                               SizedBox(height: 4),
-                              Text(
-                                expense['createBy'],
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
                               Row(
                                 children: [
                                   Flexible(
                                     child: Text(
-                                      expense['description'],
+                                      item['description'],
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -301,28 +290,28 @@ class _PaymentListMobileState extends State<PaymentListMobile>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                formatCurrency(expense['amount'].toDouble()),
+                                formatCurrency(item?['amount'] ?? 0.toDouble()),
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
                                 ),
                               ),
-                              SizedBox(height: 10),
-                              Text(
-                                expense['paymentMethod'],
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              Row(
-                                children: [
-                                  SizedBox(width: 20),
-                                  Text(
-                                    formatDateString(expense['expenseDate']),
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              // SizedBox(height: 10),
+                              // Text(
+                              //   item['paymentMethod'],
+                              //   style: TextStyle(fontWeight: FontWeight.bold),
+                              // ),
+                              // Row(
+                              //   children: [
+                              //     SizedBox(width: 20),
+                              //     Text(
+                              //       formatDateString(item['expenseDate']),
+                              //       style: TextStyle(
+                              //         fontWeight: FontWeight.bold,
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
                             ],
                           ),
                         ),

@@ -1,9 +1,16 @@
-import 'dart:math';
+// ignore_for_file: use_build_context_synchronously
 
+import 'dart:math';
+import 'dart:typed_data';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:residenza/routes/route_names.dart';
+import 'package:residenza/utils/calendar_with_sunday.dart';
 import 'package:residenza/view_models/room_view_model.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import 'package:universal_html/html.dart' as html; // Wasm-safe
 
 String generateRandomValueKey() {
   var random = Random();
@@ -108,31 +115,20 @@ Future<DateTime?> showCustomDatePicker({
   required DateTime initialDate,
   required DateTime firstDate,
 }) async {
-  DateTime? selectedDate;
-
-  await showDialog<DateTime>(
+  return await showDialog<DateTime>(
     context: context,
     builder: (BuildContext context) {
       return Dialog(
         surfaceTintColor: Colors.transparent,
         backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Container(
-          constraints: BoxConstraints(maxWidth: 500),
-          child: CalendarDatePicker(
-            initialDate: initialDate, // DateTime.now(),
-            firstDate: firstDate, //DateTime(1900),
-            lastDate: DateTime(3000),
-            onDateChanged: (DateTime date) {
-              selectedDate = date;
-              Navigator.of(context).pop(date); // Close and return date
-            },
-          ),
+          constraints: BoxConstraints(maxWidth: 450, maxHeight: 500),
+          child: CalendarWithRedSunday(),
         ),
       );
     },
   );
-
-  return selectedDate;
 }
 
 Color generateRoomStatusColor({required String? roomSatus}) {
@@ -216,4 +212,119 @@ String invoiceStatusText(String status) {
     default:
       return status;
   }
+}
+
+Future<void> saveImage(
+  BuildContext context,
+  Uint8List bytes,
+  String name,
+  String format,
+) async {
+  final timestamp = DateTime.now().millisecondsSinceEpoch;
+  final fileName = '${name}_$timestamp.$format';
+
+  if (kIsWeb) {
+    try {
+      final blob = html.Blob([bytes]);
+      final url = html.Url.createObjectUrlFromBlob(blob);
+      html.AnchorElement(href: url)
+        ..setAttribute("download", fileName)
+        ..click();
+      html.Url.revokeObjectUrl(url);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Image download started')));
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Download not supported in this environment'),
+        ),
+      );
+    }
+  }
+}
+
+Future<void> downloadImageAndClosePopup(
+  BuildContext dialogContext,
+  String imageUrl,
+  String name,
+) async {
+  // setState(() {
+  //   isDownloading = true;
+  // });
+  final response = await http.get(Uri.parse(imageUrl));
+  // if (response.statusCode == 200) {
+  //   setState(() {
+  //     imageData = response.bodyBytes;
+  //     isDownloading = false;
+  //   });
+  await saveImage(dialogContext, response.bodyBytes, name, 'jpg');
+  Navigator.of(dialogContext).pop();
+}
+
+void showPopup(
+  BuildContext context,
+  Uint8List? imageData,
+  String imageUrl,
+  String name,
+  bool isMobile,
+) {
+  showDialog(
+    context: context,
+    barrierDismissible: true,
+    builder: (dialogContext) {
+      return Dialog(
+        insetPadding: const EdgeInsets.all(10),
+        backgroundColor: Colors.black87,
+        child: SizedBox(
+          width: isMobile ? null : MediaQuery.of(context).size.width / 2,
+          child: Stack(
+            alignment: Alignment.topRight,
+            children: [
+              InteractiveViewer(
+                panEnabled: true,
+                scaleEnabled: true,
+                minScale: 1.0,
+                maxScale: 4.0,
+                child:
+                    imageData != null
+                        ? Image.memory(
+                          imageData,
+                          fit: BoxFit.contain,
+                          width: double.infinity,
+                        )
+                        : Image.network(
+                          imageUrl,
+                          fit: BoxFit.contain,
+                          width: double.infinity,
+                        ),
+              ),
+              Positioned(
+                top: 2,
+                right: 2,
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.download, color: Colors.blue.shade700),
+                      onPressed:
+                          () => downloadImageAndClosePopup(
+                            dialogContext,
+                            imageUrl,
+                            name,
+                          ),
+                    ),
+                    SizedBox(width: 5),
+                    IconButton(
+                      icon: Icon(Icons.close, color: Colors.blue.shade700),
+                      onPressed: () => Navigator.of(dialogContext).pop(),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
 }

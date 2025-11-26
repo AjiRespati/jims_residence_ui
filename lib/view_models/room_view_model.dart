@@ -11,6 +11,7 @@ import 'package:residenza/services/report_api_service.dart';
 import 'package:residenza/services/room_api_service.dart';
 import 'package:residenza/services/tenant_api_service.dart';
 import 'package:residenza/services/transaction_invoice_api_service.dart';
+import 'package:residenza/services/transfer_owner_api_service.dart';
 
 class RoomViewModel extends ChangeNotifier {
   bool _isUpdating = false;
@@ -550,6 +551,23 @@ class RoomViewModel extends ChangeNotifier {
   List<dynamic> get charges => _charges;
   set charges(List<dynamic> val) {
     _charges = val;
+    notifyListeners();
+  }
+
+  // TODO:  TRANSFER OWNER STATE
+
+  List<dynamic> _transferOwners = [];
+  double _totalTransferOwnerAmount = 0;
+
+  List<dynamic> get transferOwners => _transferOwners;
+  set transferOwners(List<dynamic> val) {
+    _transferOwners = val;
+    notifyListeners();
+  }
+
+  double get totalTransferOwnerAmount => _totalTransferOwnerAmount;
+  set totalTransferOwnerAmount(double val) {
+    _totalTransferOwnerAmount = val;
     notifyListeners();
   }
 
@@ -1144,6 +1162,87 @@ class RoomViewModel extends ChangeNotifier {
     }
   }
 
+  Future<void> createTransferOwner({
+    required double amount,
+    required DateTime? transferDate,
+    required String? description, // Optional
+    required Uint8List? imageWeb,
+    required XFile? imageDevice,
+  }) async {
+    isBusy = true;
+    try {
+      if (transferDate == null) {
+        isError = true;
+        errorMessage = "Tanggal pembayaran harus diisi";
+      } else if (amount < 1000) {
+        isError = true;
+        errorMessage = "Jumlah harus diisi";
+      } else if (roomKostId == null) {
+        isError = true;
+        errorMessage = "Kost harus dipilih";
+      } else {
+        await TransferOwnerApiService().createTransferOwner(
+          boardingHouseId: roomKostId,
+          amount: amount,
+          transferDate: transferDate,
+          description: description,
+          imageDevice: imageDevice,
+          imageWeb: imageWeb,
+        );
+
+        isSuccess = true;
+        successMessage = "Transfer Ke Pemilik Berhasil";
+      }
+    } catch (e) {
+      if (e.toString().contains("Please re-login")) {
+        isNoSession = true;
+      } else {
+        print('disinikah???');
+        print(e);
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
+  }
+
+  Future<void> getAllTransferOwners({
+    required String? boardingHouseId,
+    required DateTime? dateFrom,
+    required DateTime? dateTo,
+  }) async {
+    isBusy = true;
+    transactionsTable = [];
+    totalInvoicesPaid = 0;
+    totalExpensesAmount = 0;
+
+    final now = DateTime.now();
+
+    try {
+      var resp = await TransferOwnerApiService().getAllTransferOwner(
+        boardingHouseId: boardingHouseId,
+        dateFrom: dateFrom ?? DateTime(now.year, now.month),
+        dateTo:
+            dateTo ??
+            DateTime(now.year, now.month + 1).subtract(Duration(seconds: 1)),
+      );
+
+      transferOwners = resp['data']['transferOwners'];
+      totalTransferOwnerAmount = resp?['data']?['totalAmount'] ?? 0.toDouble();
+      // totalInvoicesPaid = resp['summary']['totalIncomeAmount'].toDouble();
+    } catch (e) {
+      if (e.toString().contains("Please re-login")) {
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
+  }
+
   Future<void> createExpense({
     required String? category, // Optional
     required String name,
@@ -1237,8 +1336,9 @@ class RoomViewModel extends ChangeNotifier {
 
       invoices = resp['data']['invoices'];
       expenses = resp['data']['expenses'];
-      totalInvoicesPaid = resp['data']['totalInvoicesPaid'].toDouble();
-      totalExpensesAmount = resp['data']['totalExpensesAmount'].toDouble();
+      totalInvoicesPaid = resp?['data']?['totalInvoicesPaid'] ?? 0.toDouble();
+      totalExpensesAmount =
+          resp?['data']?['totalExpensesAmount'] ?? 0.toDouble();
     } catch (e) {
       if (e.toString().contains("Please re-login")) {
         isNoSession = true;
@@ -1273,8 +1373,10 @@ class RoomViewModel extends ChangeNotifier {
       );
 
       transactionsTable = resp['data'];
-      totalInvoicesPaid = resp['summary']['totalIncomeAmount'].toDouble();
-      totalExpensesAmount = resp['summary']['totalExpensesAmount'].toDouble();
+      totalInvoicesPaid =
+          resp?['summary']?['totalIncomeAmount'] ?? 0.toDouble();
+      totalExpensesAmount =
+          resp?['summary']?['totalExpensesAmount'] ?? 0.toDouble();
     } catch (e) {
       if (e.toString().contains("Please re-login")) {
         isNoSession = true;

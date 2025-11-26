@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
-import 'package:residenza/features/payments/components/create_expense_content.dart';
-import 'package:residenza/features/payments/components/table_item.dart';
+import 'package:residenza/features/payments/components/create_transfer_owner_content.dart';
+import 'package:residenza/features/payments/components/transfer_owner_item.dart';
 import 'package:residenza/utils/helpers.dart';
 import 'package:residenza/view_models/room_view_model.dart';
 import 'package:residenza/widgets/buttons/gradient_elevated_button.dart';
 import 'package:residenza/widgets/month_selector_dropdown.dart';
 import 'package:residenza/widgets/page_container.dart';
 
-class PaymentListDesktop extends StatefulWidget with GetItStatefulWidgetMixin {
-  PaymentListDesktop({super.key});
+class TransferOwnerList extends StatefulWidget with GetItStatefulWidgetMixin {
+  TransferOwnerList({super.key});
 
   @override
-  State<PaymentListDesktop> createState() => _PaymentListDesktopState();
+  State<TransferOwnerList> createState() => _TransferOwnerListState();
 }
 
-class _PaymentListDesktopState extends State<PaymentListDesktop>
-    with GetItStateMixin, SingleTickerProviderStateMixin {
+class _TransferOwnerListState extends State<TransferOwnerList>
+    with GetItStateMixin {
   final now = DateTime.now();
   String? _boardingHouseId;
   DateTime? _dateFrom;
@@ -41,7 +41,7 @@ class _PaymentListDesktopState extends State<PaymentListDesktop>
         _boardingHouseId = null;
       }
 
-      model.getFinancialTransactions(
+      model.getAllTransferOwners(
         boardingHouseId: model.roomKostId,
         dateFrom:
             periode != null
@@ -67,9 +67,8 @@ class _PaymentListDesktopState extends State<PaymentListDesktop>
 
   @override
   Widget build(BuildContext context) {
-    watchOnly((RoomViewModel x) => x.transactionsTable);
+    watchOnly((RoomViewModel x) => x.transferOwners);
     watchOnly((RoomViewModel x) => x.roomKostId);
-
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: PageContainer(
@@ -130,19 +129,7 @@ class _PaymentListDesktopState extends State<PaymentListDesktop>
                                   get<RoomViewModel>().roomKostId = item['id'];
                                   _boardingHouseId = item['id'];
 
-                                  // get<RoomViewModel>().getFinancialOverview(
-                                  //   boardingHouseId: _boardingHouseId,
-                                  //   dateFrom: _dateFrom,
-                                  //   dateTo: _dateTo,
-                                  // );
-
-                                  // get<RoomViewModel>().getMonthlyReport(
-                                  //   boardingHouseId: _boardingHouseId,
-                                  //   month: _dateFrom?.month ?? DateTime.now().month,
-                                  //   year: _dateFrom?.year ?? DateTime.now().year,
-                                  // );
-
-                                  get<RoomViewModel>().getFinancialTransactions(
+                                  get<RoomViewModel>().getAllTransferOwners(
                                     boardingHouseId: _boardingHouseId,
                                     dateFrom:
                                         _dateFrom ??
@@ -172,19 +159,7 @@ class _PaymentListDesktopState extends State<PaymentListDesktop>
                                   );
                                   get<RoomViewModel>().periode = dateFrom;
 
-                                  // get<RoomViewModel>().getFinancialOverview(
-                                  //   boardingHouseId: _boardingHouseId,
-                                  //   dateFrom: _dateFrom,
-                                  //   dateTo: _dateTo,
-                                  // );
-
-                                  // get<RoomViewModel>().getMonthlyReport(
-                                  //   boardingHouseId: _boardingHouseId,
-                                  //   month: _dateFrom?.month ?? DateTime.now().month,
-                                  //   year: _dateFrom?.year ?? DateTime.now().year,
-                                  // );
-
-                                  get<RoomViewModel>().getFinancialTransactions(
+                                  get<RoomViewModel>().getAllTransferOwners(
                                     boardingHouseId: _boardingHouseId,
                                     dateFrom:
                                         _dateFrom ??
@@ -218,7 +193,22 @@ class _PaymentListDesktopState extends State<PaymentListDesktop>
                       children: [
                         SizedBox(width: 30),
                         Expanded(
-                          flex: 15,
+                          flex: 6,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Tanggal",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          flex: 10,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -226,22 +216,7 @@ class _PaymentListDesktopState extends State<PaymentListDesktop>
                                 "Keterangan",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          flex: 6,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Debit",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
+                                  fontSize: 20,
                                 ),
                               ),
                             ],
@@ -249,12 +224,12 @@ class _PaymentListDesktopState extends State<PaymentListDesktop>
                         ),
                         SizedBox(width: 20),
                         Expanded(
-                          flex: 6,
+                          flex: 4,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                "Kredit",
+                                "Jumlah",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
@@ -269,11 +244,10 @@ class _PaymentListDesktopState extends State<PaymentListDesktop>
                   ),
                   Expanded(
                     child: ListView.builder(
-                      itemCount: get<RoomViewModel>().transactionsTable.length,
+                      itemCount: get<RoomViewModel>().transferOwners.length,
                       itemBuilder: (context, idx) {
-                        dynamic item =
-                            get<RoomViewModel>().transactionsTable[idx];
-                        return TableItem(item: item);
+                        dynamic item = get<RoomViewModel>().transferOwners[idx];
+                        return TransferOwnerItem(item: item, isMobile: false);
                       },
                     ),
                   ),
@@ -300,33 +274,15 @@ class _PaymentListDesktopState extends State<PaymentListDesktop>
                             ],
                           ),
                         ),
-                        Expanded(
-                          flex: 6,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                formatCurrency(
-                                  get<RoomViewModel>().totalExpensesAmount,
-                                ),
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  color: Colors.red.shade600,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
                         SizedBox(width: 20),
                         Expanded(
-                          flex: 6,
+                          flex: 4,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Text(
                                 formatCurrency(
-                                  get<RoomViewModel>().totalInvoicesPaid,
+                                  get<RoomViewModel>().totalTransferOwnerAmount,
                                 ),
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
@@ -337,7 +293,7 @@ class _PaymentListDesktopState extends State<PaymentListDesktop>
                             ],
                           ),
                         ),
-                        SizedBox(width: 30),
+                        SizedBox(width: 130),
                       ],
                     ),
                   ),
@@ -345,16 +301,13 @@ class _PaymentListDesktopState extends State<PaymentListDesktop>
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.only(bottom: 100, right: 30),
+                padding: const EdgeInsets.only(bottom: 80, right: 30),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     GradientElevatedButton(
                       gradient: const LinearGradient(
-                        colors: [
-                          Color.fromARGB(200, 211, 47, 47),
-                          Color.fromARGB(200, 211, 47, 47),
-                        ],
+                        colors: [Colors.blueAccent, Colors.blue],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
@@ -369,7 +322,7 @@ class _PaymentListDesktopState extends State<PaymentListDesktop>
                                     MediaQuery.of(context).viewInsets.bottom,
                               ),
                               child: SingleChildScrollView(
-                                child: CreateExpenseContent(),
+                                child: CreateTransferOwnerContent(),
                               ),
                             );
                           },
@@ -378,9 +331,9 @@ class _PaymentListDesktopState extends State<PaymentListDesktop>
                       child: Icon(Icons.add, size: 30),
                     ),
                     Text(
-                      "Pengeluaran",
+                      "Transfer Ke Pemilik",
                       style: TextStyle(
-                        color: Color.fromARGB(200, 211, 47, 47),
+                        color: Colors.blueAccent,
                         fontWeight: FontWeight.w600,
                         fontSize: 12,
                       ),

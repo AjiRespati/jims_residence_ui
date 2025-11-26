@@ -1,33 +1,63 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:residenza/utils/helpers.dart';
 import 'package:residenza/view_models/room_view_model.dart';
 import 'package:residenza/widgets/buttons/gradient_elevated_button.dart';
 import 'package:residenza/widgets/currency_text_field.dart';
 
-class CreateExpenseContent extends StatefulWidget
+class CreateTransferOwnerContent extends StatefulWidget
     with GetItStatefulWidgetMixin {
-  CreateExpenseContent({super.key});
+  CreateTransferOwnerContent({super.key});
 
   @override
-  State<CreateExpenseContent> createState() => _CreateExpenseContentState();
+  State<CreateTransferOwnerContent> createState() =>
+      _CreateTransferOwnerContentState();
 }
 
-class _CreateExpenseContentState extends State<CreateExpenseContent>
+class _CreateTransferOwnerContentState extends State<CreateTransferOwnerContent>
     with GetItStateMixin {
-  TextEditingController nameController = TextEditingController();
   TextEditingController amountController = TextEditingController();
   String? paymentMethod = "Bank Transfer";
   TextEditingController descriptionController = TextEditingController();
   double amount = 0;
-  DateTime? expenseDate;
+  DateTime? transferDate;
+
+  final ImagePicker _picker = ImagePicker();
+  XFile? imageDevice;
+  Uint8List? imageWeb;
+
+  // ✅ Pick Image for Mobile
+  Future<void> _pickImageMobile(ImageSource source) async {
+    final XFile? pickedImage = await _picker.pickImage(source: source);
+    setState(() {
+      imageDevice = pickedImage;
+    });
+    // await _submit();
+  }
+
+  // ✅ Pick Image for Web
+  Future<void> _pickImageWeb() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+    );
+    if (result != null) {
+      setState(() {
+        imageWeb = result.files.first.bytes;
+      });
+      // await _submit();
+    }
+  }
 
   @override
   void dispose() {
     super.dispose();
-    nameController.dispose();
     amountController.dispose();
     descriptionController.dispose();
   }
@@ -44,7 +74,7 @@ class _CreateExpenseContentState extends State<CreateExpenseContent>
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "Pengeluaran",
+                "Transfer Ke Pemilik",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ],
@@ -87,10 +117,10 @@ class _CreateExpenseContentState extends State<CreateExpenseContent>
             context,
             "Tanggal",
             "Tanggal:  ",
-            expenseDate,
+            transferDate,
             (date) {
               setState(() {
-                expenseDate = date;
+                transferDate = date;
               });
             },
             dateTextStyle: TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
@@ -106,40 +136,68 @@ class _CreateExpenseContentState extends State<CreateExpenseContent>
           TextFormField(
             decoration: InputDecoration(
               isDense: true,
-              label: Text("Untuk Pembayaran"),
-            ),
-            keyboardType: TextInputType.name,
-            controller: nameController,
-          ),
-          SizedBox(height: 12),
-          DropdownButtonFormField<String>(
-            decoration: InputDecoration(
-              isDense: true,
-              label: Text("Metode Pembayaran"),
-            ),
-            value: paymentMethod,
-            items:
-                ['Bank Transfer', 'Online Payment', 'Cash', 'Other'].map((
-                  item,
-                ) {
-                  return DropdownMenuItem<String>(
-                    value: item,
-                    child: Text(item),
-                  );
-                }).toList(),
-            onChanged: (value) {
-              paymentMethod = value ?? "Bank Transfer";
-              setState(() {});
-            },
-          ),
-          SizedBox(height: 12),
-          TextFormField(
-            decoration: InputDecoration(
-              isDense: true,
               label: Text("Keterangan"),
             ),
             controller: descriptionController,
           ),
+          SizedBox(height: 30),
+
+          // ✅ Image Preview
+          (imageDevice != null || imageWeb != null)
+              ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 250,
+                    width: 200,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    child:
+                        kIsWeb
+                            ? Image.memory(imageWeb!)
+                            : Image.file(File(imageDevice!.path)),
+                  ),
+                ],
+              )
+              : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Column(
+                    children: [
+                      SizedBox(
+                        width: 35,
+                        height: 35,
+                        child: ElevatedButton(
+                          onPressed:
+                              () =>
+                                  kIsWeb
+                                      ? _pickImageWeb()
+                                      : _pickImageMobile(ImageSource.gallery),
+                          style: ElevatedButton.styleFrom(
+                            shape: CircleBorder(),
+                            padding: EdgeInsets.all(0), // Adjust size
+                            elevation: 2, // Optional: change elevation
+                            backgroundColor:
+                                Colors.amber.shade400, // Button color
+                            foregroundColor: Colors.white, // Icon color
+                          ),
+                          child: Icon(Icons.upload, size: 30),
+                        ),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        "Upload bukti transfer",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
           SizedBox(height: 12),
           SizedBox(height: 30),
           SizedBox(
@@ -162,22 +220,21 @@ class _CreateExpenseContentState extends State<CreateExpenseContent>
                     ),
                     elevation: 3,
                     onPressed: () async {
-                      await get<RoomViewModel>().createExpense(
-                        category: null,
-                        name: nameController.text,
+                      await get<RoomViewModel>().createTransferOwner(
                         amount: amount,
-                        expenseDate: expenseDate,
-                        paymentMethod: paymentMethod,
+                        transferDate: transferDate,
                         description: descriptionController.text,
+                        imageDevice: imageDevice,
+                        imageWeb: imageWeb,
                       );
 
                       if (get<RoomViewModel>().isSuccess) {
-                        await get<RoomViewModel>().getFinancialOverview(
-                          boardingHouseId: get<RoomViewModel>().roomKostId,
-                          dateFrom: null,
-                          dateTo: null,
-                        );
-                        await get<RoomViewModel>().getFinancialTransactions(
+                        // await get<RoomViewModel>().getFinancialOverview(
+                        //   boardingHouseId: get<RoomViewModel>().roomKostId,
+                        //   dateFrom: null,
+                        //   dateTo: null,
+                        // );
+                        await get<RoomViewModel>().getAllTransferOwners(
                           boardingHouseId: get<RoomViewModel>().roomKostId,
                           dateFrom: null,
                           dateTo: null,
@@ -185,7 +242,7 @@ class _CreateExpenseContentState extends State<CreateExpenseContent>
                       }
                       Navigator.pop(context);
                     },
-                    child: Text("Bayar"),
+                    child: Text("Transfer"),
                   ),
                 ],
               ),

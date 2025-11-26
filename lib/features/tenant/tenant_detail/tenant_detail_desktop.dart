@@ -117,7 +117,7 @@ class _TenantDetailDesktopState extends State<TenantDetailDesktop>
                             child: SingleChildScrollView(
                               child: Column(
                                 children: [
-                                  TenantImage(tenant: _tenant),
+                                  TenantImage(tenant: _tenant, isMobile: false),
 
                                   Divider(),
 
@@ -210,8 +210,14 @@ class _TenantDetailDesktopState extends State<TenantDetailDesktop>
                                     itemCount: _tenant?['Invoices'].length,
                                     itemBuilder: (context, index) {
                                       final item = _tenant['Invoices'][index];
-                                      item['Tenant'] = {'id': _tenant['id']};
-                                      return InvoiceCard(item: item);
+                                      item['Tenant'] = {
+                                        'id': _tenant['id'],
+                                        'name': _tenant['name'],
+                                      };
+                                      return InvoiceCard(
+                                        item: item,
+                                        isMobile: false,
+                                      );
                                     },
                                   ),
                                 ],
