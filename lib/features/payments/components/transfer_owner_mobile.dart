@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
+import 'package:residenza/application_info.dart';
 import 'package:residenza/utils/helpers.dart';
 import 'package:residenza/view_models/room_view_model.dart';
 import 'package:residenza/widgets/month_selector_dropdown.dart';
@@ -201,6 +202,51 @@ class _TransferOwnerMobileState extends State<TransferOwnerMobile>
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Expanded(
+                          flex: 3,
+                          child:
+                              item['proofPath'] != null
+                                  ? GestureDetector(
+                                    onTap:
+                                        () => showPopup(
+                                          context,
+                                          null,
+                                          ApplicationInfo.baseUrl +
+                                              item['proofPath'],
+                                          "bukti_transfer",
+                                          true,
+                                        ),
+                                    child: Container(
+                                      height: 60,
+                                      width: 85,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.grey),
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(10),
+                                        ),
+                                      ),
+                                      child: Image.network(
+                                        ApplicationInfo.baseUrl +
+                                            item['proofPath'],
+                                      ),
+                                    ),
+                                  )
+                                  : Container(
+                                    height: 60,
+                                    width: 85,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey),
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(10),
+                                      ),
+                                    ),
+                                    child: Icon(
+                                      Icons.image,
+                                      size: 50,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                        ),
                         Expanded(
                           flex: 15,
                           child: Column(
