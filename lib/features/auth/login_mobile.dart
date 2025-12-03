@@ -16,7 +16,25 @@ class LoginMobile extends StatelessWidget with GetItMixin {
         padding: const EdgeInsets.all(20),
         child:
             watchOnly((SystemViewModel x) => x.isLoginView)
-                ? LoginContent()
+                ? Column(
+                  children: [
+                    SizedBox(
+                      width: 150,
+                      height: 150,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            fit: BoxFit.fitWidth,
+                            image: AssetImage('assets/images/main_logo.png'),
+                          ),
+                          shape: BoxShape.rectangle,
+                        ),
+                        margin: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                      ),
+                    ),
+                    LoginContent(),
+                  ],
+                )
                 : RegisterContent(),
       ),
     );
