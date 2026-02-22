@@ -1243,6 +1243,28 @@ class RoomViewModel extends ChangeNotifier {
     }
   }
 
+  Future<void> deleteTransferOwner({required String id}) async {
+    isBusy = true;
+    try {
+      await TransferOwnerApiService().deleteTransferOwner(id: id);
+
+      isBusy = false;
+      isSuccess = true;
+      successMessage = "Berhasil delete Transfer Owner";
+    } catch (e) {
+      if (e.toString().contains("Please re-login")) {
+        isBusy = false;
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isBusy = false;
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
+  }
+
   Future<void> createExpense({
     required String? category, // Optional
     required String name,

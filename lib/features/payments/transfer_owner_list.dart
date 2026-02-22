@@ -69,6 +69,11 @@ class _TransferOwnerListState extends State<TransferOwnerList>
   Widget build(BuildContext context) {
     watchOnly((RoomViewModel x) => x.transferOwners);
     watchOnly((RoomViewModel x) => x.roomKostId);
+    watchOnly((RoomViewModel x) => x.isError);
+    watchOnly((RoomViewModel x) => x.isSuccess);
+    if (mounted) {
+      snackbarGenerator(context, get<RoomViewModel>());
+    }
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: PageContainer(
