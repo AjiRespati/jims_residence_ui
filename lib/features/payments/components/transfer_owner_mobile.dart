@@ -3,6 +3,7 @@ import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:residenza/application_info.dart';
 import 'package:residenza/utils/helpers.dart';
 import 'package:residenza/view_models/room_view_model.dart';
+import 'package:residenza/widgets/confirmation_dialog.dart';
 import 'package:residenza/widgets/month_selector_dropdown.dart';
 
 class TransferOwnerMobile extends StatefulWidget with GetItStatefulWidgetMixin {
@@ -125,7 +126,7 @@ class _TransferOwnerMobileState extends State<TransferOwnerMobile>
                       },
                     ),
                   ),
-                  SizedBox(width: 10),
+                  SizedBox(width: 5),
                   Expanded(
                     flex: 5,
                     child: MonthSelectorDropdown(
@@ -153,7 +154,9 @@ class _TransferOwnerMobileState extends State<TransferOwnerMobile>
           ),
         ),
         SizedBox(height: 6),
+
         Divider(thickness: 0.5),
+
         Row(
           children: [
             SizedBox(width: 20),
@@ -161,7 +164,7 @@ class _TransferOwnerMobileState extends State<TransferOwnerMobile>
               "Transfer Ke Pemilik (${get<RoomViewModel>().transferOwners.length})",
               style: TextStyle(
                 color: Colors.blue.shade700,
-                fontSize: 18,
+                fontSize: 16,
                 fontWeight: FontWeight.w800,
               ),
             ),
@@ -170,19 +173,22 @@ class _TransferOwnerMobileState extends State<TransferOwnerMobile>
               formatCurrency(get<RoomViewModel>().totalTransferOwnerAmount),
               style: TextStyle(
                 color: Colors.blue.shade700,
-                fontSize: 18,
+                fontSize: 16,
                 fontWeight: FontWeight.w800,
               ),
             ),
-            SizedBox(width: 20),
+            SizedBox(width: 50),
           ],
         ),
+
         SizedBox(height: 4),
+
         Expanded(
           child: ListView.builder(
             itemCount: get<RoomViewModel>().transferOwners.length,
             itemBuilder: (context, idx) {
               dynamic item = get<RoomViewModel>().transferOwners[idx];
+
               return Padding(
                 padding: EdgeInsets.only(
                   left: 8,
@@ -200,7 +206,7 @@ class _TransferOwnerMobileState extends State<TransferOwnerMobile>
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Expanded(
                           flex: 3,
@@ -242,11 +248,12 @@ class _TransferOwnerMobileState extends State<TransferOwnerMobile>
                                     ),
                                     child: Icon(
                                       Icons.image,
-                                      size: 50,
+                                      size: 30,
                                       color: Colors.grey,
                                     ),
                                   ),
                         ),
+                        SizedBox(width: 10),
                         Expanded(
                           flex: 15,
                           child: Column(
@@ -261,7 +268,7 @@ class _TransferOwnerMobileState extends State<TransferOwnerMobile>
                                       ),
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 16,
+                                        fontSize: 15,
                                       ),
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -269,7 +276,6 @@ class _TransferOwnerMobileState extends State<TransferOwnerMobile>
                                 ],
                               ),
                               Text(item['BoardingHouse']['name']),
-                              SizedBox(height: 4),
                               Row(
                                 children: [
                                   Flexible(
@@ -287,13 +293,13 @@ class _TransferOwnerMobileState extends State<TransferOwnerMobile>
                         Expanded(
                           flex: 8,
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Text(
                                 formatCurrency(item?['amount'] ?? 0.toDouble()),
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 16,
+                                  fontSize: 14,
                                 ),
                               ),
                               // SizedBox(height: 10),
@@ -313,6 +319,29 @@ class _TransferOwnerMobileState extends State<TransferOwnerMobile>
                               //   ],
                               // ),
                             ],
+                          ),
+                        ),
+                        SizedBox(
+                          width: 30,
+                          height: 30,
+                          child: Center(
+                            child: IconButton(
+                              padding: EdgeInsets.all(0),
+                              onPressed: () {
+                                confirmationDialog(
+                                  context,
+                                  "Hapus Transaksi",
+                                  "Apakah transaksi ini, ${item['description']}, ${formatCurrency(item?['amount'] ?? 0.toDouble())}, akan dihapus?",
+                                  handleConfirmation: (isConfirmed) {},
+                                  isMobile: true,
+                                );
+                              },
+                              icon: Icon(
+                                Icons.delete_rounded,
+                                size: 20,
+                                color: Colors.brown,
+                              ),
+                            ),
                           ),
                         ),
                       ],

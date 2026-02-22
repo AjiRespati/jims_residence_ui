@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:residenza/application_info.dart';
 import 'package:residenza/utils/helpers.dart';
+import 'package:residenza/widgets/confirmation_dialog.dart';
 
 class TransferOwnerItem extends StatelessWidget with GetItMixin {
   TransferOwnerItem({required this.item, required this.isMobile, super.key});
@@ -141,7 +142,30 @@ class TransferOwnerItem extends StatelessWidget with GetItMixin {
                       ],
                     ),
                   ),
-                  SizedBox(width: 120),
+                  SizedBox(width: 90),
+                  SizedBox(
+                    width: 30,
+                    height: 30,
+                    child: Center(
+                      child: IconButton(
+                        padding: EdgeInsets.all(0),
+                        onPressed: () {
+                          confirmationDialog(
+                            context,
+                            "Hapus Transaksi",
+                            "Apakah transaksi ini, ${item['description']}, ${formatCurrency(item?['amount'] ?? 0.toDouble())}, akan dihapus?",
+                            handleConfirmation: (isConfirmed) {},
+                            isMobile: false,
+                          );
+                        },
+                        icon: Icon(
+                          Icons.delete_rounded,
+                          size: 20,
+                          color: Colors.brown,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
