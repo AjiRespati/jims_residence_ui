@@ -150,4 +150,25 @@ class TransferOwnerApiService extends BaseApiService {
       );
     }
   }
+
+  Future<bool> deleteTransferOwner({required String id}) async {
+    final response = await performAuthenticatedRequest(
+      (token) => http.delete(
+        Uri.parse('$baseUrl/transferOwner/$id'),
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": "Bearer $token",
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
+    }
+  }
+
 }

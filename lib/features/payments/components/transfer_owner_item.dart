@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:residenza/application_info.dart';
 import 'package:residenza/utils/helpers.dart';
+import 'package:residenza/view_models/room_view_model.dart';
+import 'package:residenza/view_models/system_view_model.dart';
 import 'package:residenza/widgets/confirmation_dialog.dart';
 
 class TransferOwnerItem extends StatelessWidget with GetItMixin {
@@ -12,6 +14,8 @@ class TransferOwnerItem extends StatelessWidget with GetItMixin {
 
   @override
   Widget build(BuildContext context) {
+    final level = get<SystemViewModel>().level;
+    final now = DateTime.now();
     return Padding(
       padding: const EdgeInsets.only(left: 8, right: 8, bottom: 4),
       child: Card(
@@ -143,29 +147,62 @@ class TransferOwnerItem extends StatelessWidget with GetItMixin {
                     ),
                   ),
                   SizedBox(width: 90),
-                  SizedBox(
-                    width: 30,
-                    height: 30,
-                    child: Center(
-                      child: IconButton(
-                        padding: EdgeInsets.all(0),
-                        onPressed: () {
-                          confirmationDialog(
-                            context,
-                            "Hapus Transaksi",
-                            "Apakah transaksi ini, ${item['description']}, ${formatCurrency(item?['amount'] ?? 0.toDouble())}, akan dihapus?",
-                            handleConfirmation: (isConfirmed) {},
-                            isMobile: false,
-                          );
-                        },
-                        icon: Icon(
-                          Icons.delete_rounded,
-                          size: 20,
-                          color: Colors.brown,
+                  if (level < 2)
+                    SizedBox(width: 30)
+                  else
+                    SizedBox(
+                      width: 30,
+                      height: 30,
+                      child: Center(
+                        child: IconButton(
+                          padding: EdgeInsets.all(0),
+                          onPressed: () {
+                            confirmationDialog(
+                              context,
+                              "Hapus Transaksi",
+                              "Apakah transaksi ini, ${item['description']}, ${formatCurrency(item?['amount'] ?? 0.toDouble())}, akan dihapus?",
+                              handleConfirmation: (isConfirmed) async {
+                                if (isConfirmed) {
+                                  RoomViewModel model = get<RoomViewModel>();
+                                  DateTime? periode = model.periode;
+                                  await model.deleteTransferOwner(
+                                    id: item['id'],
+                                  );
+                                  await model.getAllTransferOwners(
+                                    boardingHouseId:
+                                        item['BoardingHouse']['id'],
+                                    dateFrom:
+                                        periode != null
+                                            ? DateTime(
+                                              periode.year,
+                                              periode.month,
+                                              1,
+                                            )
+                                            : DateTime(now.year, now.month, 1),
+                                    dateTo:
+                                        periode != null
+                                            ? DateTime(
+                                              periode.year,
+                                              periode.month + 1,
+                                            ).subtract(Duration(seconds: 1))
+                                            : DateTime(
+                                              now.year,
+                                              now.month + 1,
+                                            ).subtract(Duration(seconds: 1)),
+                                  );
+                                }
+                              },
+                              isMobile: false,
+                            );
+                          },
+                          icon: Icon(
+                            Icons.delete_rounded,
+                            size: 20,
+                            color: Colors.brown,
+                          ),
                         ),
                       ),
                     ),
-                  ),
                 ],
               ),
             ),
