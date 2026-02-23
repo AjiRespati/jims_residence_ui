@@ -196,7 +196,7 @@ class TransferOwnerItem extends StatelessWidget with GetItMixin {
                             );
                           },
                           icon: Icon(
-                            Icons.delete_rounded,
+                            Icons.delete,
                             size: 20,
                             color: Colors.brown,
                           ),

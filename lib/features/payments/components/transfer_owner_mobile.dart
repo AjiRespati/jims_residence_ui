@@ -382,7 +382,7 @@ class _TransferOwnerMobileState extends State<TransferOwnerMobile>
                                   );
                                 },
                                 icon: Icon(
-                                  Icons.delete_rounded,
+                                  Icons.delete,
                                   size: 20,
                                   color: Colors.brown,
                                 ),
