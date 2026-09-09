@@ -38,7 +38,7 @@ class _EditRoomStatusState extends State<EditRoomStatus> with GetItStateMixin {
           SizedBox(height: 6),
           DropdownButtonFormField<String>(
             decoration: InputDecoration(labelText: "Status Kamar"),
-            value: _selectedStatus,
+            initialValue: _selectedStatus,
             items:
                 ['Tersedia', 'Terisi', 'Dipesan', 'Pemeliharaan', 'Rusak'].map((
                   item,

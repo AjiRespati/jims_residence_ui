@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:residenza/features/auth/login_content.dart';
-import 'package:residenza/features/auth/register_content.dart';
-import 'package:residenza/view_models/system_view_model.dart';
 
 class LoginDesktop extends StatelessWidget with GetItMixin {
   LoginDesktop({super.key});
@@ -49,19 +47,20 @@ class LoginDesktop extends StatelessWidget with GetItMixin {
               ),
             ),
           ),
-          Column(
-            children: [
-              Container(
-                constraints: const BoxConstraints(
-                  minHeight: 600,
-                  maxWidth: 350,
-                ),
-                child:
-                    watchOnly((SystemViewModel x) => x.isLoginView)
-                        ? LoginContent()
-                        : RegisterContent(),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    constraints: const BoxConstraints(
+                      minHeight: 600,
+                      maxWidth: 350,
+                    ),
+                    child: LoginContent(),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ],
       ),

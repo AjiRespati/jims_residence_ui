@@ -64,7 +64,7 @@ class _MonthSelectorDropdownState extends State<MonthSelectorDropdown> {
   Widget build(BuildContext context) {
     return DropdownButtonFormField<DateTime>(
       decoration: InputDecoration(labelText: "Periode", isDense: true),
-      value: selectedMonth,
+      initialValue: selectedMonth,
       items:
           availableMonths.map((date) {
             final formatted = DateFormat('MMMM yyyy').format(date);

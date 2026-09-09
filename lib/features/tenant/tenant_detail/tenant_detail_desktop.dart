@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:residenza/features/payments/components/create_other_cost_content.dart';
 import 'package:residenza/features/payments/components/invoice_card.dart';
+import 'package:residenza/features/tenant/components/contract_preview_dialog.dart';
 import 'package:residenza/features/tenant/components/tenant_checkout_content.dart';
+import 'package:residenza/features/tenant/tenant_detail/tenant_contract_image.dart';
 import 'package:residenza/features/tenant/tenant_detail/tenant_image.dart';
 import 'package:residenza/features/tenant/tenant_detail/tenant_info.dart';
 import 'package:residenza/routes/route_names.dart';
@@ -52,6 +54,23 @@ class _TenantDetailDesktopState extends State<TenantDetailDesktop>
             : DateTime.parse(_tenant['checkoutDate']);
 
     setState(() {});
+  }
+
+  Future _openContractPreview() async {
+    final roomVm = get<RoomViewModel>();
+    final previousRoomId = roomVm.roomId;
+    roomVm.roomId = _tenant['roomId'];
+    await roomVm.fetchRoom();
+    final room = roomVm.room;
+    roomVm.roomId = previousRoomId;
+
+    await showDialog(
+      context: context,
+      builder: (context) => ContractPreviewDialog(
+        tenant: Map<String, dynamic>.from(_tenant),
+        room: room == null ? null : Map<String, dynamic>.from(room),
+      ),
+    );
   }
 
   @override
@@ -129,6 +148,34 @@ class _TenantDetailDesktopState extends State<TenantDetailDesktop>
                                     status: _status,
                                     startDate: _startDate,
                                     endDate: _endDate,
+                                  ),
+
+                                  SizedBox(height: 10),
+
+                                  // TOMBOL KONTRAK SEWA
+                                  OutlinedButton.icon(
+                                    icon: const Icon(
+                                      Icons.description_outlined,
+                                      size: 18,
+                                    ),
+                                    label: const Text(
+                                      "Kontrak Sewa",
+                                      style: TextStyle(fontSize: 12),
+                                    ),
+                                    style: OutlinedButton.styleFrom(
+                                      minimumSize: const Size(0, 32),
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 12,
+                                      ),
+                                    ),
+                                    onPressed: _openContractPreview,
+                                  ),
+
+                                  SizedBox(height: 10),
+
+                                  TenantContractImage(
+                                    tenant: _tenant,
+                                    isMobile: false,
                                   ),
 
                                   SizedBox(height: 10),

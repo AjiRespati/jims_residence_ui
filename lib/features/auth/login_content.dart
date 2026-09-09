@@ -31,27 +31,6 @@ class LoginContent extends StatelessWidget with GetItMixin {
             const SizedBox(height: 20),
             LoginButton(),
             const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton(
-                  onPressed: () {
-                    get<SystemViewModel>().isLoginView = false;
-                  },
-                  child: Text(
-                    "Register",
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.blue,
-                      fontWeight: FontWeight.w700,
-                      decoration: TextDecoration.underline,
-                      decorationColor: Colors.blue,
-                      decorationThickness: 1.5,
-                    ),
-                  ),
-                ),
-              ],
-            ),
           ],
         );
   }

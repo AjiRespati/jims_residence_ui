@@ -52,7 +52,7 @@ class _CreateExpenseContentState extends State<CreateExpenseContent>
           SizedBox(height: 30),
           DropdownButtonFormField<String>(
             decoration: InputDecoration(labelText: "Pilih Kost", isDense: true),
-            value: get<RoomViewModel>().roomKostName,
+            initialValue: get<RoomViewModel>().roomKostName,
             items:
                 get<RoomViewModel>().kosts.map((item) {
                   final isSelected =
@@ -117,7 +117,7 @@ class _CreateExpenseContentState extends State<CreateExpenseContent>
               isDense: true,
               label: Text("Metode Pembayaran"),
             ),
-            value: paymentMethod,
+            initialValue: paymentMethod,
             items:
                 ['Bank Transfer', 'Online Payment', 'Cash', 'Other'].map((
                   item,

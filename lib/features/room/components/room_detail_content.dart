@@ -120,7 +120,8 @@ class _RoomDetailContentState extends State<RoomDetailContent>
                           controller: _amountController,
                           label: "Harga kamar",
                           onChanged:
-                              (value) => _priceAmount = double.parse(value),
+                              (value) => _priceAmount =
+                                  double.tryParse(value) ?? 0,
                         ),
                       ),
                       SizedBox(height: 16),

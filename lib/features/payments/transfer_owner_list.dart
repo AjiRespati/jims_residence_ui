@@ -101,7 +101,7 @@ class _TransferOwnerListState extends State<TransferOwnerList>
                                   labelText: "Pilih Kost",
                                   isDense: true,
                                 ),
-                                value: get<RoomViewModel>().roomKostName,
+                                initialValue: get<RoomViewModel>().roomKostName,
                                 items:
                                     get<RoomViewModel>().kosts.map((item) {
                                       final isSelected =

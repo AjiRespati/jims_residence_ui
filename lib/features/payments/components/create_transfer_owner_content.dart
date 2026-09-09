@@ -82,7 +82,7 @@ class _CreateTransferOwnerContentState extends State<CreateTransferOwnerContent>
           SizedBox(height: 30),
           DropdownButtonFormField<String>(
             decoration: InputDecoration(labelText: "Pilih Kost", isDense: true),
-            value: get<RoomViewModel>().roomKostName,
+            initialValue: get<RoomViewModel>().roomKostName,
             items:
                 get<RoomViewModel>().kosts.map((item) {
                   final isSelected =

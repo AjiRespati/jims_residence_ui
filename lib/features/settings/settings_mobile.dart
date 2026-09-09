@@ -194,28 +194,30 @@ class SettingsMobile extends StatelessWidget with GetItMixin {
                             //   ),
                             // ),
                             // Divider(),
-                            InkWell(
-                              onTap: () {
-                                Navigator.pushNamed(context, userRoute);
-                              },
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text("User Management"),
-                                  IconButton(
-                                    onPressed: () {
-                                      Navigator.pushNamed(context, userRoute);
-                                    },
-                                    icon: Icon(
-                                      Icons.chevron_right_rounded,
-                                      size: 30,
+                            if (model.level > 0) ...[
+                              InkWell(
+                                onTap: () {
+                                  Navigator.pushNamed(context, userRoute);
+                                },
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("User Management"),
+                                    IconButton(
+                                      onPressed: () {
+                                        Navigator.pushNamed(context, userRoute);
+                                      },
+                                      icon: Icon(
+                                        Icons.chevron_right_rounded,
+                                        size: 30,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                            Divider(),
+                              Divider(),
+                            ],
 
                             if (ApplicationInfo.isDevelOn &&
                                 (model.username == 'aji@mail.com' ||

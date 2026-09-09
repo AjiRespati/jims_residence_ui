@@ -53,7 +53,7 @@ class _UpdateLevelContentState extends State<UpdateLevelContent>
 
             DropdownButtonFormField<String>(
               decoration: InputDecoration(isDense: true),
-              value: levelChoosen,
+              initialValue: levelChoosen,
               items:
                   get<SystemViewModel>().levelList.map((item) {
                     return DropdownMenuItem<String>(

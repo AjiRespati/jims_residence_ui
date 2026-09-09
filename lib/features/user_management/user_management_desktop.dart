@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
+import 'package:residenza/features/user_management/components/add_user_content.dart';
 import 'package:residenza/features/user_management/components/user_table_card.dart';
 import 'package:residenza/view_models/system_view_model.dart';
 import 'package:residenza/widgets/page_container.dart';
@@ -52,6 +53,43 @@ class _UserManagementDesktopState extends State<UserManagementDesktop>
                 child: Column(
                   children: [
                     SizedBox(height: 40),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(width: 20),
+                        Spacer(),
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            showModalBottomSheet(
+                              isScrollControlled: true,
+                              context: context,
+                              builder: (context) {
+                                return Padding(
+                                  padding: EdgeInsets.only(
+                                    bottom:
+                                        MediaQuery.of(context).viewInsets.bottom,
+                                    left: 24,
+                                    right: 24,
+                                    top: 24,
+                                  ),
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      children: [
+                                        AddUserContent(),
+                                        SizedBox(height: 50),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          icon: Icon(Icons.person_add_alt, size: 20),
+                          label: Text("Tambah User"),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
                     SizedBox(
                       child:
                           watchOnly((SystemViewModel x) => x.isBusy)

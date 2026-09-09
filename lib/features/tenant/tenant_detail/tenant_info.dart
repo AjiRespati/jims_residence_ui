@@ -203,7 +203,7 @@ class _TenantInfoState extends State<TenantInfo> with GetItStateMixin {
                             SizedBox(height: 6),
                             DropdownButtonFormField<String>(
                               decoration: InputDecoration(labelText: "Status"),
-                              value: _status.text,
+                              initialValue: _status.text,
                               items:
                                   ['Active', 'Inactive', 'Waiting'].map((item) {
                                     return DropdownMenuItem<String>(

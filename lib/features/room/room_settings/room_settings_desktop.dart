@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:residenza/features/room/components/add_price.dart';
 import 'package:residenza/features/room/components/edit_room_status.dart';
+import 'package:residenza/routes/route_names.dart';
 import 'package:residenza/utils/helpers.dart';
 import 'package:residenza/view_models/room_view_model.dart';
 import 'package:residenza/widgets/buttons/add_button.dart';
@@ -364,13 +365,13 @@ class _RoomSettingsDesktopState extends State<RoomSettingsDesktop>
                                 ),
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(10),
-                              child: SizedBox(
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
+                             Padding(
+                               padding: const EdgeInsets.all(10),
+                               child: SizedBox(
+                                 child: Wrap(
+                                   alignment: WrapAlignment.spaceAround,
+                                   runSpacing: 8,
+                                   children: [
                                     GradientElevatedButton(
                                       buttonHeight: 30,
                                       onPressed: () async {
@@ -389,27 +390,96 @@ class _RoomSettingsDesktopState extends State<RoomSettingsDesktop>
                                         ),
                                       ),
                                     ),
-                                    GradientElevatedButton(
-                                      gradient: LinearGradient(
-                                        colors: [
-                                          Colors.greenAccent.shade400,
-                                          Colors.greenAccent.shade700,
-                                        ],
-                                        begin: Alignment.topLeft,
-                                        end: Alignment.bottomRight,
-                                      ),
-                                      buttonHeight: 30,
-                                      onPressed: () async {
-                                        await get<RoomViewModel>().updateRoom();
-                                        setState(() {});
-                                      },
-                                      child: Text(
-                                        "Terapkan",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
+                                     GradientElevatedButton(
+                                       gradient: LinearGradient(
+                                         colors: [
+                                           Colors.greenAccent.shade400,
+                                           Colors.greenAccent.shade700,
+                                         ],
+                                         begin: Alignment.topLeft,
+                                         end: Alignment.bottomRight,
+                                       ),
+                                       buttonHeight: 30,
+                                       onPressed: () async {
+                                         await get<RoomViewModel>().updateRoom();
+                                         setState(() {});
+                                       },
+                                       child: Text(
+                                         "Terapkan",
+                                         style: TextStyle(
+                                           fontWeight: FontWeight.w600,
+                                         ),
+                                       ),
+                                     ),
+                                     OutlinedButton.icon(
+                                       style: OutlinedButton.styleFrom(
+                                         foregroundColor: Colors.red.shade700,
+                                         side: BorderSide(
+                                           color: Colors.red.shade400,
+                                         ),
+                                       ),
+                                       icon: Icon(
+                                         Icons.delete_forever,
+                                         size: 20,
+                                       ),
+                                       label: Text("Hapus Kamar"),
+                                       onPressed: () async {
+                                         bool? confirm =
+                                             await showDialog<bool>(
+                                               context: context,
+                                               builder:
+                                                   (
+                                                     context,
+                                                   ) => AlertDialog(
+                                                     title: Text(
+                                                       "Hapus Kamar",
+                                                     ),
+                                                     content: Text(
+                                                       "Yakin ingin menghapus kamar \"${_room?['roomNumber'] ?? ''}\"? SEMUA penghuni, invoice, transaksi, dan biaya terkait kamar ini juga akan dihapus permanen.",
+                                                     ),
+                                                     actions: [
+                                                       TextButton(
+                                                         onPressed:
+                                                             () => Navigator.pop(
+                                                               context,
+                                                               false,
+                                                             ),
+                                                         child: Text("Batal"),
+                                                       ),
+                                                       TextButton(
+                                                         onPressed:
+                                                             () => Navigator.pop(
+                                                               context,
+                                                               true,
+                                                             ),
+                                                         child: Text(
+                                                           "Hapus",
+                                                           style: TextStyle(
+                                                             color:
+                                                                 Colors
+                                                                     .red
+                                                                     .shade700,
+                                                           ),
+                                                         ),
+                                                       ),
+                                                     ],
+                                                   ),
+                                             );
+                                         if (confirm == true &&
+                                             _room != null) {
+                                           await get<RoomViewModel>().deleteRoom(
+                                             id: _room['id'],
+                                           );
+                                           if (context.mounted) {
+                                             Navigator.pushNamed(
+                                               context,
+                                               roomRoute,
+                                               arguments: true,
+                                             );
+                                           }
+                                         }
+                                       },
+                                     ),
                                   ],
                                 ),
                               ),

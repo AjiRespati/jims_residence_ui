@@ -23,7 +23,8 @@ class _UserManagementState extends State<UserManagement> with GetItStateMixin {
             users
                 .where(
                   (el) =>
-                      el['username'] != get<SystemViewModel>().user['username'],
+                      el is Map &&
+                      el['username'] != get<SystemViewModel>().user?['username'],
                 )
                 .toList();
         get<SystemViewModel>().users = newusers;

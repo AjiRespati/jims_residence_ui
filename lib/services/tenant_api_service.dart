@@ -149,6 +149,8 @@ class TenantApiService extends BaseApiService {
     required DateTime? endDate,
     required Uint8List? imageWeb,
     required XFile? imageDevice,
+    Uint8List? contractImageWeb,
+    XFile? contractImageDevice,
   }) async {
     String? token = await getToken(); // Using the base class method
 
@@ -185,6 +187,25 @@ class TenantApiService extends BaseApiService {
       } catch (e) {
         rethrow;
       }
+    }
+
+    if (kIsWeb && contractImageWeb != null) {
+      request.files.add(
+        http.MultipartFile.fromBytes(
+          'contractImage',
+          contractImageWeb,
+          filename: "contract_image.pdf",
+          contentType: MediaType('application', 'pdf'),
+        ),
+      );
+    } else if (!kIsWeb && contractImageDevice != null) {
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'contractImage',
+          contractImageDevice.path,
+          contentType: MediaType('application', 'pdf'),
+        ),
+      );
     }
 
     if (name != null) {
@@ -246,6 +267,28 @@ class TenantApiService extends BaseApiService {
     );
     if (result != null) {
       return result.files.first.bytes;
+    }
+    return null;
+  }
+
+  Future<Uint8List?> pickPdfWeb() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf'],
+    );
+    if (result != null) {
+      return result.files.first.bytes;
+    }
+    return null;
+  }
+
+  Future<XFile?> pickPdfMobile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf'],
+    );
+    if (result != null && result.files.first.path != null) {
+      return XFile(result.files.first.path!);
     }
     return null;
   }

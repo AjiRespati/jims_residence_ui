@@ -93,7 +93,6 @@ class _AddTenantState extends State<AddTenant> with GetItStateMixin {
             // onChanged: (value) => get<RoomViewModel>().tenantIdNumber = value,
           ),
           SizedBox(height: 6),
-          SizedBox(height: 16),
           _buildDatePicker(
             context,
             "Pilih tanggal mulai",

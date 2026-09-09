@@ -41,16 +41,21 @@ class AuthApiService extends BaseApiService {
     return false;
   }
 
-  Future<bool> register(String username, String password) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/auth/register'),
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode({
-        "username": username,
-        "email": username,
-        "password": password,
-        "level": 0,
-      }),
+  Future<bool> register(String username, String password, {int level = 0}) async {
+    final response = await performAuthenticatedRequest(
+      (token) => http.post(
+        Uri.parse('$baseUrl/auth/register'),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+        body: jsonEncode({
+          "username": username,
+          "email": username,
+          "password": password,
+          "level": level,
+        }),
+      ),
     );
     return response.statusCode < 400;
   }

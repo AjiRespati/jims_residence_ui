@@ -32,6 +32,26 @@ class BoardingHouseApiService extends BaseApiService {
     }
   }
 
+  Future<bool> deleteKost({required String id}) async {
+    final response = await performAuthenticatedRequest(
+      (token) => http.delete(
+        Uri.parse('$baseUrl/boardingHouse/$id'),
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": "Bearer $token",
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
+    }
+  }
+
   Future<dynamic> fetchKosts() async {
     final response = await performAuthenticatedRequest(
       (token) => http.get(

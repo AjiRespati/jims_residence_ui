@@ -37,7 +37,7 @@ class _TruncateTableState extends State<TruncateTable> with GetItStateMixin {
           SizedBox(height: 40),
           DropdownButtonFormField<String>(
             decoration: InputDecoration(isDense: true),
-            value: tableChoosen,
+            initialValue: tableChoosen,
             items:
                 tables.map((item) {
                   return DropdownMenuItem<String>(

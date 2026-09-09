@@ -87,6 +87,14 @@ class _TenantCardState extends State<TenantCard> with GetItStateMixin {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
+                              if ((widget.item['isContractSigned'] == false))
+                                Text(
+                                  "Kontrak belum ditandatangani !",
+                                  style: TextStyle(
+                                    color: Colors.amber.shade800,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               if (widget.item['Invoices'].length != 0)
                                 Text(
                                   "Ada tagihan belum lunas !",

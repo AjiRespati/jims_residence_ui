@@ -712,6 +712,8 @@ class RoomViewModel extends ChangeNotifier {
     required DateTime? endDate,
     required Uint8List? imageWeb,
     required XFile? imageDevice,
+    Uint8List? contractImageWeb,
+    XFile? contractImageDevice,
   }) async {
     try {
       isBusy = true;
@@ -726,6 +728,8 @@ class RoomViewModel extends ChangeNotifier {
         endDate: endDate,
         imageWeb: imageWeb,
         imageDevice: imageDevice,
+        contractImageWeb: contractImageWeb,
+        contractImageDevice: contractImageDevice,
       );
       tenant = resp['data'];
       isBusy = false;
@@ -831,6 +835,27 @@ class RoomViewModel extends ChangeNotifier {
     }
   }
 
+  Future<void> deleteKost({required String id}) async {
+    try {
+      isBusy = true;
+      await BoardingHouseApiService().deleteKost(id: id);
+      await fetchKosts();
+      isSuccess = true;
+      successMessage = "Berhasil hapus kost";
+    } catch (e) {
+      if (e.toString().contains("Please re-login")) {
+        isBusy = false;
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isBusy = false;
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
+  }
+
   Future<void> fetchKosts() async {
     try {
       isBusy = true;
@@ -878,6 +903,31 @@ class RoomViewModel extends ChangeNotifier {
       basicPrice = 0;
       successMessage = "Tambah kamar berhasil.";
       isSuccess = true;
+    } catch (e) {
+      if (e.toString().contains("Please re-login")) {
+        isBusy = false;
+        isNoSession = true;
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+        isBusy = false;
+        isError = true;
+      }
+    } finally {
+      isBusy = false;
+    }
+  }
+
+  Future<void> deleteRoom({required String id}) async {
+    try {
+      isBusy = true;
+      await RoomApiService().deleteRoom(id: id);
+      await fetchRooms(
+        boardingHouseId: roomKostId,
+        dateFrom: null,
+        dateTo: null,
+      );
+      isSuccess = true;
+      successMessage = "Berhasil hapus kamar";
     } catch (e) {
       if (e.toString().contains("Please re-login")) {
         isBusy = false;

@@ -49,7 +49,7 @@ class _TenantDesktopState extends State<TenantDesktop> with GetItStateMixin {
                               labelText: "Pilih Kost",
                               isDense: true,
                             ),
-                            value: get<RoomViewModel>().roomKostName,
+                            initialValue: get<RoomViewModel>().roomKostName,
                             items:
                                 get<RoomViewModel>().kosts.map((item) {
                                   final isSelected =

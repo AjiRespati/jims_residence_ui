@@ -194,6 +194,62 @@ class _KostDesktopState extends State<KostDesktop> with GetItStateMixin {
                                   ),
                                 ],
                               ),
+                              SizedBox(height: 5),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  OutlinedButton.icon(
+                                    style: OutlinedButton.styleFrom(
+                                      foregroundColor: Colors.red.shade700,
+                                      side: BorderSide(
+                                        color: Colors.red.shade400,
+                                      ),
+                                    ),
+                                    onPressed: () async {
+                                      bool? confirm = await showDialog<bool>(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                          title: Text("Hapus Kost"),
+                                          content: Text(
+                                            "Yakin ingin menghapus \"${item['name']}\"? SEMUA kamar, penghuni, invoice, transaksi, harga, dan pengeluaran terkait kost ini juga akan dihapus permanen.",
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              onPressed:
+                                                  () => Navigator.pop(
+                                                    context,
+                                                    false,
+                                              ),
+                                              child: Text("Batal"),
+                                            ),
+                                            TextButton(
+                                              onPressed:
+                                                  () => Navigator.pop(
+                                                    context,
+                                                    true,
+                                              ),
+                                              child: Text(
+                                                "Hapus",
+                                                style: TextStyle(
+                                                  color:
+                                                      Colors.red.shade700,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                      if (confirm == true) {
+                                        await get<RoomViewModel>().deleteKost(
+                                          id: item['id'],
+                                        );
+                                      }
+                                    },
+                                    icon: Icon(Icons.delete_forever, size: 20),
+                                    label: Text("Hapus Kost"),
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
                         ),

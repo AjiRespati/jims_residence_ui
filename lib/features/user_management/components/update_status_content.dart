@@ -50,7 +50,7 @@ class _UpdateLevelContentState extends State<UpdateStatusContent>
             SizedBox(height: 40),
             DropdownButtonFormField<String>(
               decoration: InputDecoration(isDense: true),
-              value: oldStatus,
+              initialValue: oldStatus,
               items:
                   ["new", "active", "inactive"].map((item) {
                     return DropdownMenuItem<String>(

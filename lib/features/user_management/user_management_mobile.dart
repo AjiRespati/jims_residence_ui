@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:residenza/features/user_management/components/add_user_content.dart';
 import 'package:residenza/features/user_management/components/user_table_card.dart';
 import 'package:residenza/view_models/system_view_model.dart';
 import 'package:residenza/widgets/mobile_navbar.dart';
@@ -16,6 +17,33 @@ class UserManagementMobile extends StatelessWidget with GetItMixin {
       appBar: AppBar(
         title: Text("User Management"),
         actions: [
+          IconButton(
+            onPressed: () {
+              showModalBottomSheet(
+                isScrollControlled: true,
+                context: context,
+                builder: (context) {
+                  return Padding(
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom,
+                      left: 24,
+                      right: 24,
+                      top: 24,
+                    ),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          AddUserContent(),
+                          SizedBox(height: 50),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
+            icon: Icon(Icons.person_add_alt, size: 24),
+          ),
           if (watchOnly((SystemViewModel x) => x.isBusy))
             Padding(
               padding: const EdgeInsets.only(right: 20),

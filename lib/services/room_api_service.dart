@@ -101,6 +101,26 @@ class RoomApiService extends BaseApiService {
     }
   }
 
+  Future<bool> deleteRoom({required String id}) async {
+    final response = await performAuthenticatedRequest(
+      (token) => http.delete(
+        Uri.parse('$baseUrl/room/$id'),
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": "Bearer $token",
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
+    }
+  }
+
   Future<dynamic> updateRoom({
     required String roomId,
     required dynamic roomUpdateData,

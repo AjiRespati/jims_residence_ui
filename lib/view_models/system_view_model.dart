@@ -142,11 +142,20 @@ class SystemViewModel extends ChangeNotifier {
     }
   }
 
-  Future<bool> register() async {
-    return await AuthApiService().register(
-      emailController.text,
-      passwordController.text,
-    );
+  Future<bool> register({required String email, required String password, int level = 0}) async {
+    try {
+      isBusy = true;
+      bool result = await AuthApiService().register(
+        email,
+        password,
+        level: level,
+      );
+      isBusy = false;
+      return result;
+    } catch (e) {
+      isBusy = false;
+      return false;
+    }
   }
 
   Future<bool> logout() async {

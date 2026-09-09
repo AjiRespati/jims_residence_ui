@@ -21,7 +21,7 @@ class AddRoomPrice extends StatelessWidget with GetItMixin {
           SizedBox(height: 15),
           DropdownButtonFormField<String>(
             decoration: InputDecoration(labelText: "Pilih Kost"),
-            value: get<RoomViewModel>().roomKostName,
+            initialValue: get<RoomViewModel>().roomKostName,
             items:
                 get<RoomViewModel>().kosts.map((item) {
                   return DropdownMenuItem<String>(
@@ -62,7 +62,7 @@ class AddRoomPrice extends StatelessWidget with GetItMixin {
           SizedBox(height: 6),
           DropdownButtonFormField<String>(
             decoration: InputDecoration(labelText: "Ukuran Kamar"),
-            value: get<RoomViewModel>().priceRoomSize,
+            initialValue: get<RoomViewModel>().priceRoomSize,
             items:
                 ['Small', 'Standard', 'Big'].map((item) {
                   return DropdownMenuItem<String>(

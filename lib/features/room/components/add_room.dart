@@ -5,9 +5,14 @@ import 'package:residenza/view_models/room_view_model.dart';
 import 'package:residenza/widgets/buttons/gradient_elevated_button.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
-class AddRoom extends StatelessWidget with GetItMixin {
+class AddRoom extends StatefulWidget with GetItStatefulWidgetMixin {
   AddRoom({super.key});
 
+  @override
+  State<AddRoom> createState() => _AddRoomState();
+}
+
+class _AddRoomState extends State<AddRoom> with GetItStateMixin {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -97,8 +102,7 @@ class AddRoom extends StatelessWidget with GetItMixin {
             keyboardType: TextInputType.text,
             onChanged: (value) => get<RoomViewModel>().description = value,
           ),
-          SizedBox(height: 6),
-          SizedBox(height: 30),
+          SizedBox(height: 16),
           Stack(
             alignment: AlignmentDirectional.center,
             children: [
