@@ -161,7 +161,7 @@ class ContractPdf {
     );
 
     final labelStyle = const pw.TextStyle(fontSize: 9);
-    final valueStyle = const pw.TextStyle(
+    final valueStyle = pw.TextStyle(
       fontSize: 9,
       fontWeight: pw.FontWeight.bold,
     );
@@ -192,7 +192,7 @@ class ContractPdf {
         ),
         child: pw.Text(
           text,
-          style: const pw.TextStyle(
+          style: pw.TextStyle(
             fontSize: 9,
             fontWeight: pw.FontWeight.bold,
           ),
@@ -269,7 +269,7 @@ class ContractPdf {
           // D. FASILITAS KAMAR
           sectionTitle('D. FASILITAS KAMAR'),
           pw.TableHelper.fromTextArray(
-            headerStyle: const pw.TextStyle(
+            headerStyle: pw.TextStyle(
               fontSize: 9,
               fontWeight: pw.FontWeight.bold,
             ),

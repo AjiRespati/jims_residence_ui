@@ -8,30 +8,29 @@ class ApplicationInfo {
   static const appName = "Residenza";
 
   static const mainUrlDev =
-      kIsWeb ? 'http://localhost:5000' : "http://10.0.2.2:5000";
+      kIsWeb ? 'http://localhost:3300' : "http://10.0.2.2:3300";
   static const mainUrlProd = 'https://residenza.id';
 
-  //TODO: buat gonta ganti
-  //   static const mainUrl = mainUrlProd;
+  /// Set at build time with `--dart-define=APP_ENV=prod`.
+  static const appEnvironment = String.fromEnvironment(
+    'APP_ENV',
+    defaultValue: 'dev',
+  );
 
-  /// API server host: on web, use the same host the page is served from
-  /// (works for localhost, 127.0.0.1, or LAN IP from another device);
-  /// API always runs on port 5000.
-  static final String mainUrl = kIsWeb ? _hostFromPageOrigin : mainUrlDev;
+  static const isProduction = appEnvironment == 'prod';
 
-  static String get _hostFromPageOrigin {
-    final loc = Uri.base;
-    if (loc.hasScheme && (loc.scheme == 'http' || loc.scheme == 'https')) {
-      return '${loc.scheme}://${loc.host}:5000';
-    }
-    return 'http://localhost:5000';
-  }
+  /// Can be overridden at build time with `--dart-define=MAIN_URL=<url>`.
+  ///
+  /// Production defaults to [mainUrlProd], while development uses the local
+  /// server appropriate for web or the Android emulator.
+  static const mainUrl = String.fromEnvironment(
+    'MAIN_URL',
+    defaultValue: isProduction ? mainUrlProd : mainUrlDev,
+  );
 
-  static final bool isProduction = mainUrl == mainUrlProd;
+  static const baseUrl = "$mainUrl/service/api";
 
-  static final baseUrl = "$mainUrl/service/api";
-
-  static const appVersion = '1.2.5+2 DEV';
+  static const appVersion = '1.2.5 ${isProduction ? "" : "DEV"}';
 
   static const secondColor = Color.fromARGB(255, 171, 203, 60);
   static const thirdColor = Colors.amber;
