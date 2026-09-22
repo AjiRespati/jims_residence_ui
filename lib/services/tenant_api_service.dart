@@ -293,6 +293,52 @@ class TenantApiService extends BaseApiService {
     return null;
   }
 
+  /// Uploads a generated contract PDF and returns its served path
+  /// (e.g. `/uploads/<timestamp>-kontrak.pdf`).
+  Future<String?> uploadContractPdf({
+    required Uint8List? bytesWeb,
+    required XFile? fileDevice,
+  }) async {
+    String? token = await getToken();
+
+    var request = http.MultipartRequest(
+      "POST",
+      Uri.parse('$baseUrl/tenant/contract/upload'),
+    );
+    request.headers['Authorization'] = "Bearer $token";
+
+    if (kIsWeb && bytesWeb != null) {
+      request.files.add(
+        http.MultipartFile.fromBytes(
+          'file',
+          bytesWeb,
+          filename: "kontrak.pdf",
+          contentType: MediaType('application', 'pdf'),
+        ),
+      );
+    } else if (!kIsWeb && fileDevice != null) {
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'file',
+          fileDevice.path,
+          contentType: MediaType('application', 'pdf'),
+        ),
+      );
+    }
+
+    var streamedResponse = await request.send();
+    var response = await http.Response.fromStream(streamedResponse);
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return data['data']?['path'] as String?;
+    } else {
+      throw Exception(
+        'Failed to upload contract. Status: ${response.statusCode}. Body: ${response.body}',
+      );
+    }
+  }
+
   Future<bool> deleteTenant({required String id}) async {
     final response = await performAuthenticatedRequest(
       (token) => http.delete(
