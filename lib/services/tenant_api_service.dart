@@ -294,10 +294,11 @@ class TenantApiService extends BaseApiService {
   }
 
   /// Uploads a generated contract PDF and returns its served path
-  /// (e.g. `/uploads/<timestamp>-kontrak.pdf`).
+  /// (e.g. `/uploads/KONTRAK SEWA_1-RZ-SOLO-09-2026.pdf`).
   Future<String?> uploadContractPdf({
     required Uint8List? bytesWeb,
     required XFile? fileDevice,
+    String? filename,
   }) async {
     String? token = await getToken();
 
@@ -312,7 +313,7 @@ class TenantApiService extends BaseApiService {
         http.MultipartFile.fromBytes(
           'file',
           bytesWeb,
-          filename: "kontrak.pdf",
+          filename: filename ?? "kontrak.pdf",
           contentType: MediaType('application', 'pdf'),
         ),
       );
@@ -321,6 +322,7 @@ class TenantApiService extends BaseApiService {
         await http.MultipartFile.fromPath(
           'file',
           fileDevice.path,
+          filename: filename,
           contentType: MediaType('application', 'pdf'),
         ),
       );

@@ -32,9 +32,16 @@ class _ContractPreviewDialogState extends State<ContractPreviewDialog> {
     setState(() => _sharing = true);
     try {
       final bytes = await build(pageFormat);
+      final contractNumber = ContractPdf.buildContractNumber(
+        tenant: widget.tenant,
+        room: widget.room,
+      );
+      final fileSafeName =
+          'KONTRAK SEWA_${contractNumber.replaceAll('/', '-')}.pdf';
       final path = await TenantApiService().uploadContractPdf(
         bytesWeb: bytes,
         fileDevice: null,
+        filename: fileSafeName,
       );
       if (path == null) throw Exception('Upload returned no path');
       final url = '${ApplicationInfo.baseUrl}$path';
