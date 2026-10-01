@@ -87,144 +87,125 @@ class _TenantDetailMobileState extends State<TenantDetailMobile>
       appBar: AppBar(title: Text("Detail Penghuni")),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            if (_tenant == null) Center(child: Text("waiting for data...")),
-            if (_tenant != null)
-              Text(
-                "${_tenant['boardingHouseName']} ${_tenant['roomNumber']}",
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-              ),
-            if (_tenant != null)
-              Expanded(
-                child: Column(
-                  children: [
-                    TenantImage(tenant: _tenant, isMobile: true),
-
-                    Divider(),
-
-                    TenantInfo(
-                      id: _tenant['id'],
-                      name: _name,
-                      phone: _phone,
-                      nik: _nik,
-                      status: _status,
-                      startDate: _startDate,
-                      endDate: _endDate,
+        child: _tenant == null
+            ? const Center(child: Text("waiting for data..."))
+            : Column(
+                children: [
+                  Text(
+                    "${_tenant['boardingHouseName']} ${_tenant['roomNumber']}",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
                     ),
-
-                    SizedBox(height: 10),
-
-                    // TOMBOL KONTRAK SEWA
-                    OutlinedButton.icon(
-                      icon: const Icon(Icons.description_outlined, size: 18),
-                      label: const Text(
-                        "Kontrak Sewa",
-                        style: TextStyle(fontSize: 12),
-                      ),
-                      style: OutlinedButton.styleFrom(
-                        minimumSize: const Size(0, 32),
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                      ),
-                       onPressed: _openContractPreview,
-                     ),
-
-                     SizedBox(height: 10),
-
-                     TenantContractImage(tenant: _tenant, isMobile: true),
-
-                    SizedBox(height: 10),
-                    Stack(
-                      alignment: Alignment.centerRight,
+                  ),
+                  Expanded(
+                    child: ListView(
+                      padding: const EdgeInsets.only(bottom: 96),
                       children: [
+                        TenantImage(tenant: _tenant, isMobile: true),
+                        const Divider(),
+                        TenantInfo(
+                          id: _tenant['id'],
+                          name: _name,
+                          phone: _phone,
+                          nik: _nik,
+                          status: _status,
+                          startDate: _startDate,
+                          endDate: _endDate,
+                        ),
+                        const SizedBox(height: 10),
+
+                        // TOMBOL KONTRAK SEWA
+                        OutlinedButton.icon(
+                          icon: const Icon(Icons.description_outlined, size: 18),
+                          label: const Text(
+                            "Kontrak Sewa",
+                            style: TextStyle(fontSize: 12),
+                          ),
+                          style: OutlinedButton.styleFrom(
+                            minimumSize: const Size(0, 32),
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                          ),
+                          onPressed: _openContractPreview,
+                        ),
+                        const SizedBox(height: 10),
+
+                        TenantContractImage(tenant: _tenant, isMobile: true),
+                        const SizedBox(height: 10),
+
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
+                            const Text(
                               "Daftar Tagihan",
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 16,
                               ),
                             ),
-                          ],
-                        ),
-                        if (_status != 'Inactive')
-                          GradientElevatedButton(
-                            gradient: const LinearGradient(
-                              colors: [
-                                Color.fromARGB(240, 244, 67, 54),
-                                Color.fromRGBO(241, 30, 30, 0.641),
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            elevation: 8,
-                            buttonHeight: 25,
-                            onPressed: () async {
-                              await showModalBottomSheet(
-                                isScrollControlled: true,
-                                context: context,
-                                builder: (context) {
-                                  return Padding(
-                                    padding: EdgeInsets.only(
-                                      bottom:
-                                          MediaQuery.of(
+                            if (_status != 'Inactive')
+                              GradientElevatedButton(
+                                gradient: const LinearGradient(
+                                  colors: [
+                                    Color.fromARGB(240, 244, 67, 54),
+                                    Color.fromRGBO(241, 30, 30, 0.641),
+                                  ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
+                                elevation: 8,
+                                buttonHeight: 25,
+                                onPressed: () async {
+                                  await showModalBottomSheet(
+                                    isScrollControlled: true,
+                                    context: context,
+                                    builder: (context) {
+                                      return Padding(
+                                        padding: EdgeInsets.only(
+                                          bottom: MediaQuery.of(
                                             context,
                                           ).viewInsets.bottom,
-                                    ),
-                                    child: SingleChildScrollView(
-                                      child: CreateOtherCostContent(
-                                        roomId: _tenant['roomId'],
-                                      ),
-                                    ),
+                                        ),
+                                        child: SingleChildScrollView(
+                                          child: CreateOtherCostContent(
+                                            roomId: _tenant['roomId'],
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   );
+                                  _setup();
                                 },
-                              );
-                              _setup();
-                            },
-                            child: Text(
-                              "Biaya Lain",
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
+                                child: const Text(
+                                  "Biaya Lain",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                      ],
-                    ),
-                    SizedBox(height: 10),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
 
-                    //TODO: TENANT PAYMENTS LIST
-                    Expanded(
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        // physics: NeverScrollableScrollPhysics(),
-                        itemCount: _tenant?['Invoices'].length,
-                        itemBuilder: (context, index) {
-                          final item = _tenant['Invoices'][index];
+                        ...((_tenant['Invoices'] as List?) ?? const []).map((
+                          item,
+                        ) {
                           item['Tenant'] = {
                             'id': _tenant['id'],
                             'name': _tenant['name'],
                           };
                           return Padding(
-                            padding: EdgeInsets.only(
-                              bottom:
-                                  index == _tenant?['Invoices'].length - 1
-                                      ? 40
-                                      : 0,
-                            ),
+                            padding: const EdgeInsets.only(bottom: 8),
                             child: InvoiceCard(item: item, isMobile: true),
                           );
-                        },
-                      ),
+                        }),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-          ],
-        ),
       ),
       floatingActionButtonLocation:
           _status == 'Inactive'

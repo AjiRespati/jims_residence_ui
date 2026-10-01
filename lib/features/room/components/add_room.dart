@@ -26,7 +26,7 @@ class _AddRoomState extends State<AddRoom> with GetItStateMixin {
           SizedBox(height: 6),
           DropdownButtonFormField<String>(
             decoration: InputDecoration(labelText: "Pilih Kost"),
-            value: get<RoomViewModel>().roomKostName,
+            initialValue: get<RoomViewModel>().roomKostName,
             items:
                 get<RoomViewModel>().kosts.map((item) {
                   return DropdownMenuItem<String>(
@@ -77,7 +77,7 @@ class _AddRoomState extends State<AddRoom> with GetItStateMixin {
           SizedBox(height: 6),
           DropdownButtonFormField<String>(
             decoration: InputDecoration(labelText: "Status Kamar"),
-            value: get<RoomViewModel>().roomStatus,
+            initialValue: get<RoomViewModel>().roomStatus,
             items:
                 ['Tersedia', 'Terisi', 'Dipesan', 'Pemeliharaan', 'Rusak'].map((
                   item,
