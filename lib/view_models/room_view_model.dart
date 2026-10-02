@@ -714,6 +714,7 @@ class RoomViewModel extends ChangeNotifier {
     required XFile? imageDevice,
     Uint8List? contractImageWeb,
     XFile? contractImageDevice,
+    String? contractFilename,
   }) async {
     try {
       isBusy = true;
@@ -730,6 +731,7 @@ class RoomViewModel extends ChangeNotifier {
         imageDevice: imageDevice,
         contractImageWeb: contractImageWeb,
         contractImageDevice: contractImageDevice,
+        contractFilename: contractFilename,
       );
       tenant = resp['data'];
       isBusy = false;

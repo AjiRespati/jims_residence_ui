@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 import 'package:residenza/application_info.dart';
+import 'package:residenza/features/tenant/components/contract_pdf.dart';
 import 'package:residenza/services/tenant_api_service.dart';
 import 'package:residenza/view_models/room_view_model.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -39,6 +40,11 @@ class _TenantContractImageState extends State<TenantContractImage>
       deviceFile = await TenantApiService().pickPdfMobile();
       if (deviceFile == null) return;
     }
+    final contractNumber = ContractPdf.buildContractNumber(
+      tenant: Map<String, dynamic>.from(widget.tenant),
+    );
+    final contractFilename =
+        'KONTRAK SEWA_${contractNumber.replaceAll('/', '-')}_SIGNED.pdf';
     await get<RoomViewModel>().updateTenant(
       tenantId: widget.tenant['id'],
       name: null,
@@ -52,6 +58,7 @@ class _TenantContractImageState extends State<TenantContractImage>
       imageDevice: null,
       contractImageWeb: webBytes,
       contractImageDevice: deviceFile,
+      contractFilename: contractFilename,
     );
     await _submit();
   }
@@ -113,7 +120,7 @@ class _TenantContractImageState extends State<TenantContractImage>
                             SizedBox(width: 8),
                             Flexible(
                               child: Text(
-                                "${widget.tenant['name']} - kontrak.pdf",
+                                "${widget.tenant['contractImagePath']}".split('/').last,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   color: Colors.blue,

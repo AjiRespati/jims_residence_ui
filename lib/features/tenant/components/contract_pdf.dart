@@ -315,12 +315,15 @@ class ContractPdf {
             'Jatuh Tempo Pembayaran',
             'Setiap tanggal dimulai Periode Sewa',
           ),
-          infoRow('Deposit / Uang Jaminan', 'Satu kali sewa per bulan'),
+          infoRow(
+            'Deposit / Uang Jaminan',
+            'Satu kali sewa per bulan atau sesuai kesepakatan',
+          ),
           infoRow(
             'Ketentuan Pengembalian Deposit',
-            'Dikembalikan paling lambat 7 hari setelah masa sewa berakhir, '
-            'setelah dikurangi tagihan atau kerusakan yang menjadi tanggung '
-            'jawab Penyewa.',
+            'Jika ada deposit, akan dikembalikan paling lambat 7 hari setelah '
+            'masa sewa berakhir, setelah dikurangi tagihan atau kerusakan yang '
+            'menjadi tanggung jawab Penyewa.',
           ),
 
           // F. KETENTUAN SEWA

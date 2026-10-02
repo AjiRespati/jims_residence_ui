@@ -151,6 +151,7 @@ class TenantApiService extends BaseApiService {
     required XFile? imageDevice,
     Uint8List? contractImageWeb,
     XFile? contractImageDevice,
+    String? contractFilename,
   }) async {
     String? token = await getToken(); // Using the base class method
 
@@ -194,7 +195,7 @@ class TenantApiService extends BaseApiService {
         http.MultipartFile.fromBytes(
           'contractImage',
           contractImageWeb,
-          filename: "contract_image.pdf",
+          filename: contractFilename ?? "contract_image.pdf",
           contentType: MediaType('application', 'pdf'),
         ),
       );
@@ -203,6 +204,7 @@ class TenantApiService extends BaseApiService {
         await http.MultipartFile.fromPath(
           'contractImage',
           contractImageDevice.path,
+          filename: contractFilename,
           contentType: MediaType('application', 'pdf'),
         ),
       );
