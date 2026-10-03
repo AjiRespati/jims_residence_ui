@@ -23,7 +23,7 @@ class SystemViewModel extends ChangeNotifier {
 
   dynamic _user;
   List<dynamic> _users = [];
-  List<String> levelList = ["Penjaga Kost", "Admin", "Pemilik"];
+  List<String> levelList = ["Penjaga Kost", "Pemilik", "Admin"];
   int _level = 0;
   String _username = " -";
   String _levelDesc = " -";
@@ -142,13 +142,23 @@ class SystemViewModel extends ChangeNotifier {
     }
   }
 
-  Future<bool> register({required String email, required String password, int level = 0}) async {
+  Future<bool> register({
+    required String email,
+    required String password,
+    int level = 0,
+    String? name,
+    String? phone,
+    String? ownerId,
+  }) async {
     try {
       isBusy = true;
       bool result = await AuthApiService().register(
         email,
         password,
         level: level,
+        name: name,
+        phone: phone,
+        ownerId: ownerId,
       );
       isBusy = false;
       return result;
@@ -205,6 +215,7 @@ class SystemViewModel extends ChangeNotifier {
     required String id,
     required int? level,
     required String? status,
+    String? password,
   }) async {
     try {
       isBusy = true;
@@ -212,6 +223,7 @@ class SystemViewModel extends ChangeNotifier {
         id: id,
         level: level,
         status: status,
+        password: password,
       );
       isBusy = false;
       return resp;
@@ -221,6 +233,18 @@ class SystemViewModel extends ChangeNotifier {
       } else {
         isBusy = false;
       }
+      isBusy = false;
+      return false;
+    }
+  }
+
+  Future<bool> deleteUser({required String id}) async {
+    try {
+      isBusy = true;
+      var resp = await AuthApiService().deleteUser(id);
+      isBusy = false;
+      return resp;
+    } catch (e) {
       isBusy = false;
       return false;
     }

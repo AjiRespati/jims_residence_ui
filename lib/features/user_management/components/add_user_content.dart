@@ -18,15 +18,20 @@ class _AddUserContentState extends State<AddUserContent>
     with GetItStateMixin {
   bool _isBusy = false;
   final formKey = GlobalKey<FormState>();
+  final nameController = TextEditingController();
   final emailController = TextEditingController();
+  final phoneController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
   bool showPassword = false;
   String levelChoosen = "Penjaga Kost";
+  String? ownerIdChoosen;
 
   @override
   void dispose() {
+    nameController.dispose();
     emailController.dispose();
+    phoneController.dispose();
     passwordController.dispose();
     confirmPasswordController.dispose();
     super.dispose();
@@ -48,6 +53,30 @@ class _AddUserContentState extends State<AddUserContent>
             Text("Register user baru", style: TextStyle(fontSize: 12)),
             SizedBox(height: 40),
             TextFormField(
+              controller: nameController,
+              decoration: InputDecoration(
+                label: Text("Nama", style: GoogleFonts.inter(fontSize: 12)),
+                hintText: "Nama",
+                hintStyle: GoogleFonts.inter(fontSize: 12),
+                prefixIcon: const Icon(Icons.badge_outlined, size: 20),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 2,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
+              autovalidateMode: AutovalidateMode.onUnfocus,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Nama can't be empty";
+                }
+                return null;
+              },
+            ),
+            SizedBox(height: 20),
+            TextFormField(
               controller: emailController,
               decoration: InputDecoration(
                 label: Text("Email", style: GoogleFonts.inter(fontSize: 12)),
@@ -68,6 +97,31 @@ class _AddUserContentState extends State<AddUserContent>
                   return "Email can't be empty";
                 } else if (!EmailValidator.validate(value)) {
                   return "Invalid email format";
+                }
+                return null;
+              },
+            ),
+            SizedBox(height: 20),
+            TextFormField(
+              controller: phoneController,
+              keyboardType: TextInputType.phone,
+              decoration: InputDecoration(
+                label: Text("Telepon", style: GoogleFonts.inter(fontSize: 12)),
+                hintText: "Telepon",
+                hintStyle: GoogleFonts.inter(fontSize: 12),
+                prefixIcon: const Icon(Icons.phone_rounded, size: 20),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 2,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
+              autovalidateMode: AutovalidateMode.onUnfocus,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Telepon can't be empty";
                 }
                 return null;
               },
@@ -143,13 +197,54 @@ class _AddUserContentState extends State<AddUserContent>
                 isDense: true,
               ),
               initialValue: levelChoosen,
-              items: get<SystemViewModel>().levelList.map((item) {
-                return DropdownMenuItem<String>(value: item, child: Text(item));
-              }).toList(),
+              items:
+                  (get<SystemViewModel>().level == 1
+                          ? ["Penjaga Kost"]
+                          : ["Pemilik", "Penjaga Kost"])
+                      .map((item) {
+                        return DropdownMenuItem<String>(
+                          value: item,
+                          child: Text(item),
+                        );
+                      }).toList(),
               onChanged: (value) {
-                levelChoosen = value ?? "Penjaga Kost";
+                setState(() {
+                  levelChoosen = value ?? "Penjaga Kost";
+                  ownerIdChoosen = null;
+                });
               },
             ),
+            if (get<SystemViewModel>().level == 2 &&
+                levelChoosen == "Penjaga Kost") ...[
+              SizedBox(height: 20),
+              DropdownButtonFormField<String>(
+                decoration: InputDecoration(
+                  label: Text(
+                    "Pemilik",
+                    style: GoogleFonts.inter(fontSize: 12),
+                  ),
+                  isDense: true,
+                ),
+                hint: const Text("Pilih Pemilik"),
+                initialValue: ownerIdChoosen,
+                items:
+                    get<SystemViewModel>()
+                        .users
+                        .where((u) => u['level'] == 1)
+                        .map((u) {
+                          return DropdownMenuItem<String>(
+                            value: u['id'] as String,
+                            child: Text(
+                              u['name'] ?? u['username'] ?? u['id'],
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          );
+                        }).toList(),
+                onChanged: (value) {
+                  setState(() => ownerIdChoosen = value);
+                },
+              ),
+            ],
             SizedBox(height: 40),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -166,6 +261,12 @@ class _AddUserContentState extends State<AddUserContent>
                         email: emailController.text.trim(),
                         password: passwordController.text,
                         level: level,
+                        name: nameController.text.trim(),
+                        phone: phoneController.text.trim(),
+                        ownerId:
+                            levelChoosen == "Penjaga Kost"
+                                ? ownerIdChoosen
+                                : null,
                       );
                       setState(() => _isBusy = false);
 

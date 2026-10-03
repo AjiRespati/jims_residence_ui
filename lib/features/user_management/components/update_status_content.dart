@@ -25,7 +25,7 @@ class _UpdateLevelContentState extends State<UpdateStatusContent>
     with GetItStateMixin {
   final formKey = GlobalKey<FormState>();
   bool _isBusy = false;
-  String oldStatus = "new";
+  String oldStatus = "active";
 
   @override
   void initState() {
@@ -52,7 +52,7 @@ class _UpdateLevelContentState extends State<UpdateStatusContent>
               decoration: InputDecoration(isDense: true),
               initialValue: oldStatus,
               items:
-                  ["new", "active", "inactive"].map((item) {
+                  ["active", "inactive"].map((item) {
                     return DropdownMenuItem<String>(
                       value: item,
                       child: Text(item),

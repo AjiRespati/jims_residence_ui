@@ -324,7 +324,7 @@ class _TransferOwnerMobileState extends State<TransferOwnerMobile>
                             ],
                           ),
                         ),
-                        if (_level < 2)
+                        if (_level < 1)
                           SizedBox(width: 30)
                         else
                           SizedBox(

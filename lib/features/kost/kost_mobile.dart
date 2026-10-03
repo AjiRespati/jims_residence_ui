@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:residenza/utils/helpers.dart';
 import 'package:residenza/view_models/room_view_model.dart';
+import 'package:residenza/view_models/system_view_model.dart';
 import 'package:residenza/widgets/buttons/add_button.dart';
 import 'package:residenza/widgets/buttons/gradient_elevated_button.dart';
 import 'package:residenza/widgets/mobile_navbar.dart';
@@ -20,6 +21,7 @@ class _KostMobileState extends State<KostMobile> with GetItStateMixin {
   Widget build(BuildContext context) {
     watchOnly((RoomViewModel x) => x.isError);
     watchOnly((RoomViewModel x) => x.isSuccess);
+    final level = get<SystemViewModel>().level;
     if (mounted) {
       snackbarGenerator(context, get<RoomViewModel>());
     }
@@ -38,93 +40,95 @@ class _KostMobileState extends State<KostMobile> with GetItStateMixin {
                 child: CircularProgressIndicator(color: Colors.blue),
               ),
             ),
-          SizedBox(width: 5),
-          Text("Tambah Kost"),
-          SizedBox(width: 8),
-          AddButton(
-            message: "",
-            onPressed: () async {
-              await showModalBottomSheet(
-                isScrollControlled: true,
-                context: context,
-                builder: (context) {
-                  return Padding(
-                    padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom,
-                      left: 24,
-                      right: 24,
-                      top: 24,
-                    ),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          Text(
-                            'Tambah Kost',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              color: Colors.blue.shade700,
-                              fontSize: 18,
-                            ),
-                          ),
-                          SizedBox(height: 16),
-                          SizedBox(height: 6),
-                          TextFormField(
-                            decoration: InputDecoration(
-                              isDense: true,
-                              label: Text("Nama Kost"),
-                            ),
-                            onChanged:
-                                (value) =>
-                                    get<RoomViewModel>().kostName = value,
-                          ),
-
-                          SizedBox(height: 6),
-                          TextFormField(
-                            decoration: InputDecoration(
-                              isDense: true,
-                              label: Text("Alamat Kost"),
-                            ),
-                            onChanged:
-                                (value) =>
-                                    get<RoomViewModel>().kostAddress = value,
-                          ),
-
-                          SizedBox(height: 6),
-                          TextFormField(
-                            minLines: 1,
-                            maxLines: 3,
-                            decoration: InputDecoration(
-                              isDense: true,
-                              label: Text("Keterangan"),
-                            ),
-                            onChanged:
-                                (value) =>
-                                    get<RoomViewModel>().kostDescription =
-                                        value,
-                          ),
-                          SizedBox(height: 30),
-                          GradientElevatedButton(
-                            onPressed: () async {
-                              await get<RoomViewModel>().createKost();
-                              Navigator.pop(context);
-                            },
-                            child: Text(
-                              "Tambah Kost",
+          if (level == 1) ...[
+            SizedBox(width: 5),
+            Text("Tambah Kost"),
+            SizedBox(width: 8),
+            AddButton(
+              message: "",
+              onPressed: () async {
+                await showModalBottomSheet(
+                  isScrollControlled: true,
+                  context: context,
+                  builder: (context) {
+                    return Padding(
+                      padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom,
+                        left: 24,
+                        right: 24,
+                        top: 24,
+                      ),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Text(
+                              'Tambah Kost',
                               style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.blue.shade700,
+                                fontSize: 18,
                               ),
                             ),
-                          ),
-                          SizedBox(height: 50),
-                        ],
+                            SizedBox(height: 16),
+                            SizedBox(height: 6),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                isDense: true,
+                                label: Text("Nama Kost"),
+                              ),
+                              onChanged:
+                                  (value) =>
+                                      get<RoomViewModel>().kostName = value,
+                            ),
+
+                            SizedBox(height: 6),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                isDense: true,
+                                label: Text("Alamat Kost"),
+                              ),
+                              onChanged:
+                                  (value) =>
+                                      get<RoomViewModel>().kostAddress = value,
+                            ),
+
+                            SizedBox(height: 6),
+                            TextFormField(
+                              minLines: 1,
+                              maxLines: 3,
+                              decoration: InputDecoration(
+                                isDense: true,
+                                label: Text("Keterangan"),
+                              ),
+                              onChanged:
+                                  (value) =>
+                                      get<RoomViewModel>().kostDescription =
+                                          value,
+                            ),
+                            SizedBox(height: 30),
+                            GradientElevatedButton(
+                              onPressed: () async {
+                                await get<RoomViewModel>().createKost();
+                                Navigator.pop(context);
+                              },
+                              child: Text(
+                                "Tambah Kost",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 50),
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                },
-              );
-            },
-          ),
+                    );
+                  },
+                );
+              },
+            ),
+          ],
           SizedBox(width: 25),
         ],
       ),
@@ -189,60 +193,61 @@ class _KostMobileState extends State<KostMobile> with GetItStateMixin {
                             ],
                           ),
                           SizedBox(height: 5),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              OutlinedButton.icon(
-                                style: OutlinedButton.styleFrom(
-                                  foregroundColor: Colors.red.shade700,
-                                  side: BorderSide(
-                                    color: Colors.red.shade400,
+                          if (level >= 1)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                OutlinedButton.icon(
+                                  style: OutlinedButton.styleFrom(
+                                    foregroundColor: Colors.red.shade700,
+                                    side: BorderSide(
+                                      color: Colors.red.shade400,
+                                    ),
                                   ),
-                                ),
-                                onPressed: () async {
-                                  bool? confirm = await showDialog<bool>(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      title: Text("Hapus Kost"),
-                                      content: Text(
-                                        "Yakin ingin menghapus \"${item['name']}\"? SEMUA kamar, penghuni, invoice, transaksi, harga, dan pengeluaran terkait kost ini juga akan dihapus permanen.",
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          onPressed:
-                                              () => Navigator.pop(
-                                                context,
-                                                false,
-                                              ),
-                                          child: Text("Batal"),
+                                  onPressed: () async {
+                                    bool? confirm = await showDialog<bool>(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        title: Text("Hapus Kost"),
+                                        content: Text(
+                                          "Yakin ingin menghapus \"${item['name']}\"? SEMUA kamar, penghuni, invoice, transaksi, harga, dan pengeluaran terkait kost ini juga akan dihapus permanen.",
                                         ),
-                                        TextButton(
-                                          onPressed:
-                                              () => Navigator.pop(
-                                                context,
-                                                true,
+                                        actions: [
+                                          TextButton(
+                                            onPressed:
+                                                () => Navigator.pop(
+                                                  context,
+                                                  false,
+                                                ),
+                                            child: Text("Batal"),
+                                          ),
+                                          TextButton(
+                                            onPressed:
+                                                () => Navigator.pop(
+                                                  context,
+                                                  true,
+                                                ),
+                                            child: Text(
+                                              "Hapus",
+                                              style: TextStyle(
+                                                color: Colors.red.shade700,
                                               ),
-                                          child: Text(
-                                            "Hapus",
-                                            style: TextStyle(
-                                              color: Colors.red.shade700,
                                             ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                  if (confirm == true) {
-                                    await get<RoomViewModel>().deleteKost(
-                                      id: item['id'],
+                                        ],
+                                      ),
                                     );
-                                  }
-                                },
-                                icon: Icon(Icons.delete_forever, size: 20),
-                                label: Text("Hapus Kost"),
-                              ),
-                            ],
-                          ),
+                                    if (confirm == true) {
+                                      await get<RoomViewModel>().deleteKost(
+                                        id: item['id'],
+                                      );
+                                    }
+                                  },
+                                  icon: Icon(Icons.delete_forever, size: 20),
+                                  label: Text("Hapus Kost"),
+                                ),
+                              ],
+                            ),
                         ],
                       ),
                     ),

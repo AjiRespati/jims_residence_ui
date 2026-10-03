@@ -4,7 +4,6 @@ import 'package:residenza/features/room/components/add_room.dart';
 import 'package:residenza/routes/route_names.dart';
 import 'package:residenza/utils/helpers.dart';
 import 'package:residenza/view_models/room_view_model.dart';
-import 'package:residenza/view_models/system_view_model.dart';
 import 'package:residenza/widgets/buttons/add_button.dart';
 import 'package:residenza/widgets/page_container.dart';
 
@@ -152,10 +151,7 @@ class _RoomDesktopState extends State<RoomDesktop> with GetItStateMixin {
                         child: ClipRRect(
                           child: InkWell(
                             onTap:
-                                widget.isSetting ||
-                                        (get<SystemViewModel>()
-                                                .user['status'] ==
-                                            'new')
+                                widget.isSetting
                                     ? null
                                     : () {
                                       get<RoomViewModel>().roomId =

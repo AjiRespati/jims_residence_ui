@@ -5,6 +5,7 @@ import 'package:residenza/features/payments/components/payment_list_mobile.dart'
 import 'package:residenza/features/payments/components/payment_resume_mobile.dart';
 import 'package:residenza/utils/helpers.dart';
 import 'package:residenza/view_models/room_view_model.dart';
+import 'package:residenza/view_models/system_view_model.dart';
 import 'package:residenza/widgets/page_container.dart';
 
 class PaymentsDesktop extends StatefulWidget with GetItStatefulWidgetMixin {
@@ -17,11 +18,13 @@ class PaymentsDesktop extends StatefulWidget with GetItStatefulWidgetMixin {
 class _PaymentsDesktopState extends State<PaymentsDesktop>
     with GetItStateMixin, SingleTickerProviderStateMixin {
   late TabController _tabController;
+  int tabCount = 2;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    tabCount = get<SystemViewModel>().level < 1 ? 1 : 2;
+    _tabController = TabController(length: tabCount, vsync: this);
     _tabController.addListener(() {
       // kalau index tidak berubah berarti swipe.
       if (!_tabController.indexIsChanging) {
@@ -64,13 +67,17 @@ class _PaymentsDesktopState extends State<PaymentsDesktop>
                 labelStyle: TextStyle(fontWeight: FontWeight.w600),
                 tabs: [
                   Tab(icon: Icon(Icons.list_alt), text: "List"),
-                  Tab(icon: Icon(Icons.note_add_outlined), text: "Resume"),
+                  if (tabCount == 2)
+                    Tab(icon: Icon(Icons.note_add_outlined), text: "Resume"),
                 ],
               ),
               Expanded(
                 child: TabBarView(
                   controller: _tabController,
-                  children: [PaymentListMobile(), PaymentResumeMobile()],
+                  children: [
+                    PaymentListMobile(),
+                    if (tabCount == 2) PaymentResumeMobile(),
+                  ],
                 ),
               ),
             ],

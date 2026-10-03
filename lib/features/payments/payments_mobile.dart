@@ -6,6 +6,7 @@ import 'package:residenza/features/payments/components/payment_resume_mobile.dar
 import 'package:residenza/features/payments/components/transfer_owner_mobile.dart';
 import 'package:residenza/utils/helpers.dart';
 import 'package:residenza/view_models/room_view_model.dart';
+import 'package:residenza/view_models/system_view_model.dart';
 import 'package:residenza/widgets/mobile_navbar.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
@@ -25,6 +26,7 @@ class _PaymentsMobileState extends State<PaymentsMobile>
   @override
   void initState() {
     super.initState();
+    tabCount = get<SystemViewModel>().level < 1 ? 2 : 3;
     _tabController = TabController(length: tabCount, vsync: this);
     _tabController.addListener(() {
       // kalau index tidak berubah berarti swipe.
@@ -66,7 +68,8 @@ class _PaymentsMobileState extends State<PaymentsMobile>
           tabs: [
             Tab(icon: Icon(Icons.currency_exchange), text: "Transfer Pemilik"),
             Tab(icon: Icon(Icons.list_alt), text: "List"),
-            Tab(icon: Icon(Icons.note_add_outlined), text: "Resume"),
+            if (tabCount == 3)
+              Tab(icon: Icon(Icons.note_add_outlined), text: "Resume"),
           ],
         ),
       ),
@@ -75,7 +78,7 @@ class _PaymentsMobileState extends State<PaymentsMobile>
         children: [
           TransferOwnerMobile(),
           PaymentListMobile(),
-          PaymentResumeMobile(),
+          if (tabCount == 3) PaymentResumeMobile(),
         ],
       ),
 

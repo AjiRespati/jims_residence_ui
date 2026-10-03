@@ -123,20 +123,21 @@ class SideBar extends StatelessWidget with GetItMixin {
                           },
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 14),
-                        child: ListTile(
-                          leading: const Icon(
-                            Icons.fact_check_outlined,
-                            size: 22,
+                      if (level >= 1)
+                        Padding(
+                          padding: const EdgeInsets.only(left: 14),
+                          child: ListTile(
+                            leading: const Icon(
+                              Icons.fact_check_outlined,
+                              size: 22,
+                            ),
+                            title: const Text("Resume Transaksi"),
+                            dense: true,
+                            onTap: () {
+                              onTapMenu(menuTitle: "Resume Transaksi");
+                            },
                           ),
-                          title: const Text("Resume Transaksi"),
-                          dense: true,
-                          onTap: () {
-                            onTapMenu(menuTitle: "Resume Transaksi");
-                          },
                         ),
-                      ),
                     ],
                   ),
                   ExpansionTile(
@@ -153,20 +154,21 @@ class SideBar extends StatelessWidget with GetItMixin {
                       ],
                     ),
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 14),
-                        child: ListTile(
-                          leading: const Icon(
-                            Icons.apartment_rounded,
-                            size: 22,
+                      if (level >= 1)
+                        Padding(
+                          padding: const EdgeInsets.only(left: 14),
+                          child: ListTile(
+                            leading: const Icon(
+                              Icons.apartment_rounded,
+                              size: 22,
+                            ),
+                            title: const Text("Kost Management"),
+                            dense: true,
+                            onTap: () {
+                              onTapMenu(menuTitle: "Kost Management");
+                            },
                           ),
-                          title: const Text("Kost Management"),
-                          dense: true,
-                          onTap: () {
-                            onTapMenu(menuTitle: "Kost Management");
-                          },
                         ),
-                      ),
                       Padding(
                         padding: const EdgeInsets.only(left: 14),
                         child: ListTile(
@@ -178,7 +180,7 @@ class SideBar extends StatelessWidget with GetItMixin {
                           },
                         ),
                       ),
-                      if (level > 0)
+                      if (level >= 1)
                         Padding(
                           padding: const EdgeInsets.only(left: 14),
                           child: ListTile(

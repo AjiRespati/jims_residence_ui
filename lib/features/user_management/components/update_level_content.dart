@@ -55,12 +55,15 @@ class _UpdateLevelContentState extends State<UpdateLevelContent>
               decoration: InputDecoration(isDense: true),
               initialValue: levelChoosen,
               items:
-                  get<SystemViewModel>().levelList.map((item) {
-                    return DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(item),
-                    );
-                  }).toList(),
+                  (get<SystemViewModel>().level == 1
+                          ? ["Penjaga Kost"]
+                          : get<SystemViewModel>().levelList)
+                      .map((item) {
+                        return DropdownMenuItem<String>(
+                          value: item,
+                          child: Text(item),
+                        );
+                      }).toList(),
               onChanged: (value) {
                 levelChoosen = value ?? "Penjaga Kost";
                 levelChoosenInt = get<SystemViewModel>().levelList.indexOf(

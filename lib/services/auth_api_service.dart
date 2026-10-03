@@ -41,7 +41,14 @@ class AuthApiService extends BaseApiService {
     return false;
   }
 
-  Future<bool> register(String username, String password, {int level = 0}) async {
+  Future<bool> register(
+    String username,
+    String password, {
+    int level = 0,
+    String? name,
+    String? phone,
+    String? ownerId,
+  }) async {
     final response = await performAuthenticatedRequest(
       (token) => http.post(
         Uri.parse('$baseUrl/auth/register'),
@@ -54,6 +61,9 @@ class AuthApiService extends BaseApiService {
           "email": username,
           "password": password,
           "level": level,
+          "name": name,
+          "phone": phone,
+          "ownerId": ownerId,
         }),
       ),
     );
@@ -105,6 +115,7 @@ class AuthApiService extends BaseApiService {
     required String id,
     required int? level,
     required String? status,
+    String? password,
   }) async {
     final response = await performAuthenticatedRequest(
       (token) => http.put(
@@ -113,7 +124,31 @@ class AuthApiService extends BaseApiService {
           'Content-Type': 'application/json',
           "Authorization": "Bearer $token",
         },
-        body: jsonEncode({'level': level, 'status': status}),
+        body: jsonEncode({
+          'level': level,
+          'status': status,
+          if (password != null) 'password': password,
+        }),
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw Exception(
+        jsonDecode(response.body)['message'] ?? 'Internal service error',
+      );
+    }
+  }
+
+  Future<bool> deleteUser(String id) async {
+    final response = await performAuthenticatedRequest(
+      (token) => http.delete(
+        Uri.parse('$baseUrl/auth/user/$id'),
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": "Bearer $token",
+        },
       ),
     );
 

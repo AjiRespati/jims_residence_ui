@@ -90,12 +90,10 @@ class _UserManagementDesktopState extends State<UserManagementDesktop>
                       ],
                     ),
                     SizedBox(height: 20),
-                    SizedBox(
+                    Expanded(
                       child:
                           watchOnly((SystemViewModel x) => x.isBusy)
-                              ? SizedBox(
-                                width: 25,
-                                height: 25,
+                              ? const Center(
                                 child: CircularProgressIndicator(
                                   color: Colors.blue,
                                 ),
@@ -103,17 +101,15 @@ class _UserManagementDesktopState extends State<UserManagementDesktop>
                               : watchOnly(
                                 (SystemViewModel x) => x.users,
                               ).isEmpty
-                              ? Text("user not found")
+                              ? const Center(child: Text("user not found"))
                               : Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: ListView.builder(
-                                  shrinkWrap: true,
                                   itemCount:
                                       get<SystemViewModel>().users.length,
                                   itemBuilder: (context, index) {
                                     var item =
                                         get<SystemViewModel>().users[index];
-                                    // print(item);
                                     return UserTableCard(
                                       key: ValueKey(index + 19000),
                                       user: item,

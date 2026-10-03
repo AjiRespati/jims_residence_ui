@@ -3,6 +3,7 @@ import 'package:residenza/features/payments/payments_desktop.dart';
 import 'package:residenza/features/payments/payments_mobile.dart';
 import 'package:residenza/utils/responsive_layout.dart';
 import 'package:residenza/view_models/room_view_model.dart';
+import 'package:residenza/view_models/system_view_model.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
 class Payments extends StatefulWidget with GetItStatefulWidgetMixin {
@@ -17,6 +18,9 @@ class _PaymentsState extends State<Payments> with GetItStateMixin {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Reports are Pemilik/Admin only; skip for Penjaga (level 0).
+      if (get<SystemViewModel>().level < 1) return;
+
       final now = DateTime.now();
 
       get<RoomViewModel>().getMonthlyReport(
